@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/bg_friend_list_item"
+        android:gravity="center_vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="10dp">
+
+        <findboom.android.com.findboom.widget.CircleImageView
+            android:id="@+id/img_photo"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            app:border_color="@color/content_yellow"
+            app:border_width="1dp" />
+
+        <TextView
+            android:id="@+id/txt_name"
+            style="@style/settingContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:text="名称"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/img_talk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:background="@mipmap/icon_talk" />
+    </LinearLayout>
+</LinearLayout>

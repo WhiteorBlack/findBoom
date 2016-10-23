@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@drawable/bg_select_pay_type">
+
+
+        <FrameLayout
+            android:id="@+id/ll_alipay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/btn_alipay" />
+
+            <ImageView
+                android:id="@+id/img_alipay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginTop="25dp"
+                android:background="@mipmap/icon_selected" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ll_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/btn_wxpay" />
+
+            <ImageView
+                android:id="@+id/img_wxpay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginTop="25dp"
+                android:background="@mipmap/icon_selected" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ll_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="10dp"
+                android:background="@mipmap/btn_wxpay" />
+
+            <ImageView
+                android:id="@+id/img_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:layout_marginTop="25dp"
+                android:background="@mipmap/icon_selected" />
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_pay"
+            android:layout_width="102dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="10dp"
+            android:background="@mipmap/btn_pay" />
+
+    </LinearLayout>
+</LinearLayout>

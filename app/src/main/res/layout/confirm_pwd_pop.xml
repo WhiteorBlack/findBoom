@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@mipmap/login_phone_bg">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pop_title_height">
+
+            <ImageView
+                android:id="@+id/img_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginLeft="20dp"
+                android:background="@mipmap/icon_pop_back"
+                android:visibility="gone" />
+
+            <TextView
+                style="@style/PopTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/title_input_code" />
+
+            <ImageView style="@style/PopClose" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_marginLeft="45dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="26dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <EditText
+                    android:id="@+id/edt_phone"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/setting_pop_box_bg"
+                    android:gravity="center_vertical"
+                    android:inputType="numberPassword"
+                    android:maxLength="6"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/btn_get_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:background="@mipmap/btn_forget_pwd" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:text="输入6位支付密码"
+                android:textColor="#efa508"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:visibility="invisible"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_pay_money"
+                    style="@style/settingContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="需支付金额:200" />
+
+                <TextView
+                    android:id="@+id/txt_account_money"
+                    style="@style/settingContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="账户余额额:200" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                style="@style/settingContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@mipmap/btn_send_confirm"
+                android:onClick="boomClick"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/txt_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:text="@string/pay_notify"
+                android:textColor="#efa508"
+                android:textSize="14sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

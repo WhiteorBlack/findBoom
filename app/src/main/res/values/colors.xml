@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="blue">@android:color/holo_blue_light</color>
+    <color name="pop_title">#89241C</color>
+    <color name="pop_bg">#BB5445</color>
+    <color name="pop_line">#E77260</color>
+    <color name="content_yellow">#F0A509</color>
+    <color name="price_red">#D9271D</color>
+    <color name="deep_yellow">#E69A0A</color>
+    <color name="gray_pressed">#b5b5b6</color>
+    <color name="gray_normal">#666667</color>
+</resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@mipmap/shop_buy_bg"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+
+            <EditText
+                android:id="@+id/edt_phone"
+                style="@style/settingContent"
+                android:layout_width="150dp"
+                android:layout_height="35dp"
+                android:background="@drawable/setting_pop_box_bg"
+                android:gravity="center_vertical"
+                android:hint="输入手机号码"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:paddingLeft="5dp"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btn_get_code"
+                android:layout_width="112dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:background="@mipmap/btn_get_code" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edt_code"
+            style="@style/settingContent"
+            android:layout_width="120dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/setting_pop_box_bg"
+            android:gravity="center_vertical"
+            android:hint="输入验证码"
+            android:inputType="phone"
+            android:maxLength="11"
+            android:paddingLeft="5dp"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="112dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@mipmap/btn_send_confirm" />
+    </LinearLayout>
+</LinearLayout>

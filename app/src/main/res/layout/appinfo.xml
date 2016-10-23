@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/holo_blue_dark">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/ic_arrow_back" />
+
+        <TextView
+            style="@style/text18White"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="关于我们" />
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="25dp"
+        android:background="@mipmap/ic_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:text="公司简介"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="    郑州扫雷网络科技有限公司成立于2016年,是郑州一家专业的网络科技公司。公司主要服务于中小企业,提供网站策划,网站设计制作建设,网络推广营销、APP开发于一体的专业服务。公司以“专注网络,用心服务”为核心价值,希望通过我们的专业水平和不懈努力,为您提供更好的服务。"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:text="游戏简介"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="    《扫雷高手》是由郑州扫雷网络科技有限公司研发的一款LBS游戏，游戏基于百度实景地图，融合了传统地雷游戏和位置社交的特点，让你在娱乐的时候结识新的小伙伴一起Happy。
+"
+        android:textSize="14sp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="Copyright © 2016\n 郑州扫雷网络科技有限公司"
+        android:textColor="@android:color/darker_gray" />
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@mipmap/bg_shop_center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pop_title_height">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/title_advice" />
+
+            <ImageView style="@style/PopClose" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <EditText
+                android:id="@+id/edt_advice"
+                android:layout_width="match_parent"
+                android:background="@drawable/advice_edit_bg"
+                android:layout_height="0dp"
+                android:layout_marginBottom="15dp"
+                android:hint="@string/advice_hint"
+                android:gravity="top"
+                android:padding="5dp"
+                style="@style/settingContent"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_advice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:background="@mipmap/btn_send_confirm" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

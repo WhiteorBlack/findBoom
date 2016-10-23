@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:orientation="horizontal"
+            android:padding="25dp">
+
+            <FrameLayout
+                android:id="@+id/rel_defense"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_defense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_defense"
+                    android:clickable="false" />
+
+
+                <TextView
+                    android:id="@+id/txt_defense_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_marginRight="@dimen/home_scan_right"
+                    android:layout_marginTop="@dimen/home_scan_top"
+                    android:text="10"
+                    android:textColor="@color/pop_bg"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/rel_scan"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_scan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_scan"
+                    android:clickable="false" />
+
+
+                <TextView
+                    android:id="@+id/txt_scan_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_marginRight="@dimen/home_scan_right"
+                    android:layout_marginTop="@dimen/home_scan_top"
+                    android:text="10"
+                    android:textColor="@color/pop_bg"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center|right"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/rel_arsenal"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="boomClick">
+
+                    <ImageView
+                        android:id="@+id/img_arsenal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/home_arsenal" />
+
+
+                    <TextView
+                        android:id="@+id/txt_arsenal_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|right"
+                        android:layout_marginRight="@dimen/home_scan_right"
+                        android:layout_marginTop="@dimen/home_scan_top"
+                        android:text="10"
+                        android:textColor="@color/pop_bg"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/rel_record"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:onClick="boomClick">
+
+                    <ImageView
+                        android:id="@+id/img_record"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/home_record" />
+
+
+                    <TextView
+                        android:id="@+id/txt_record_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|right"
+                        android:layout_marginRight="7dp"
+                        android:layout_marginTop="5dp"
+                        android:text="10"
+                        android:textColor="@color/pop_bg"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <CheckBox
+                    android:id="@+id/chb_set_red_packet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="50dp"
+                    android:button="@drawable/checkbox_boom" />
+
+                <CheckBox
+                    android:id="@+id/chb_set_treasure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:button="@drawable/checkbox_money" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical|right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txt_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_marginRight="-15dp"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_home_msg"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="15dp"
+                    android:text="消息" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/home_msg" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/rel_shop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/icon_home_shop" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/rel_friend_center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_friend_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/icon_home_friend" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/rel_personal_center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_personal_center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/icon_home_personal" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/rel_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="boomClick">
+
+                <ImageView
+                    android:id="@+id/img_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@mipmap/icon_home_setting" />
+
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,361 @@
+package findboom.android.com.findboom.dailog;/**
+ * Created by Administrator on 2016/9/10.
+ */
+
+import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.activity.MyRecordDetial;
+import findboom.android.com.findboom.adapter.BaseRecyAdapter;
+import findboom.android.com.findboom.adapter.MyBoomRecordAdapter;
+import findboom.android.com.findboom.adapter.MyGetBoomAdapter;
+import findboom.android.com.findboom.adapter.RankAdapter;
+import findboom.android.com.findboom.adapter.ViewPagerAdapter;
+import findboom.android.com.findboom.asytask.PostTools;
+import findboom.android.com.findboom.bean.Bean_MyBoomRecord;
+import findboom.android.com.findboom.bean.Bean_Rank;
+import findboom.android.com.findboom.interfacer.OnClickInterface;
+import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.utils.AppPrefrence;
+import findboom.android.com.findboom.utils.CommonUntilities;
+import findboom.android.com.findboom.utils.Tools;
+import findboom.android.com.findboom.widget.CircleImageView;
+import findboom.android.com.findboom.widget.xrecycleview.XRecyclerView;
+
+/**
+ * author:${白曌勇} on 2016/9/10
+ * TODO:战绩中心
+ */
+public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeListener, XRecyclerView.LoadingListener {
+    private Context context;
+    private View view;
+    private ViewPager viewPager;
+    private View myBoomView, myGetView, rankView;
+    private XRecyclerView boomListView, getListView, rankListView;
+    private ImageView imgSelector;
+    private ImageView imgBoom, imgGet, imgRank;
+    private List<View> viewList;
+
+    private List<Bean_MyBoomRecord.BoomInfo> myBoomList, getBoomList;
+    private List<Bean_Rank.RankUser> rankList;
+    private MyBoomRecordAdapter myRecordAdapter;
+    private MyGetBoomAdapter getBoomAdapter;
+    private RankAdapter rankAdapter;
+    private Button btnShare;
+    private int position = 0;
+
+    private int myIndex = 1, getIndex = 1, rankIndex = 1, pageSize = 15;
+
+
+    public RecordPop(Context context) {
+        super(context);
+        this.context = context;
+        initView();
+        initData();
+        getMyBoom();
+    }
+
+    private void getMyBoom() {
+        Map<String, String> params = new HashMap<>();
+        params.put("PageIndex", myIndex + "");
+        params.put("PageSize", pageSize + "");
+        PostTools.getData(context, CommonUntilities.USER_URL + "GetMyTotalMine", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                Bean_MyBoomRecord bean_MyBoomRecord = new Gson().fromJson(response, Bean_MyBoomRecord.class);
+                if (bean_MyBoomRecord != null && bean_MyBoomRecord.Success) {
+                    if (myIndex == 1)
+                        myBoomList.clear();
+                    myBoomList.addAll(bean_MyBoomRecord.Data);
+                    if (bean_MyBoomRecord.Data.size() < pageSize)
+                        boomListView.setLoadingMoreEnabled(false);
+                    else boomListView.setLoadingMoreEnabled(true);
+                } else boomListView.setLoadingMoreEnabled(false);
+                myRecordAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+                boomListView.loadMoreComplete();
+            }
+        });
+    }
+
+    private void getBoom() {
+        Map<String, String> params = new HashMap<>();
+        params.put("PageIndex", getIndex + "");
+        params.put("PageSize", pageSize + "");
+        PostTools.getData(context, CommonUntilities.USER_URL + "GetMyBombTotalMine", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                Bean_MyBoomRecord bean_MyBoomRecord = new Gson().fromJson(response, Bean_MyBoomRecord.class);
+                if (bean_MyBoomRecord != null && bean_MyBoomRecord.Success) {
+                    if (getIndex == 1)
+                        getBoomList.clear();
+                    getBoomList.addAll(bean_MyBoomRecord.Data);
+                    if (bean_MyBoomRecord.Data.size() < pageSize)
+                        getListView.setLoadingMoreEnabled(false);
+                    else getListView.setLoadingMoreEnabled(true);
+                } else getListView.setLoadingMoreEnabled(false);
+                getBoomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+                getListView.loadMoreComplete();
+            }
+        });
+    }
+
+    private void getRank() {
+        Map<String, String> params = new HashMap<>();
+        params.put("rankDate", System.currentTimeMillis() + "");
+        PostTools.getData(context, CommonUntilities.RANK_URL, params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                Bean_Rank bean_MyBoomRecord = new Gson().fromJson(response, Bean_Rank.class);
+                if (bean_MyBoomRecord != null && bean_MyBoomRecord.Success) {
+                    rankList.clear();
+                    rankList.addAll(bean_MyBoomRecord.Data);
+                }
+                getBoomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+//                getListView.loadMoreComplete();
+            }
+        });
+    }
+
+    private void initData() {
+        myBoomList = new ArrayList<>();
+        viewList = new ArrayList<>();
+        getBoomList = new ArrayList<>();
+        rankList = new ArrayList<>();
+
+        //我埋得雷
+        myBoomView = LayoutInflater.from(context).inflate(R.layout.xrecycleview, null);
+        boomListView = (XRecyclerView) myBoomView.findViewById(R.id.xrecycleview);
+        boomListView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        boomListView.setPullRefreshEnabled(false);
+        boomListView.setLoadingMoreEnabled(false);
+        boomListView.setLoadingListener(this);
+        myRecordAdapter = new MyBoomRecordAdapter(myBoomList);
+        boomListView.setAdapter(myRecordAdapter);
+        myRecordAdapter.setOnclick(new OnClickInterface() {
+            @Override
+            public void onClick(View view, int position) {
+                context.startActivity(new Intent(context, MyRecordDetial.class).
+                        putExtra("id", myBoomList.get(position - 1).MineRecordId).putExtra("type", getBoomList.get(position - 1).MineType).putExtra("isMine",true));
+            }
+        });
+
+        //我踩到雷
+        myGetView = LayoutInflater.from(context).inflate(R.layout.xrecycleview, null);
+        getListView = (XRecyclerView) myGetView.findViewById(R.id.xrecycleview);
+        getListView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        getListView.setPullRefreshEnabled(false);
+        getListView.setLoadingMoreEnabled(false);
+        getListView.setLoadingListener(this);
+        getBoomAdapter = new MyGetBoomAdapter(getBoomList);
+        getListView.setAdapter(getBoomAdapter);
+        getBoomAdapter.setOnclick(new OnClickInterface() {
+            @Override
+            public void onClick(View view, int position) {
+                //举报
+                Bundle bundle=new Bundle();
+                bundle.putInt("type",0);
+                bundle.putString("userId",getBoomList.get(position-1).MineRecordId);
+                popInterfacer.OnConfirm(flag,bundle);
+            }
+        });
+        getBoomAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                context.startActivity(new Intent(context, MyRecordDetial.class).
+                        putExtra("id", getBoomList.get(position - 1).MineRecordId).putExtra("type", getBoomList.get(position - 1).MineType).putExtra("isMine",false));
+            }
+
+            @Override
+            public void onItemLongClickListener(View view, int position) {
+
+            }
+        });
+
+        //排行榜
+        rankView = LayoutInflater.from(context).inflate(R.layout.xrecycleview, null);
+        rankListView = (XRecyclerView) rankView.findViewById(R.id.xrecycleview);
+        rankListView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        rankListView.setPullRefreshEnabled(false);
+        rankListView.setLoadingMoreEnabled(false);
+        rankListView.setLoadingListener(this);
+        rankAdapter = new RankAdapter(rankList);
+        rankListView.setAdapter(rankAdapter);
+
+        viewList.add(myBoomView);
+        viewList.add(myGetView);
+        viewList.add(rankView);
+        viewPager.setAdapter(new ViewPagerAdapter(viewList));
+        boomSelected();
+        contentWide = (int) (Tools.getScreenWide(context) - Tools.dip2px(context, 45));//viewPager总移动距离
+    }
+
+    private void initView() {
+        if (view == null)
+            view = LayoutInflater.from(context).inflate(R.layout.record_pop, null);
+        view.findViewById(R.id.img_close).setOnClickListener(this);
+        viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        viewPager.setOnPageChangeListener(this);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewPager.getLayoutParams();
+        params.height = (int) (Tools.getScreenWide(context) * 0.8);
+        viewPager.setLayoutParams(params);
+        imgSelector = (ImageView) view.findViewById(R.id.img_selector);
+        btnShare = (Button) view.findViewById(R.id.btn_share);
+        btnShare.setOnClickListener(this);
+
+        imgBoom = (ImageView) view.findViewById(R.id.img_personal);
+        imgBoom.setOnClickListener(this);
+        imgGet = (ImageView) view.findViewById(R.id.img_find);
+        imgGet.setOnClickListener(this);
+        imgRank = (ImageView) view.findViewById(R.id.img_account);
+        imgRank.setOnClickListener(this);
+        this.setContentView(view);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_close:
+                dismiss();
+                break;
+            case R.id.img_account:
+                viewPager.setCurrentItem(2);
+                break;
+            case R.id.img_personal:
+                viewPager.setCurrentItem(0);
+                break;
+            case R.id.img_find:
+                viewPager.setCurrentItem(1);
+                break;
+            case R.id.btn_share:
+
+                break;
+        }
+    }
+
+    float marginList = 0, contentWide, moveDis;
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        moveDis = Tools.getScreenWide(context) - Tools.dip2px(context, 110) + imgSelector.getWidth() / 2;//selector移动距离
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) imgSelector.getLayoutParams();
+
+        marginList = (moveDis / 3) * (position + positionOffset);
+        params.leftMargin = (int) marginList;
+        imgSelector.setLayoutParams(params);
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        this.position = position;
+        switch (position) {
+            case 0:
+                boomSelected();
+                break;
+            case 1:
+                if (getBoomList == null || getBoomList.size() == 0) {
+                    getIndex = 1;
+                    getBoom();
+                }
+                getSelected();
+                break;
+            case 2:
+                if (rankList == null || rankList.size() == 0) {
+                    getRank();
+                }
+                rankSelected();
+                break;
+        }
+    }
+
+    private void boomSelected() {
+        imgRank.setEnabled(true);
+        imgGet.setEnabled(true);
+        imgBoom.setEnabled(false);
+        btnShare.setVisibility(View.GONE);
+    }
+
+    private void getSelected() {
+        imgRank.setEnabled(true);
+        imgGet.setEnabled(false);
+        imgBoom.setEnabled(true);
+        btnShare.setVisibility(View.VISIBLE);
+    }
+
+    private void rankSelected() {
+        imgRank.setEnabled(false);
+        imgGet.setEnabled(true);
+        imgBoom.setEnabled(true);
+        btnShare.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void onLoadMore() {
+        switch (position) {
+            case 0:
+                myIndex++;
+                getMyBoom();
+                break;
+            case 1:
+                getIndex++;
+                getBoom();
+                break;
+            case 2:
+
+                break;
+        }
+    }
+}

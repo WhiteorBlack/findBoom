@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@mipmap/bg_shop_center"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pop_title_height">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/title_create_pay_pwd" />
+
+            <ImageView style="@style/PopClose" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="15dp">
+
+            <TextView
+                style="@style/settingContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:text="请输入您要创建的密码" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/advice_edit_bg"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edt_first"
+                    style="@style/settingContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="最多6位数字"
+                    android:inputType="numberPassword"
+                    android:maxLength="6"
+                    android:padding="5dp" />
+
+                <ImageView
+                    android:id="@+id/img_first_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:background="@mipmap/icon_clear" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/settingContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="20dp"
+                android:text="请再次输入您要创建的密码" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/advice_edit_bg"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edt_second"
+                    style="@style/settingContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:hint="最多6位数字"
+                    android:inputType="numberPassword"
+                    android:maxLength="6"
+                    android:padding="5dp" />
+
+                <ImageView
+                    android:id="@+id/img_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:background="@mipmap/icon_clear" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_advice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="30dp"
+            android:background="@mipmap/btn_send_confirm" />
+
+    </LinearLayout>
+
+</LinearLayout>
