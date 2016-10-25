@@ -696,6 +696,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 String type = "" + bundle.getInt("type");
                 money = bundle.getFloat("money");
+                Tools.debug("moneyAfater"+money);
                 if (chargeTyp == 5) {
                     isBuyGold = false;
                     recahrgeRed(type);
@@ -804,7 +805,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private void redBuyGold(String pwd) {
         Map<String, String> params = new HashMap<>();
         params.put("GoldId", goodsId);
-        params.put("PayPassWord", Tools.get32MD5Str(pwd));
+        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
         PostTools.postData(context, CommonUntilities.ORDER_URL + "BuyGold", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -1030,7 +1031,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         Map<String, String> params = new HashMap<>();
         params.put("ArmInfoId", goodsId);
         params.put("Count", goodsCount);
-        params.put("PayPassWord", Tools.get32MD5Str(pwd));
+        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
         PostTools.postData(context, CommonUntilities.ORDER_URL + "CreateOrder", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -1564,7 +1565,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         params.put("RedPackText", text);
         params.put("Count", redCount);
         params.put("TotalAmount", redAmount);
-        params.put("PayPassWord", Tools.get32MD5Str(pwdString));
+        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwdString));
         PostTools.postData(context, CommonUntilities.MINE_URL + "AddRedPackMine", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {

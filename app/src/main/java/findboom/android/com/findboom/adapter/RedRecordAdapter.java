@@ -45,11 +45,7 @@ public class RedRecordAdapter extends BaseRecyAdapter {
         mHolder.setText(R.id.txt_name, redRecord.ReceiveUserId);
         mHolder.setText(R.id.txt_money, redRecord.Amount);
         mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
-        TextView txtInfo = (TextView) mHolder.itemView.findViewById(R.id.txt_info);
-        txtInfo.setText("");
-        txtInfo.append(Tools.getSpanString(mHolder.itemView.getContext(), redRecord.ReceiveTime, R.color.content_yellow) + " 在 " +
-                Tools.getSpanString(mHolder.itemView.getContext(), address, R.color.content_yellow) + " 领取了 " +
-                Tools.getSpanString(mHolder.itemView.getContext(), setUser, R.color.content_yellow) + " 的红包。");
+        mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
     }
 
     @Override

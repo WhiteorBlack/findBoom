@@ -7,10 +7,9 @@ import java.util.List;
  */
 public class Bean_BoomDetial extends BaseBean {
     public BoomDetial Data;
-    public List<GoldRecord> GoldReciveRecords;
-    public List<RedRecord> RedPackReciveRecords;
 
-    public static class BoomDetial{
+
+    public static class BoomDetial {
         public String MineRecordId;
         public String UserId;
         public String Provice;
@@ -41,5 +40,11 @@ public class Bean_BoomDetial extends BaseBean {
         public String StatusTxt;  //状态 0未触发 1已触发 -1已删除
         public String UserNickName;
         public String BombUserNickName;
+        public String RedPackText;
+        public String Count;
+        public String LeftCount;
+        public String TotalAmount;
+        public List<RedRecord> RedPackReciveRecords;
+        public List<GoldRecord> GoldReciveRecords;
     }
 }

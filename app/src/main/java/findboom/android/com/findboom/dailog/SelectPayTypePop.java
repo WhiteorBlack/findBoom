@@ -72,6 +72,7 @@ public class SelectPayTypePop extends BasePopupwind {
                     Tools.toastMsg(context, "请输入要充值的金额");
                     return;
                 }
+                Tools.debug("money"+money);
                 bundle.putInt("type", type);
                 bundle.putFloat("money", Float.parseFloat(money));
                 if (popInterfacer != null)

@@ -22,12 +22,15 @@ import java.util.HashMap;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_AllConfig;
+import findboom.android.com.findboom.dailog.BandPhonePop;
+import findboom.android.com.findboom.dailog.ChangePayPwdPop;
 import findboom.android.com.findboom.dailog.ConfrimPwdPop;
 import findboom.android.com.findboom.dailog.SelectBoomPic;
 import findboom.android.com.findboom.dailog.SelectBoomText;
 import findboom.android.com.findboom.dailog.SelectBoomType;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 
@@ -51,6 +54,8 @@ public class PutRedBoom extends Activity implements PopInterfacer {
     private EditText edtMoney, edtCount, edtRemark;
     private int rang = 50;
     private ConfrimPwdPop confrimPwdPop;
+    private BandPhonePop bandPhonePop;
+    private ChangePayPwdPop changePayPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +179,21 @@ public class PutRedBoom extends Activity implements PopInterfacer {
 
     @Override
     public void OnCancle(int flag) {
-
+        if (flag==0){
+            //忘记密码
+            if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+                //忘记密码-->绑定手机号码
+                if (bandPhonePop == null)
+                    bandPhonePop = new BandPhonePop(context);
+                bandPhonePop.showPop(txtAddRecord);
+                bandPhonePop.setPopInterfacer(this, 22);
+            } else {
+                if (changePayPwd == null)
+                    changePayPwd = new ChangePayPwdPop(context);
+                changePayPwd.showPop(txtAddRecord);
+                changePayPwd.setPopInterfacer(this, 13);
+            }
+        }
     }
 
 }

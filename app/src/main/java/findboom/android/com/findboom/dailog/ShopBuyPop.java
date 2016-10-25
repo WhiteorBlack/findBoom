@@ -86,14 +86,14 @@ public class ShopBuyPop extends BasePopupwind {
             case R.id.fl_add:
                 count++;
                 txtCount.setText(count + "");
-                txtPrice.setText("￥ " + price*count);
+                txtPrice.setText("￥ " + price * count);
                 break;
             case R.id.fl_minute:
                 count--;
-                if (count < 0)
+                if (count == 0)
                     count = 1;
                 txtCount.setText(count + "");
-                txtPrice.setText("￥ " + price*count);
+                txtPrice.setText("￥ " + price * count);
                 break;
             case R.id.btn_buy:
                 Bundle bundle = new Bundle();

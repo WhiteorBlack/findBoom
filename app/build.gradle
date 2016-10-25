@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'findboom'
             keyPassword 'findboom2016'
-            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
+            storeFile file('F:\\BaiduYunDownload\\FindBoom.jks')
             storePassword 'findboom2016'
         }
     }

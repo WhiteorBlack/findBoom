@@ -17,7 +17,7 @@
 
         <ImageView
             android:id="@+id/img_photo"
-           style="@style/GoodsPic" />
+            style="@style/GoodsPic" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -33,7 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"
-                android:textColor="@color/price_red" />
+                android:textColor="@color/price_red"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txt_name"
@@ -41,13 +42,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="地雷" />
+                android:text="地雷"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <Button
             android:id="@+id/btn_buy"
-            android:layout_width="102dp"
-            android:layout_height="35dp"
+            android:layout_width="87dp"
+            android:layout_height="30dp"
             android:background="@mipmap/btn_buy" />
     </LinearLayout>
 
