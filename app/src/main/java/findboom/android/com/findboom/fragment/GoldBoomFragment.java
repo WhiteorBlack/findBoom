@@ -85,9 +85,9 @@ public class GoldBoomFragment extends Fragment implements XRecyclerView.LoadingL
     private void setData() {
         ((FindBoomDetial) getActivity()).setState(bean_BoomDetial.Data.BombTypeTxt, bean_BoomDetial.Data.StatusTxt);
         redRecordAdapter.setAddress(bean_BoomDetial.Data.Address, bean_BoomDetial.Data.MineUserNickName);
-        recordList.addAll(bean_BoomDetial.RedPackReciveRecords);
-        if (bean_BoomDetial.RedPackReciveRecords != null) {
-            xRecyclerView.setPullRefreshEnabled(bean_BoomDetial.RedPackReciveRecords.size() < pageSize);
+        recordList.addAll(bean_BoomDetial.Data.RedPackReciveRecords);
+        if (bean_BoomDetial.Data.RedPackReciveRecords != null) {
+            xRecyclerView.setPullRefreshEnabled(bean_BoomDetial.Data.RedPackReciveRecords.size() < pageSize);
         }
         redRecordAdapter.notifyDataSetChanged();
     }

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.activity.MyRecordDetial;
+import findboom.android.com.findboom.activity.MyRedRecordDetial;
 import findboom.android.com.findboom.adapter.BaseRecyAdapter;
 import findboom.android.com.findboom.adapter.MyBoomRecordAdapter;
 import findboom.android.com.findboom.adapter.MyGetBoomAdapter;
@@ -177,8 +178,12 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
         myRecordAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
-                context.startActivity(new Intent(context, MyRecordDetial.class).
-                        putExtra("id", myBoomList.get(position - 1).MineRecordId).putExtra("type", getBoomList.get(position - 1).MineType).putExtra("isMine",true));
+                Bean_MyBoomRecord.BoomInfo boomInfo = myBoomList.get(position);
+                if (boomInfo.MineType == 3)
+                    context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
+                else
+                    context.startActivity(new Intent(context, MyRecordDetial.class).
+                            putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
             }
         });
 
@@ -195,17 +200,21 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
             @Override
             public void onClick(View view, int position) {
                 //举报
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",0);
-                bundle.putString("userId",getBoomList.get(position-1).MineRecordId);
-                popInterfacer.OnConfirm(flag,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 0);
+                bundle.putString("userId", getBoomList.get(position).MineRecordId);
+                popInterfacer.OnConfirm(flag, bundle);
             }
         });
         getBoomAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                context.startActivity(new Intent(context, MyRecordDetial.class).
-                        putExtra("id", getBoomList.get(position - 1).MineRecordId).putExtra("type", getBoomList.get(position - 1).MineType).putExtra("isMine",false));
+                Bean_MyBoomRecord.BoomInfo boomInfo = myBoomList.get(position);
+                if (boomInfo.MineType == 3)
+                    context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
+                else
+                    context.startActivity(new Intent(context, MyRecordDetial.class).
+                            putExtra("id", boomInfo.MineRecordId).putExtra("isMine", false));
             }
 
             @Override

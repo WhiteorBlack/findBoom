@@ -9,5 +9,5 @@
     <dimen name="textandiconmargin">10dp</dimen>
     <dimen name="home_scan_top">5dp</dimen>
     <dimen name="home_scan_right">10dp</dimen>
-    <dimen name="pic_size">80dp</dimen>
+    <dimen name="pic_size">60dp</dimen>
 </resources>
