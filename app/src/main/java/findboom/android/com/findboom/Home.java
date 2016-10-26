@@ -715,7 +715,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 String type = "" + bundle.getInt("type");
                 money = bundle.getFloat("money");
-                Tools.debug("moneyAfater" + money);
                 if (chargeTyp == 5) {
                     isBuyGold = false;
                     recahrgeRed(type);
@@ -1051,7 +1050,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         params.put("UserProfile", "");
         params.put("Avatar", Tools.convertIconToString(photoPath));
         params.put("PhoneBrand", "");
-        params.put("BirthDay", (year-ageInt) + "-01-01");
+        params.put("BirthDay", (year - ageInt) + "-01-01");
 
         PostTools.postData(context, CommonUntilities.USER_URL + "UpdateUserInfo", params, new PostCallBack() {
             @Override
