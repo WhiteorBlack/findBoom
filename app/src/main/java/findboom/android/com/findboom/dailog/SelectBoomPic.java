@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
@@ -49,7 +50,7 @@ public class SelectBoomPic extends PopupWindow {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.select_boom_list, null);
         recyclerView = (RecyclerView) view.findViewById(R.id.recy_type);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) recyclerView.getLayoutParams();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) recyclerView.getLayoutParams();
         params.width = Tools.dip2px(context, 200);
         recyclerView.setLayoutParams(params);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));

@@ -59,6 +59,33 @@ public class BoomDBManager {
         }
     }
 
+    public void updateUserData(Bean_UserInfo.GameUser user) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if (db.isOpen()) {
+            db.delete(Contents.USER_TABLE, null, null);
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(Contents.USER_BALANCE, user.UserBalance);
+            contentValues.put(Contents.USER_CREATETIME, user.CreateTime);
+            contentValues.put(Contents.USER_EASEID, user.EasemobId);
+            contentValues.put(Contents.USER_EASEPWD, user.EasemobPwd);
+            contentValues.put(Contents.USER_GIVETIME, user.LastGiveTime);
+            contentValues.put(Contents.USER_ID, user.GameUserId);
+            contentValues.put(Contents.USER_ISADMIN, user.IsAdminUser ? 1 : 0);
+            contentValues.put(Contents.USER_LEVEL, user.UserLevel);
+            contentValues.put(Contents.USER_PHONE, user.PhoneNumber);
+            contentValues.put(Contents.USER_REDPACK, user.RedPackBalance);
+            contentValues.put(Contents.USER_REFERCOUNT, user.ReferUserCount);
+            contentValues.put(Contents.USER_SCORE, user.UserScore);
+            contentValues.put(Contents.USER_SOURCE, user.UserSource);
+            contentValues.put(Contents.USER_STATUS, user.Status);
+            contentValues.put(Contents.USER_STATUSTXT, user.StatusTxt);
+            contentValues.put(Contents.USER_AGE, user.Age);
+            contentValues.put(Contents.USER_NIKC, user.NickName);
+            contentValues.put(Contents.USER_AVATAR, user.Avatar);
+            db.replace(Contents.USER_TABLE, null, contentValues);
+        }
+    }
+
     public Bean_UserInfo.GameUser getUserData(String userId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Bean_UserInfo.GameUser user = new Bean_UserInfo.GameUser();

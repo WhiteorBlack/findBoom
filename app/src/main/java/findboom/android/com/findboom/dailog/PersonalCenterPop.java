@@ -59,15 +59,17 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
 
     private List<View> viewList;
     private View personView, accountView;
+    private boolean isEdit = false;
 
     //账户信息
     private TextView txtRed, txtAccount;
     private Button btnApply;
 
     //个人资料
-    private TextView txtAge, txtCity, txtWork, txtLevel, txtIntegra;
-    private EditText txtName;
+    private TextView txtAge, txtCity, txtWork, txtLevel, txtIntegra, txtName;
+    private EditText edtName;
     private CircleImageView imgPhoto;
+
 
     public PersonalCenterPop(Context context) {
         super(context);
@@ -83,6 +85,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             txtAccount.setText(userInfo.UserBalance);
             txtAge.setText(TextUtils.isEmpty(userInfo.Age) ? "0" : userInfo.Age);//暂时没有该字段
             txtName.setText(TextUtils.isEmpty(userInfo.NickName) ? AppPrefrence.getUserName(context) : userInfo.NickName);
+            edtName.setText(TextUtils.isEmpty(userInfo.NickName) ? AppPrefrence.getUserName(context) : userInfo.NickName);
             txtRed.setText(userInfo.RedPackBalance);
             txtWork.setText(TextUtils.isEmpty(userInfo.Profession) ? "自由" : userInfo.Profession);
             txtIntegra.setText(TextUtils.isEmpty(userInfo.UserScore) ? "0" : userInfo.UserScore);
@@ -97,6 +100,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             txtAccount.setText(userInfo.UserBalance);
             txtAge.setText(TextUtils.isEmpty(userInfo.Age) ? "0" : userInfo.Age); //暂时没有该字段
             txtName.setText(userInfo.NickName);
+            edtName.setText(userInfo.NickName);
             txtRed.setText(userInfo.RedPackBalance);
             txtWork.setText(userInfo.Profession);
             txtIntegra.setText(TextUtils.isEmpty(userInfo.UserScore) ? "0" : userInfo.UserScore);
@@ -121,15 +125,18 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
     private void initData() {
         personView = LayoutInflater.from(context).inflate(R.layout.fragment_edit_personal, null);
         txtAge = (TextView) personView.findViewById(R.id.txt_user_age);
+        txtAge.setOnClickListener(this);
         txtCity = (TextView) personView.findViewById(R.id.txt_user_city);
         txtIntegra = (TextView) personView.findViewById(R.id.txt_user_intergra);
         txtLevel = (TextView) personView.findViewById(R.id.txt_user_level);
-        txtName = (EditText) personView.findViewById(R.id.txt_user_name);
+        txtName = (TextView) personView.findViewById(R.id.txt_user_name);
+        edtName = (EditText) personView.findViewById(R.id.edt_user_name);
+        edtName.setVisibility(View.GONE);
         personView.findViewById(R.id.ll_record).setOnClickListener(this);
         txtWork = (TextView) personView.findViewById(R.id.txt_user_work);
+        txtWork.setOnClickListener(this);
         imgPhoto = (CircleImageView) personView.findViewById(R.id.img_user_photo);
         imgPhoto.setOnClickListener(this);
-        txtName.setKeyListener(null);
 
         accountView = LayoutInflater.from(context).inflate(R.layout.fragment_account_info, null);
         txtAccount = (TextView) accountView.findViewById(R.id.txt_account_fee);
@@ -168,12 +175,25 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         this.setFocuse(true);
     }
 
-    public void setMoney(String money){
+    public void setMoney(String money) {
         txtAccount.setText(money);
     }
 
-    public void setRed(String money){
+    public void setRed(String money) {
         txtRed.setText(money);
+    }
+
+    public void setUseNmae(String name) {
+        txtName.setText(name);
+        edtName.setText(name);
+    }
+
+    public void setAge(String age) {
+        txtAge.setText(age);
+    }
+
+    public void setWorkd(String work) {
+        txtWork.setText(work);
     }
 
     @Override
@@ -199,13 +219,45 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 switch ((int) btnBottom.getTag()) {
                     case 1:
                         //编辑个人信息
+                        edtName.setVisibility(View.VISIBLE);
+                        txtName.setVisibility(View.GONE);
+                        edtName.setFocusable(true);
+                        Tools.openInput(edtName, context);
+                        isEdit = true;
+                        btnBottom.setTag(6);
                         break;
                     case 2:
                         //创建支付密码
-
+                        popInterfacer.OnConfirm(flag, bundleBtn);
                         break;
                     case 3:
                         //修改支付密码
+                        popInterfacer.OnConfirm(flag, bundleBtn);
+                        break;
+                    case 6:
+                        //保存个人资料
+//                        Bundle bundle = new Bundle();
+                        btnBottom.setTag(1);
+                        String name = edtName.getText().toString();
+                        if (TextUtils.isEmpty(name)) {
+                            Tools.toastMsg(context, "请输入用户名");
+                            return;
+                        }
+                        edtName.setVisibility(View.GONE);
+                        txtName.setVisibility(View.VISIBLE);
+                        txtName.setText(name);
+                        Tools.closeInput(edtName, context);
+                        isEdit = false;
+                        bundleBtn.putString("age", txtAge.getText().toString());
+                        bundleBtn.putString("name", name);
+                        bundleBtn.putString("pro", txtWork.getText().toString());
+                        Bean_UserInfo.GameUser user = new Bean_UserInfo.GameUser();
+                        user.Age = txtAge.getText().toString();
+                        user.NickName = txtName.getText().toString();
+                        user.Profession = txtWork.getText().toString();
+                        BoomDBManager.getInstance().setUserData(user);
+                        if (popInterfacer != null)
+                            popInterfacer.OnConfirm(flag, bundleBtn);
                         break;
                 }
                 break;
@@ -219,19 +271,37 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 popInterfacer.OnConfirm(flag, bundle);
                 break;
             case R.id.img_photo:
-
+                if (popInterfacer != null)
+                    popInterfacer.OnCancle(flag);
                 break;
             case R.id.btn_charge_money://充值账号
                 Bundle bundlec = new Bundle();
                 bundlec.putInt("type", 4);
-                if (popInterfacer!=null)
-                    popInterfacer.OnConfirm(flag,bundlec);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundlec);
                 break;
             case R.id.btn_charge_red://red package
                 Bundle bundler = new Bundle();
                 bundler.putInt("type", 5);
-                if (popInterfacer!=null)
-                    popInterfacer.OnConfirm(flag,bundler);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundler);
+                break;
+            case R.id.txt_user_work:
+                if (!isEdit)
+                    return;
+                Bundle bundleW = new Bundle();
+                bundleW.putInt("type", 7);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundleW);
+
+                break;
+            case R.id.txt_user_age:
+                if (!isEdit)
+                    return;
+                Bundle bundleA = new Bundle();
+                bundleA.putInt("type", 8);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundleA);
                 break;
         }
     }
@@ -246,6 +316,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         params.leftMargin = (int) (positionOffsetPixels * ((Tools.getScreenWide(context) - Tools.dip2px(context, 142) - imgSelector.getWidth()) / (viewPager.getWidth() - Tools.dip2px(context, 20))));
         imgSelector.setLayoutParams(params);
     }
+
 
     @Override
     public void onPageSelected(int position) {

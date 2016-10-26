@@ -1,14 +1,17 @@
 package findboom.android.com.findboom.adapter;
 
-import com.qtcem.yexiu.pickview.adapter.WheelAdapter;
-
 import android.text.TextUtils;
+
+import java.util.List;
+
+import findboom.android.com.findboom.widget.pickview.adapter.WheelAdapter;
+
 
 public class PickerDialogAdapter implements WheelAdapter<String> {
 
-	private String[] datas;
+	private List<String> datas;
 
-	public PickerDialogAdapter(String[] datas) {
+	public PickerDialogAdapter(List<String> datas) {
 		super();
 		this.datas = datas;
 	}
@@ -16,21 +19,21 @@ public class PickerDialogAdapter implements WheelAdapter<String> {
 	@Override
 	public int getItemsCount() {
 		// TODO Auto-generated method stub
-		return datas.length;
+		return datas.size();
 	}
 
 	@Override
 	public String getItem(int index) {
 		// TODO Auto-generated method stub
-		return datas[index];
+		return datas.get(index);
 	}
 
 	@Override
 	public int indexOf(String o) {
 		// TODO Auto-generated method stub
 		int index = 0;
-		for (int i = 0; i < datas.length; i++) {
-			if (TextUtils.equals(datas[i], o)) {
+		for (int i = 0; i < datas.size(); i++) {
+			if (TextUtils.equals(datas.get(i), o)) {
 				index = i;
 				break;
 			}

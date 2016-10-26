@@ -3,17 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <TextView
+        android:id="@+id/txt_type"
+        style="@style/settingContent"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="类别"
-        android:gravity="center"
-        android:singleLine="true"
-        android:background="@mipmap/select_type_item_bg"
-        android:textColor="@color/detial_bg"
-        android:ellipsize="end"
         android:layout_margin="5dp"
-        android:id="@+id/txt_type"
-        style="@style/settingContent"/>
+        android:background="@drawable/select_text_item_bg"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:padding="0dp"
+        android:singleLine="true"
+        android:text="类别"
+        android:textColor="@color/detial_bg" />
 
 </LinearLayout>

@@ -91,6 +91,7 @@ import findboom.android.com.findboom.dailog.GetRecordPop;
 import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
 import findboom.android.com.findboom.dailog.PersonalInfo;
+import findboom.android.com.findboom.dailog.PickerDialog;
 import findboom.android.com.findboom.dailog.PostResultPop;
 import findboom.android.com.findboom.dailog.RecordListPop;
 import findboom.android.com.findboom.dailog.RecordPop;
@@ -162,7 +163,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private String goodsId, goodsCount;
 
     private int boomCount = 0, scanCount = 0, defenseCount = 0;
-
+    private PickerDialog ageDialog, workDialog;
+    private List<String> workStrings = new ArrayList<>();
+    private List<String> ageStrings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,37 +217,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            String balance = "";
-            recharMoney = "";
-            float moneyF = 0.00f;
-            Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
-            if (!isBuyGold) {
-                if (user != null)
-                    balance = user.RedPackBalance;
-                if (!TextUtils.isEmpty(balance))
-                    moneyF = Float.parseFloat(balance) + money;
-                recharMoney = decentFloat(moneyF);
-                if (personalCenterPop != null) {
-                    if (chargeTyp == 4) {
-                        personalCenterPop.setMoney(recharMoney);
-                        user.UserBalance = recharMoney;
-                    } else {
-                        personalCenterPop.setRed(recharMoney);
-                        user.RedPackBalance = recharMoney;
-                    }
-                }
-            } else {
-                if (user != null)
-                    balance = user.UserBalance;
-                if (!TextUtils.isEmpty(balance))
-                    moneyF = Float.parseFloat(balance) + goldAmout;
-                recharMoney = decentFloat(moneyF);
-                user.UserBalance = recharMoney;
-            }
-
-            BoomDBManager.getInstance().setUserData(user);
-        }
     }
 
     private void startRecordPop() {
@@ -369,11 +341,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setMyLocationEnabled(true);
-        MapStatusUpdate status = MapStatusUpdateFactory.zoomTo(18f);
+        MapStatusUpdate status = MapStatusUpdateFactory.zoomTo(20f);
         mBaiduMap.setMapStatus(status);
         // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+
         mCurrentMarker = BitmapDescriptorFactory
-                .fromResource(R.mipmap.ic_logo);
+                .fromResource(R.mipmap.man_one);
+
         MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
         mBaiduMap.setMyLocationConfigeration(config);
 
@@ -581,7 +555,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     advicePop.setPopInterfacer(this, 8);
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 1) { //邀请好友
-
+                    //编辑个人信息
+                    if (bundle == null)
+                        return;
+                    saveUserInfo(bundle);
                 }
                 break;
             case 1: //商店窗口
@@ -613,14 +590,51 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     recordListPop.showPop(imgArsenal);
                     recordListPop.setPopInterfacer(this, 11);
                 }
-                if (bundle != null && bundle.getInt("type", -1) == 1) {
-                    //修改个人信息
-                    if (personalInfo == null)
-                        personalInfo = new PersonalInfo(context);
-                    personalInfo.setUserData();
-                    personalInfo.setCity(city);
-                    personalInfo.showPop(txtArsenal);
-                    personalInfo.setPopInterfacer(this, 17);
+                if (bundle != null && bundle.getInt("type", -1) == 7) {
+                    if (workStrings.size() == 0) {
+                        workStrings.add("学生");
+                        workStrings.add("老师");
+                        workStrings.add("白领");
+                        workStrings.add("蓝领");
+                        workStrings.add("司机");
+                        workStrings.add("高管");
+                        workStrings.add("其他");
+                    }
+                    if (workDialog == null)
+                        workDialog = new PickerDialog(context, workStrings, txtArsenal);
+                    workDialog.showPop();
+                    workDialog.setCurrentPos(0);
+                    workDialog.setOnSelectItem(new PickerDialog.OnSelectItem() {
+                        @Override
+                        public void onItemSelect(String selectString) {
+                            if (personalCenterPop != null)
+                                personalCenterPop.setWorkd(selectString);
+                        }
+                    });
+                }
+                if (bundle != null && bundle.getInt("type", -1) == 8) {
+                    if (ageStrings == null || ageStrings.size() == 0) {
+                        for (int i = 16; i < 65; i++) {
+                            ageStrings.add(i + "");
+                        }
+                    }
+
+                    if (ageDialog == null)
+                        ageDialog = new PickerDialog(context, ageStrings, txtArsenal);
+                    ageDialog.showPop();
+                    ageDialog.setOnSelectItem(new PickerDialog.OnSelectItem() {
+                        @Override
+                        public void onItemSelect(String selectString) {
+                            if (personalCenterPop != null)
+                                personalCenterPop.setAge(selectString);
+                        }
+                    });
+                }
+                if (bundle != null && bundle.getInt("type", -1) == 6) {
+                    //编辑个人信息
+                    if (bundle == null)
+                        return;
+                    saveUserInfo(bundle);
                 }
                 if (bundle != null && bundle.getInt("type", -1) == 2) {
                     //2创建,3修改
@@ -632,6 +646,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bundle != null && bundle.getInt("type", -1) == 3) {
                     if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
                         //提示绑定手机号码
+                        dissAllPop();
+                        if (bandPhonePop == null)
+                            bandPhonePop = new BandPhonePop(context);
+                        bandPhonePop.showPop(txtArsenal);
+                        bandPhonePop.setPopInterfacer(this, 22);
 
                     } else {
                         if (changePayPwd == null)
@@ -696,7 +715,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 String type = "" + bundle.getInt("type");
                 money = bundle.getFloat("money");
-                Tools.debug("moneyAfater"+money);
+                Tools.debug("moneyAfater" + money);
                 if (chargeTyp == 5) {
                     isBuyGold = false;
                     recahrgeRed(type);
@@ -748,23 +767,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 logOut();
                 settingPop = null;
                 break;
-            case 14:
-                //forget pwd
-                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
-                    //忘记密码-->绑定手机号码
-                    dissAllPop();
-                    if (bandPhonePop == null)
-                        bandPhonePop = new BandPhonePop(context);
-                    bandPhonePop.showPop(txtArsenal);
-                    bandPhonePop.setPopInterfacer(this, 22);
-                } else {
-                    if (changePayPwd == null)
-                        changePayPwd = new ChangePayPwdPop(context);
-                    changePayPwd.showPop(imgArsenal);
-                    changePayPwd.setPopInterfacer(this, 13);
-                }
-                break;
-            case 17:
+            case 3:
                 File file = new File(Environment.getExternalStorageDirectory(), "/findBoom/" + System.currentTimeMillis() + ".jpg");
                 if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
                 final Uri imageUri = Uri.fromFile(file);
@@ -792,6 +795,51 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                     }
                 }).show();
+                break;
+            case 14:
+                //forget pwd
+                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+                    //忘记密码-->绑定手机号码
+                    dissAllPop();
+                    if (bandPhonePop == null)
+                        bandPhonePop = new BandPhonePop(context);
+                    bandPhonePop.showPop(txtArsenal);
+                    bandPhonePop.setPopInterfacer(this, 22);
+                } else {
+                    if (changePayPwd == null)
+                        changePayPwd = new ChangePayPwdPop(context);
+                    changePayPwd.showPop(imgArsenal);
+                    changePayPwd.setPopInterfacer(this, 13);
+                }
+                break;
+            case 17:
+//                File file = new File(Environment.getExternalStorageDirectory(), "/findBoom/" + System.currentTimeMillis() + ".jpg");
+//                if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+//                final Uri imageUri = Uri.fromFile(file);
+//                CharSequence[] items = {"手机相册", "手机拍照"};
+//                final TakePhoto takePhoto = getTakePhoto();
+//                final CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create();
+//                new AlertDialog.Builder(this).setTitle("选择照片").setCancelable(true).setItems(items, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        switch (which) {
+//                            case 0:
+//                                takePhoto.onPickFromGalleryWithCrop(imageUri, cropOptions);
+//                                break;
+//                            case 1:
+//                                takePhoto.onPickFromCaptureWithCrop(imageUri, cropOptions);
+//                                break;
+//                            case 2:
+//                                dialog.dismiss();
+//                                break;
+//                        }
+//                    }
+//                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                }).show();
                 Tools.debug("takephoto");
                 break;
         }
@@ -924,6 +972,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                 BoomDBManager.getInstance().setUserData(user);
 
+            } else {
+                recharMoney = "";
+                money = 0f;
             }
         }
     };
@@ -940,7 +991,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      */
     private void recahrgeRed(final String type) {
         Map<String, String> params = new HashMap<>();
-        params.put("RechargeAmount", recharMoney);
+        params.put("RechargeAmount", money + "");
         params.put("PayMentType", type);
         PostTools.postData(context, CommonUntilities.RECHARGE_URL + "RechargeRedPack", params, new PostCallBack() {
             @Override
@@ -1000,7 +1051,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         params.put("UserProfile", "");
         params.put("Avatar", Tools.convertIconToString(photoPath));
         params.put("PhoneBrand", "");
-        params.put("BirthDay", year - ageInt + "-01-01");
+        params.put("BirthDay", (year-ageInt) + "-01-01");
 
         PostTools.postData(context, CommonUntilities.USER_URL + "UpdateUserInfo", params, new PostCallBack() {
             @Override
@@ -1103,11 +1154,15 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         super.takeSuccess(result);
         Tools.debug(result.getImage().getPath());
         photoPath = result.getImage().getPath();
+//        if (!TextUtils.isEmpty(photoPath)) {
+//            if (personalCenterPop != null && personalCenterPop.isShowing())
+//                personalCenterPop.setPhoto(photoPath);
+//            if (personalInfo != null && personalInfo.isShowing())
+//                personalInfo.setPhoto(photoPath);
+//        }
         if (!TextUtils.isEmpty(photoPath)) {
             if (personalCenterPop != null && personalCenterPop.isShowing())
                 personalCenterPop.setPhoto(photoPath);
-            if (personalInfo != null && personalInfo.isShowing())
-                personalInfo.setPhoto(photoPath);
         }
     }
 
@@ -1137,6 +1192,41 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     protected void onResume() {
         isForeground = true;
         super.onResume();
+        if (CommonUntilities.WXPAY) {
+            String balance = "";
+            recharMoney = "";
+            float moneyF = 0.00f;
+            Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+            if (!isBuyGold) {
+                if (user != null)
+                    balance = user.RedPackBalance;
+                if (!TextUtils.isEmpty(balance))
+                    moneyF = Float.parseFloat(balance) + money;
+                recharMoney = decentFloat(moneyF);
+                if (personalCenterPop != null) {
+                    if (chargeTyp == 4) {
+                        personalCenterPop.setMoney(recharMoney);
+                        user.UserBalance = recharMoney;
+                    } else {
+                        personalCenterPop.setRed(recharMoney);
+                        user.RedPackBalance = recharMoney;
+                    }
+                }
+            } else {
+                if (user != null)
+                    balance = user.UserBalance;
+                if (!TextUtils.isEmpty(balance))
+                    moneyF = Float.parseFloat(balance) + goldAmout;
+                recharMoney = decentFloat(moneyF);
+                user.UserBalance = recharMoney;
+            }
+
+            BoomDBManager.getInstance().setUserData(user);
+        } else {
+            recharMoney = "";
+            money = 0f;
+        }
+
     }
 
 
@@ -1181,13 +1271,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (!TextUtils.isEmpty(city))
             city = city.substring(0, city.length() - 1);
         // 构造定位数据
+        LatLng endLat = new LatLng(location.getLatitude(), location.getLongitude());
         MyLocationData locData = new MyLocationData.Builder()
                 .accuracy(location.getRadius())
                 // 此处设置开发者获取到的方向信息，顺时针0-360
-                .direction(100).latitude(location.getLatitude())
+                .direction(0).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
         // 设置定位数据
-        if (!isPutBoom)
+        if (!isPutBoom && (endLat == null || walkLat == null || DistanceUtil.getDistance(startLat, endLat) > 5))
             mBaiduMap.setMyLocationData(locData);
         if (startLat == null) {
             startLat = new LatLng(location.getLatitude(), location.getLongitude());
@@ -1196,7 +1287,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (walkLat == null) {
             walkLat = new LatLng(location.getLatitude(), location.getLongitude());
         }
-        LatLng endLat = new LatLng(location.getLatitude(), location.getLongitude());
+
         if (DistanceUtil.getDistance(startLat, endLat) > radius * 4 / 5) {
             getBoom(location);
             startLat = endLat;
@@ -1611,7 +1702,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                     addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
                     addOverLay(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
-                }else new PostResultPop(context,txtArsenal,R.drawable.icon_error,baseBean.Msg,"").showPop();
+                } else
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
             }
 
             @Override

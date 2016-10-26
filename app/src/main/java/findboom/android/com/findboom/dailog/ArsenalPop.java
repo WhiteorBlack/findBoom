@@ -52,6 +52,7 @@ public class ArsenalPop extends BasePopupwind {
         this.setContentView(view);
         defenseList = new ArrayList();
         defenseAdapter = new ArsenalAdapter(defenseList);
+        defenseAdapter.setArsenal(true);
         recyDefense.setAdapter(defenseAdapter);
         defenseAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override

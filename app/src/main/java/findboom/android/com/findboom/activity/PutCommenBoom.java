@@ -216,7 +216,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
                     if (selectBoomText == null)
                         selectBoomText = new SelectBoomText(context);
                     selectBoomText.setStrings(textBoom.Texts);
-                    selectBoomText.showAsDropDown(txtIntro, -Tools.dip2px(context, 30), 0);
+                    selectBoomText.showAsDropDown(txtIntro, -Tools.dip2px(context, 35), 0);
                     selectBoomText.setPopInterfacer(PutCommenBoom.this);
                 }
                 break;

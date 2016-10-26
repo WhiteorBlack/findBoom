@@ -42,9 +42,6 @@ public class PutRedBoom extends Activity implements PopInterfacer {
     private ImageView imgBoom;
     private TextView txtType, txtIntro, txtDistance, txtTime, txtReduceRecord, txtAddRecord;
     private int type = 3;
-    private SelectBoomType selectBoomType;
-    private SelectBoomText selectBoomText;
-    private SelectBoomPic selectBoomPic;
     private Context context;
     private String configString;
     private Bean_AllConfig.RedBoom redBoom;

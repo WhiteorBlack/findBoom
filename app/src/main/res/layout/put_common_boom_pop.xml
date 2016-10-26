@@ -11,8 +11,7 @@
 
         <ImageView
             style="@style/PopClose"
-            android:onClick="boomClick"
-             />
+            android:onClick="boomClick" />
 
 
     </FrameLayout>
@@ -40,7 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
+            android:drawableRight="@mipmap/icon_arrow_down"
             android:text="普通雷"
+            android:drawablePadding="5dp"
             android:textStyle="bold" />
 
         <TextView

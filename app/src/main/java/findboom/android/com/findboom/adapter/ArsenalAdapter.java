@@ -8,6 +8,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,13 +30,20 @@ public class ArsenalAdapter extends BaseRecyAdapter {
         this.dataList = dataList;
     }
 
+    private boolean isArsenal = false;
+
+    public void setArsenal(boolean isArsenal) {
+        this.isArsenal = isArsenal;
+    }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
         TextView txtName = (TextView) mHolder.itemView.findViewById(R.id.txt_name);
-        txtName.append(userArm.ArmTypeTxt + " ");
+        if (isArsenal)
+            txtName.append("地雷");
         SpannableString count = new SpannableString(userArm.Count + "");
         count.setSpan(new ForegroundColorSpan(mHolder.itemView.getContext().getResources().getColor(R.color.price_red)), 0, count.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         count.setSpan(new AbsoluteSizeSpan(20, true), 0, count.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -48,6 +56,9 @@ public class ArsenalAdapter extends BaseRecyAdapter {
             mHolder.setText(R.id.txt_intro, "临时");
             mHolder.setImage(R.id.img_photo, R.mipmap.boom_temp);
         }
+        if (isArsenal)
+            mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.VISIBLE);
+        else mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.GONE);
         mHolder.setOnClick(R.id.btn_use, position);
     }
 

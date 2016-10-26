@@ -10,15 +10,16 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
-        android:paddingLeft="37dp"
-        android:paddingRight="37dp"
-        android:paddingTop="20dp">
+        android:paddingLeft="@dimen/pop_padding"
+        android:paddingRight="@dimen/pop_padding"
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/img_photo"
-            android:layout_width="80dp"
-            android:layout_height="94dp"
-            android:background="@mipmap/boom_normal" />
+            android:layout_width="@dimen/pop_pic_wide"
+            android:layout_height="@dimen/pop_pic_height"
+            android:background="@mipmap/boom_normal"
+            android:scaleType="centerInside" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -50,9 +51,10 @@
 
         <Button
             android:id="@+id/btn_use"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="使用" />
+            android:layout_width="@dimen/pop_btn_wide"
+            android:layout_height="@dimen/pop_btn_height"
+            android:background="@mipmap/btn_use"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

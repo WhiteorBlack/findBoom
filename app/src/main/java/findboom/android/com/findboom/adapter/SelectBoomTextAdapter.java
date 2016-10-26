@@ -28,7 +28,7 @@ public class SelectBoomTextAdapter extends BaseRecyAdapter {
 
     @Override
     public int getLayout() {
-        return R.layout.select_boom_list_item;
+        return R.layout.select_boom_text_list_item;
     }
 
 }

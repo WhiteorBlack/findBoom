@@ -54,7 +54,7 @@ public class SplashActivity extends BaseActivity {
                 }
                 bean_UserInfo = new Gson().fromJson(response, Bean_UserInfo.class);
                 if (bean_UserInfo != null && bean_UserInfo.Success) {
-                    BoomDBManager.getInstance().setUserData(bean_UserInfo.Data);
+                    BoomDBManager.getInstance().updateUserData(bean_UserInfo.Data);
                     AppPrefrence.setToken(context, bean_UserInfo.Data.Token);
                     AppPrefrence.setUserName(context, bean_UserInfo.Data.GameUserId);
                     AppPrefrence.setUserPhone(context, bean_UserInfo.Data.PhoneNumber);
