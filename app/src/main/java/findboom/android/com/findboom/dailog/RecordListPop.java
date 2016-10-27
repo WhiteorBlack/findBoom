@@ -57,6 +57,7 @@ public class RecordListPop extends BasePopupwind implements XRecyclerView.Loadin
             view = LayoutInflater.from(context).inflate(R.layout.record_list_pop, null);
         view.findViewById(R.id.img_close).setOnClickListener(this);
         recyFriend = (XRecyclerView) view.findViewById(R.id.recy_friend);
+        recyFriend.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         recyFriend.setItemAnimator(new DefaultItemAnimator());
         recyFriend.setPullRefreshEnabled(false);
         recyFriend.setLoadingMoreEnabled(true);
@@ -64,12 +65,6 @@ public class RecordListPop extends BasePopupwind implements XRecyclerView.Loadin
 
         friendList = new ArrayList();
         friendAdapter = new RecordListAdapter(context, friendList);
-        friendAdapter.setOnclick(new OnClickInterface() {
-            @Override
-            public void onClick(View view, int position) {
-
-            }
-        });
         recyFriend.setAdapter(friendAdapter);
         this.setContentView(view);
         getFriend();
@@ -107,7 +102,7 @@ public class RecordListPop extends BasePopupwind implements XRecyclerView.Loadin
                         recyFriend.setLoadingMoreEnabled(false);
                     else recyFriend.setLoadingMoreEnabled(true);
                 }
-                recyFriend.loadMoreComplete();
+//                recyFriend.loadMoreComplete();
                 friendAdapter.notifyDataSetChanged();
             }
 

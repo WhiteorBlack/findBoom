@@ -221,8 +221,8 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         //编辑个人信息
                         edtName.setVisibility(View.VISIBLE);
                         txtName.setVisibility(View.GONE);
-                        edtName.setFocusable(true);
-                        Tools.openInput(edtName, context);
+//                        edtName.setFocusable(true);
+//                        Tools.openInput(edtName, context);
                         isEdit = true;
                         btnBottom.setTag(6);
                         break;
@@ -245,7 +245,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         edtName.setVisibility(View.GONE);
                         txtName.setVisibility(View.VISIBLE);
                         txtName.setText(name);
-                        Tools.closeInput(edtName, context);
+//                        Tools.closeInput(edtName, context);
                         isEdit = false;
                         bundleBtn.putString("age", txtAge.getText().toString());
                         bundleBtn.putString("name", name);

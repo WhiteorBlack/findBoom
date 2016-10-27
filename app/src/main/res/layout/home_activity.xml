@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandable_selector="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -76,17 +77,17 @@
             </FrameLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:gravity="center|right"
-            android:orientation="vertical"
             android:paddingBottom="100dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -163,32 +164,29 @@
                     android:button="@drawable/checkbox_money" />
             </LinearLayout>
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/img_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center_vertical|right"
-                android:orientation="horizontal">
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/home_msg"
+                android:onClick="boomClick" />
 
-                <TextView
-                    android:id="@+id/txt_msg"
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="-15dp"
-                    android:layout_weight="1"
-                    android:background="@mipmap/bg_home_msg"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="15dp"
-                    android:text="消息" />
+            <findboom.android.com.findboom.widget.expandableselector.ExpandableSelector
+                android:id="@+id/img_expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/img_msg"
+                android:layout_centerHorizontal="true"
+                android:onClick="boomClick"
+                android:layout_marginBottom="5dp"
+                expandable_selector:animation_duration="200"
+                expandable_selector:hide_background_if_collapsed="true"
+                expandable_selector:hide_first_item_on_collapse="true" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@mipmap/home_msg" />
-            </LinearLayout>
-        </LinearLayout>
+
+        </RelativeLayout>
 
 
         <LinearLayout

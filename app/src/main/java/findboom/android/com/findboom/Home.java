@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -88,6 +89,7 @@ import findboom.android.com.findboom.dailog.CreatePayPwdPop;
 import findboom.android.com.findboom.dailog.DefensePop;
 import findboom.android.com.findboom.dailog.FriendListPop;
 import findboom.android.com.findboom.dailog.GetRecordPop;
+import findboom.android.com.findboom.dailog.MessageDialog;
 import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
 import findboom.android.com.findboom.dailog.PersonalInfo;
@@ -109,6 +111,10 @@ import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
+import findboom.android.com.findboom.widget.expandableselector.ExpandableItem;
+import findboom.android.com.findboom.widget.expandableselector.ExpandableSelector;
+import findboom.android.com.findboom.widget.expandableselector.ExpandableSelectorListener;
+import findboom.android.com.findboom.widget.expandableselector.OnExpandableItemClickListener;
 import findboom.android.com.findboom.wxpay.WxPayHelper;
 import okhttp3.Call;
 
@@ -119,7 +125,7 @@ import okhttp3.Call;
 public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
-    private ImageView imgDefense, imgScan, imgRecord, imgArsenal;
+    private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg;
     private TextView txtDefense, txtScan, txtRecord, txtArsenal;
     private CheckBox chbMoney, chbBoom;
 
@@ -144,6 +150,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BoomPop boomPop;
     private SelectPayTypeAllPop selectPayTypeAllPop;
     private BandPhonePop bandPhonePop;
+    private MessageDialog messageDialog;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -327,8 +334,50 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     BitmapDescriptor mCurrentMarker;
+    private ExpandableSelector expandableSelector;
 
     private void initView() {
+
+        expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
+        expandableSelector.setVisibility(View.INVISIBLE);
+        List<ExpandableItem> expandableItems = new ArrayList<>();
+        expandableItems.add(new ExpandableItem(R.mipmap.friend_msg));
+        expandableItems.add(new ExpandableItem(R.mipmap.system_msg));
+        expandableSelector.showExpandableItems(expandableItems);
+        expandableSelector.setOnExpandableItemClickListener(new OnExpandableItemClickListener() {
+            @Override
+            public void onExpandableItemClickListener(int index, View view) {
+                if (index == 0) {
+                    //系统消息
+
+                } else {
+                    //好友消息
+
+                }
+                expandableSelector.collapse();
+            }
+        });
+        expandableSelector.setExpandableSelectorListener(new ExpandableSelectorListener() {
+            @Override
+            public void onCollapse() {
+
+            }
+
+            @Override
+            public void onExpand() {
+
+            }
+
+            @Override
+            public void onCollapsed() {
+                expandableSelector.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onExpanded() {
+                expandableSelector.setVisibility(View.VISIBLE);
+            }
+        });
         mapBoomList = new ArrayList<>();
         boomList = new ArrayList<>();
         defenseList = new ArrayList<>();
@@ -361,6 +410,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         imgRecord = (ImageView) findViewById(R.id.img_record);
         imgScan = (ImageView) findViewById(R.id.img_scan);
         imgScan.setEnabled(false);
+
+        imgMsg = (ImageView) findViewById(R.id.img_msg);
 
         txtArsenal = (TextView) findViewById(R.id.txt_arsenal_count);
         txtArsenal.setVisibility(View.GONE);
@@ -455,6 +506,20 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 shopPop.setPopInterfacer(Home.this, 1);
                 shopPop.showPop(imgArsenal);
                 break;
+            case R.id.img_msg:
+//                if (messageDialog == null)
+//                    messageDialog = new MessageDialog(context);
+//                messageDialog.showAtLocation(imgMsg, Gravity.BOTTOM | Gravity.RIGHT, Tools.dip2px(context, 15), Tools.dip2px(context, 100));
+//                messageDialog.setPopInterfacer(this, 23);
+                if (!expandableSelector.isExpanded()) {
+                    expandableSelector.setVisibility(View.VISIBLE);
+                    expandableSelector.expand();
+                } else {
+                    expandableSelector.setVisibility(View.INVISIBLE);
+                    expandableSelector.collapse();
+                }
+
+                break;
         }
     }
 
@@ -535,6 +600,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 22:
                 bandPhonePop = null;
+                break;
+            case 23:
+                messageDialog = null;
                 break;
         }
     }
@@ -748,6 +816,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     confirmPwdPop.showPop(txtArsenal);
                     confirmPwdPop.setMoney(money);
                     confirmPwdPop.setPopInterfacer(this, 14);
+                }
+                break;
+            case 23:
+                if (bundle == null)
+                    return;
+                if (bundle.getInt("type") == 1) {
+
+                }
+                if (bundle.getInt("type") == 2) {
+
                 }
                 break;
         }

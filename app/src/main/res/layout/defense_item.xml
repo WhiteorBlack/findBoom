@@ -18,7 +18,6 @@
             android:id="@+id/img_photo"
             android:layout_width="@dimen/pop_pic_wide"
             android:layout_height="@dimen/pop_pic_height"
-            android:background="@mipmap/boom_normal"
             android:scaleType="centerInside" />
 
         <LinearLayout

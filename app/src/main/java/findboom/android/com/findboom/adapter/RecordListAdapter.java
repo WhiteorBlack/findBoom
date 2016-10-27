@@ -18,16 +18,10 @@ import findboom.android.com.findboom.interfacer.OnClickInterface;
  * TODO:
  */
 public class RecordListAdapter extends BaseRecyAdapter {
-    private OnClickInterface onClickInterface;
 
     public RecordListAdapter(Context context, List dataList) {
         super(context, dataList);
     }
-
-    public void setOnclick(OnClickInterface l) {
-        this.onClickInterface = l;
-    }
-
 
     public RecordListAdapter(List dataList) {
         super(dataList);
@@ -37,18 +31,9 @@ public class RecordListAdapter extends BaseRecyAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         super.onBindViewHolder(holder, position);
         ViewHolder mHolder = (ViewHolder) holder;
-        if (onClickInterface != null) {
-            mHolder.itemView.findViewById(R.id.img_talk).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onClickInterface.onClick(v, position);
-                }
-            });
-        }
-
-        Bean_RecordList.RecordList recordList= (Bean_RecordList.RecordList) dataList.get(position);
+        Bean_RecordList.RecordList recordList = (Bean_RecordList.RecordList) dataList.get(position);
         mHolder.setText(R.id.txt_date, recordList.GetTime);
-        mHolder.setRadiusImage(R.id.txt_content, recordList.SourceType);
+        mHolder.setText(R.id.txt_content, recordList.SourceType);
 
     }
 
