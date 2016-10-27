@@ -87,7 +87,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             txtName.setText(TextUtils.isEmpty(userInfo.NickName) ? AppPrefrence.getUserName(context) : userInfo.NickName);
             edtName.setText(TextUtils.isEmpty(userInfo.NickName) ? AppPrefrence.getUserName(context) : userInfo.NickName);
             txtRed.setText(userInfo.RedPackBalance);
-            txtWork.setText(TextUtils.isEmpty(userInfo.Profession) ? "自由" : userInfo.Profession);
+            txtWork.setText(TextUtils.isEmpty(userInfo.Profession) ? "其他" : userInfo.Profession);
             txtIntegra.setText(TextUtils.isEmpty(userInfo.UserScore) ? "0" : userInfo.UserScore);
             txtLevel.setText(TextUtils.isEmpty(userInfo.UserLevel) ? "0" : userInfo.UserLevel);
             if (!TextUtils.isEmpty(userInfo.Avatar))
@@ -215,7 +215,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             case R.id.btn_edit_info:
                 Bundle bundleBtn = new Bundle();
                 bundleBtn.putInt("type", (int) btnBottom.getTag());
-                popInterfacer.OnConfirm(flag, bundleBtn);
+
                 switch ((int) btnBottom.getTag()) {
                     case 1:
                         //编辑个人信息
@@ -236,8 +236,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         break;
                     case 6:
                         //保存个人资料
-//                        Bundle bundle = new Bundle();
-                        btnBottom.setTag(1);
+
                         String name = edtName.getText().toString();
                         if (TextUtils.isEmpty(name)) {
                             Tools.toastMsg(context, "请输入用户名");
@@ -258,6 +257,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         BoomDBManager.getInstance().setUserData(user);
                         if (popInterfacer != null)
                             popInterfacer.OnConfirm(flag, bundleBtn);
+                        btnBottom.setTag(1);
                         break;
                 }
                 break;

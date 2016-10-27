@@ -26,6 +26,7 @@ public class Contents {
     public static String USER_AGE = "Age";
     public static String USER_NIKC = "userNick";
     public static String USER_AVATAR = "userAvatar";
+    public static String USER_WORK="userWork";
 
     public static String COMMON_TABLE="CommonTable";
     public static String COMMON_PLAUS="CommonPlaus";

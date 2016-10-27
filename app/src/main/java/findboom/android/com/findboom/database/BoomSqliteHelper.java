@@ -27,7 +27,7 @@ public class BoomSqliteHelper extends SQLiteOpenHelper {
             + Contents.USER_REDPACK + " TEXT, " + Contents.USER_REFERCOUNT + " TEXT, "
             + Contents.USER_SCORE + " TEXT, " + Contents.USER_STATUS + " TEXT, "
             + Contents.USER_AVATAR + " TEXT, " + Contents.USER_NIKC + " TEXT, "
-            + Contents.USER_AGE + " TEXT, "
+            + Contents.USER_AGE + " TEXT, " + Contents.USER_WORK + " TEXT, "
             + Contents.USER_SOURCE + " TEXT, " + Contents.USER_STATUSTXT + " TEXT);";
 
     private String CREATE_COMMON_TABLE = "CREATE TABLE " + Contents.COMMON_TABLE + " ("

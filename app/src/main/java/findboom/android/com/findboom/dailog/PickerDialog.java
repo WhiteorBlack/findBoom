@@ -49,10 +49,10 @@ public class PickerDialog extends PopupWindow {
                 // TODO Auto-generated method stub
 
                 if (onSelectItem != null) {
-                    if (index == 0) {
-                        onSelectItem.onItemSelect("");
-                        return;
-                    }
+//                    if (index == 0) {
+//                        onSelectItem.onItemSelect("");
+//                        return;
+//                    }
                     onSelectItem.onItemSelect(datas.get(index));
                 }
             }

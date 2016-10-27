@@ -555,10 +555,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     advicePop.setPopInterfacer(this, 8);
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 1) { //邀请好友
-                    //编辑个人信息
-                    if (bundle == null)
-                        return;
-                    saveUserInfo(bundle);
+
                 }
                 break;
             case 1: //商店窗口
@@ -603,7 +600,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (workDialog == null)
                         workDialog = new PickerDialog(context, workStrings, txtArsenal);
                     workDialog.showPop();
-                    workDialog.setCurrentPos(0);
                     workDialog.setOnSelectItem(new PickerDialog.OnSelectItem() {
                         @Override
                         public void onItemSelect(String selectString) {
@@ -1041,7 +1037,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         String age = bundle.getString("age");
         int ageInt = TextUtils.isEmpty(age) ? 0 : Integer.parseInt(age);
         Calendar calendar = Calendar.getInstance();
-        int year = calendar.YEAR;
+        int year = calendar.get(Calendar.YEAR);
         params.put("NickName", TextUtils.isEmpty(name) ? "" : name);
         params.put("City", city);
         params.put("Province", provice);
@@ -1062,9 +1058,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_UserInfo userInfo = new Gson().fromJson(response, Bean_UserInfo.class);
                 if (userInfo != null && userInfo.Success) {
-                    BoomDBManager.getInstance().setUserData(userInfo.Data);
-                    if (personalInfo != null)
-                        personalInfo.dismiss();
+                    BoomDBManager.getInstance().updateUserData(userInfo.Data);
+
                     if (personalCenterPop != null)
                         personalCenterPop.setUserData(userInfo.Data);
                 }
@@ -1291,10 +1286,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             getBoom(location);
             startLat = endLat;
         }
-        if (mapBoomList != null && mapBoomList.size() > 0 && DistanceUtil.getDistance(walkLat, endLat) > 5) {
+        if (mapBoomList != null && mapBoomList.size() > 0 && DistanceUtil.getDistance(walkLat, endLat) > 2) {
             //判断是否出发雷
             walkLat = endLat;
-            dealBoomData(endLat);
+            dealBoomData(walkLat);
         }
     }
 
