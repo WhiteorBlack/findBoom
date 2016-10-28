@@ -2,12 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_boom_detial"
+    android:background="@mipmap/bg_detial_new"
     android:orientation="vertical">
 
     <ImageView
         style="@style/PopClose"
         android:layout_marginTop="15dp"
         android:onClick="boomClick" />
+
+    <findboom.android.com.findboom.widget.xrecycleview.XRecyclerView
+        android:id="@+id/xrecycleview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp" />
 
 </LinearLayout>

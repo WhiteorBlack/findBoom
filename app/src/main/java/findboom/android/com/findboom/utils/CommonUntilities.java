@@ -23,4 +23,5 @@ public class CommonUntilities {
     public static String ORDER_URL=MAIN_URL+"Order/";
     public static String RECHARGE_URL=MAIN_URL+"Recharge/";
     public static String CONFIG_URL=MAIN_URL+"Config/";
+    public static String WITH_URL=MAIN_URL+"Withdraw/";
 }

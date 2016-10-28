@@ -90,6 +90,10 @@
             android:name=".activity.PutRedBoom"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.SystemMessage"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
 
         <!-- 微信平台 -->
@@ -110,22 +114,22 @@
             android:name="EASEMOB_APPKEY"
             android:value="saoleikeji#saoleikeji" />
         <!-- 声明sdk所需的service -->
-      <!--  <service
-            android:name="com.hyphenate.chat.EMChatService"
-            android:exported="true" />
-        &lt;!&ndash; 声明sdk所需的receiver &ndash;&gt;
-        <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+        <!--  <service
+              android:name="com.hyphenate.chat.EMChatService"
+              android:exported="true" />
+          &lt;!&ndash; 声明sdk所需的receiver &ndash;&gt;
+          <receiver android:name="com.hyphenate.chat.EMMonitorReceiver">
+              <intent-filter>
+                  <action android:name="android.intent.action.PACKAGE_REMOVED" />
 
-                <data android:scheme="package" />
-            </intent-filter>
-            &lt;!&ndash; 可选filter &ndash;&gt;
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>-->
+                  <data android:scheme="package" />
+              </intent-filter>
+              &lt;!&ndash; 可选filter &ndash;&gt;
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED" />
+                  <action android:name="android.intent.action.USER_PRESENT" />
+              </intent-filter>
+          </receiver>-->
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

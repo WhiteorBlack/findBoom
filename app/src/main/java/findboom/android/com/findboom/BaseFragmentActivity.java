@@ -21,9 +21,7 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     public void boomClick(View v) {
         switch (v.getId()) {
-            case R.id.fl_back:
-                finish();
-                break;
+
         }
     }
 

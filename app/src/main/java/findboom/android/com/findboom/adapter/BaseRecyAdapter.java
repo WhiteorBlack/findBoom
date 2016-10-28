@@ -19,6 +19,7 @@ import java.util.List;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.interfacer.OnClickInterface;
 import findboom.android.com.findboom.widget.CircleImageView;
+import findboom.android.com.findboom.widget.StrokeTextView;
 
 /**
  * author:${白曌勇} on 2016/9/17
@@ -92,6 +93,9 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
 
         public void setText(int id, String text) {
             ((TextView) itemView.findViewById(id)).setText(text);
+        }
+        public void setStrokeText(int id, String text) {
+            ((StrokeTextView) itemView.findViewById(id)).setText(text);
         }
 
         public void setImage(int id, String url) {

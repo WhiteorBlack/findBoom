@@ -70,6 +70,7 @@ import cn.jpush.android.api.TagAliasCallback;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.activity.PutCommenBoom;
 import findboom.android.com.findboom.activity.PutRedBoom;
+import findboom.android.com.findboom.activity.SystemMessage;
 import findboom.android.com.findboom.alipay.AliPayHelper;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.BaseBean;
@@ -85,6 +86,7 @@ import findboom.android.com.findboom.dailog.BandPhonePop;
 import findboom.android.com.findboom.dailog.BoomPop;
 import findboom.android.com.findboom.dailog.ChangePayPwdPop;
 import findboom.android.com.findboom.dailog.ConfrimPwdPop;
+import findboom.android.com.findboom.dailog.ConvertRedPop;
 import findboom.android.com.findboom.dailog.CreatePayPwdPop;
 import findboom.android.com.findboom.dailog.DefensePop;
 import findboom.android.com.findboom.dailog.FriendListPop;
@@ -151,6 +153,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private SelectPayTypeAllPop selectPayTypeAllPop;
     private BandPhonePop bandPhonePop;
     private MessageDialog messageDialog;
+    private ConvertRedPop convertRedPop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -337,7 +340,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ExpandableSelector expandableSelector;
 
     private void initView() {
-
         expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
         expandableSelector.setVisibility(View.INVISIBLE);
         List<ExpandableItem> expandableItems = new ArrayList<>();
@@ -347,9 +349,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         expandableSelector.setOnExpandableItemClickListener(new OnExpandableItemClickListener() {
             @Override
             public void onExpandableItemClickListener(int index, View view) {
-                if (index == 0) {
+                if (index == 1) {
                     //系统消息
-
+                    startActivity(new Intent(context, SystemMessage.class));
                 } else {
                     //好友消息
 
@@ -507,10 +509,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 shopPop.showPop(imgArsenal);
                 break;
             case R.id.img_msg:
-//                if (messageDialog == null)
-//                    messageDialog = new MessageDialog(context);
-//                messageDialog.showAtLocation(imgMsg, Gravity.BOTTOM | Gravity.RIGHT, Tools.dip2px(context, 15), Tools.dip2px(context, 100));
-//                messageDialog.setPopInterfacer(this, 23);
                 if (!expandableSelector.isExpanded()) {
                     expandableSelector.setVisibility(View.VISIBLE);
                     expandableSelector.expand();
@@ -603,6 +601,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 23:
                 messageDialog = null;
+                break;
+            case 24:
+                convertRedPop = null;
+                break;
+            case 25:
+                confirmPwdPop = null;
                 break;
         }
     }
@@ -731,6 +735,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     selectPayPop.setPopInterfacer(this, 16);
                     chargeTyp = bundle.getInt("type", -1);
                 }
+                if (bundle != null && bundle.getInt("type", 9) == 9) {
+                    if (convertRedPop == null)
+                        convertRedPop = new ConvertRedPop(context);
+                    convertRedPop.showPop(txtArsenal);
+                    convertRedPop.setPopInterfacer(this, 24);
+                }
                 break;
             case 5: //放置地雷
                 isPutBoom = true;
@@ -828,7 +838,65 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                 }
                 break;
+            case 24:
+                if (bundle == null)
+                    return;
+                money = Float.parseFloat(bundle.getString("money"));
+                alipayNo = bundle.getString("alipay");
+                alipayName = bundle.getString("name");
+                if (confirmPwdPop == null)
+                    confirmPwdPop = new ConfrimPwdPop(context);
+                confirmPwdPop.showPop(txtArsenal);
+                confirmPwdPop.setPopInterfacer(this, 25);
+                break;
+            case 25:
+                if (bundle == null)
+                    return;
+                convertRed(bundle.getString("pwd"));
+                confirmPwdPop.dismiss();
+                break;
         }
+    }
+
+    String alipayName = "", alipayNo = "";
+
+    private void convertRed(String pwd) {
+        Map<String, String> params = new HashMap<>();
+        params.put("AlipayName", alipayName);
+        params.put("AlipayAccount", alipayNo);
+        params.put("Amount", money + "");
+        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
+        PostTools.postData(context, CommonUntilities.WITH_URL + "ApplyWithdraw", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                Tools.debug("convertRed" + response);
+                if (TextUtils.isEmpty(response)) {
+                    Tools.toastMsg(context, "网络错误,请检查后重试");
+                    return;
+                }
+                Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
+                if (baseBean != null && baseBean.Success) {
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
+                    String balance = "";
+                    recharMoney = "";
+                    float moneyF = 0.00f;
+                    Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+                    if (user != null)
+                        balance = user.RedPackBalance;
+                    if (!TextUtils.isEmpty(balance))
+                        moneyF = Float.parseFloat(balance) - money;
+                    recharMoney = decentFloat(moneyF);
+                    if (personalCenterPop != null)
+                        personalCenterPop.setRed(recharMoney);
+                    user.RedPackBalance = recharMoney;
+                    BoomDBManager.getInstance().setUserData(user);
+                    if (convertRedPop != null && convertRedPop.isShowing())
+                        convertRedPop.dismiss();
+                } else
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
+            }
+        });
     }
 
     @Override
@@ -886,34 +954,22 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 break;
             case 17:
-//                File file = new File(Environment.getExternalStorageDirectory(), "/findBoom/" + System.currentTimeMillis() + ".jpg");
-//                if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-//                final Uri imageUri = Uri.fromFile(file);
-//                CharSequence[] items = {"手机相册", "手机拍照"};
-//                final TakePhoto takePhoto = getTakePhoto();
-//                final CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(true).create();
-//                new AlertDialog.Builder(this).setTitle("选择照片").setCancelable(true).setItems(items, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        switch (which) {
-//                            case 0:
-//                                takePhoto.onPickFromGalleryWithCrop(imageUri, cropOptions);
-//                                break;
-//                            case 1:
-//                                takePhoto.onPickFromCaptureWithCrop(imageUri, cropOptions);
-//                                break;
-//                            case 2:
-//                                dialog.dismiss();
-//                                break;
-//                        }
-//                    }
-//                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                }).show();
-                Tools.debug("takephoto");
+                break;
+            case 25:
+                //forget pwd
+                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+                    //忘记密码-->绑定手机号码
+                    dissAllPop();
+                    if (bandPhonePop == null)
+                        bandPhonePop = new BandPhonePop(context);
+                    bandPhonePop.showPop(txtArsenal);
+                    bandPhonePop.setPopInterfacer(this, 22);
+                } else {
+                    if (changePayPwd == null)
+                        changePayPwd = new ChangePayPwdPop(context);
+                    changePayPwd.showPop(imgArsenal);
+                    changePayPwd.setPopInterfacer(this, 13);
+                }
                 break;
         }
     }

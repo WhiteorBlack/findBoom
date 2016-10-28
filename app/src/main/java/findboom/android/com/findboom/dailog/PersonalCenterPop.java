@@ -108,6 +108,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             if (!TextUtils.isEmpty(userInfo.Avatar))
                 setPhoto(userInfo.Avatar);
         }
+        btnBottom.setBackgroundResource(R.mipmap.btn_edit_info);
     }
 
     public void setCicy(String city) {
@@ -194,6 +195,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
 
     public void setWorkd(String work) {
         txtWork.setText(work);
+
     }
 
     @Override
@@ -221,10 +223,9 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         //编辑个人信息
                         edtName.setVisibility(View.VISIBLE);
                         txtName.setVisibility(View.GONE);
-//                        edtName.setFocusable(true);
-//                        Tools.openInput(edtName, context);
                         isEdit = true;
                         btnBottom.setTag(6);
+                        btnBottom.setBackgroundResource(R.mipmap.btn_save_info);
                         break;
                     case 2:
                         //创建支付密码
@@ -245,7 +246,6 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         edtName.setVisibility(View.GONE);
                         txtName.setVisibility(View.VISIBLE);
                         txtName.setText(name);
-//                        Tools.closeInput(edtName, context);
                         isEdit = false;
                         bundleBtn.putString("age", txtAge.getText().toString());
                         bundleBtn.putString("name", name);
@@ -263,7 +263,9 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 break;
             case R.id.btn_convert_money:
                 //提现
-
+                Bundle bundleT = new Bundle();
+                bundleT.putInt("type", 9);
+                popInterfacer.OnConfirm(flag, bundleT);
                 break;
             case R.id.ll_record:
                 Bundle bundle = new Bundle();
