@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import findboom.android.com.findboom.BaseActivity;
+import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.bean.Bean_WxLogin;
@@ -35,6 +37,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.wx_share_entry);
         Constants.iwxapi.handleIntent(getIntent(), this);
     }
 
@@ -47,7 +50,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
 
     @Override
     public void onReq(BaseReq baseReq) {
-        Tools.debug(baseReq.openId);
+        Tools.debug("hahhha");
 
     }
 
@@ -110,22 +113,23 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
                     AppPrefrence.setToken(context, userInfo.Data.Token);
                     AppPrefrence.setUserName(context, userInfo.Data.GameUserId);
                     AppPrefrence.setUserPhone(context, userInfo.Data.PhoneNumber);
-//                    EMClient.getInstance().login(userInfo.Data.EasemobId, userInfo.Data.EasemobPwd, new EMCallBack() {
-//                        @Override
-//                        public void onSuccess() {
-//                            Tools.debug("ease login succes");
-//                        }
-//
-//                        @Override
-//                        public void onError(int i, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onProgress(int i, String s) {
-//
-//                        }
-//                    });
+                    EMClient.getInstance().login(userInfo.Data.EasemobId, userInfo.Data.EasemobPwd, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            Tools.debug("ease login succes");
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
+                    FindBoomApplication.getInstance().setCurrentUserName(userInfo.Data.EasemobId);
                     AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(userInfo.Data.PayPassWord));
 //                    BoomDBManager.getInstance().setUserData(userInfo.Data);
                     AppPrefrence.setIsLogin(context, true);
@@ -134,7 +138,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
                         //首次登陆
                         getUserInfoFromWx();
                     } else {
-                        BoomDBManager.getInstance().setUserData(userInfo.Data);
+                        BoomDBManager.getInstance().updateUserData(userInfo.Data);
                         AppPrefrence.setIsLogin(context, true);
                         finish();
                     }

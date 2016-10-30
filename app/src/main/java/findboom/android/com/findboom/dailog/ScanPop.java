@@ -3,6 +3,7 @@ package findboom.android.com.findboom.dailog;/**
  */
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.DefenseAdapter;
 import findboom.android.com.findboom.adapter.ScanAdapter;
 import findboom.android.com.findboom.bean.Bean_UserArm;
+import findboom.android.com.findboom.interfacer.OnClickInterface;
 
 /**
  * author:${白曌勇} on 2016/9/10
@@ -44,6 +46,16 @@ public class ScanPop extends BasePopupwind {
         defenseList = new ArrayList();
         defenseAdapter = new ScanAdapter(defenseList);
         recyDefense.setAdapter(defenseAdapter);
+        defenseAdapter.setOnclick(new OnClickInterface() {
+            @Override
+            public void onClick(View view, int position) {
+                Bundle bundle = new Bundle();
+
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle);
+                dismiss();
+            }
+        });
         this.setContentView(view);
     }
 

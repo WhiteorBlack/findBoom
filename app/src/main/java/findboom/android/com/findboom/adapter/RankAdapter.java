@@ -3,8 +3,10 @@ package findboom.android.com.findboom.adapter;/**
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.bean.Bean_Rank;
 import findboom.android.com.findboom.bean.Bean_ShopList;
 import findboom.android.com.findboom.interfacer.OnClickInterface;
+import findboom.android.com.findboom.utils.Tools;
 
 /**
  * author:${白曌勇} on 2016/9/17
@@ -35,8 +38,13 @@ public class RankAdapter extends BaseRecyAdapter {
 
         Bean_Rank.RankUser rankUser = (Bean_Rank.RankUser) dataList.get(position);
         mHolder.setText(R.id.txt_name, rankUser.UserNickName);
+        mHolder.setOnClick(R.id.txt_name, position);
         mHolder.setText(R.id.txt_rank, position == 9 ? "10" : "0" + (1 + position));
         mHolder.setRadiusImage(R.id.img_photo, rankUser.Avatar);
+        TextView txtInfo = (TextView) mHolder.getView(R.id.txt_info);
+        txtInfo.setText("");
+        txtInfo.append("被炸 ");
+        txtInfo.append(Tools.getSpanString(context, rankUser.BombCount + " 次", Color.rgb(255, 255, 255)));
     }
 
 

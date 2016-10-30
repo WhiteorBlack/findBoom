@@ -94,6 +94,9 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
         public void setText(int id, String text) {
             ((TextView) itemView.findViewById(id)).setText(text);
         }
+        public View getView(int id){
+            return itemView.findViewById(id);
+        }
         public void setStrokeText(int id, String text) {
             ((StrokeTextView) itemView.findViewById(id)).setText(text);
         }

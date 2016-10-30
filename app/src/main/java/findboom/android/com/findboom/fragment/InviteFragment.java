@@ -22,6 +22,7 @@ import findboom.android.com.findboom.adapter.InviteListAdapter;
 import findboom.android.com.findboom.adapter.MsgListAdapter;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_InviteList;
+import findboom.android.com.findboom.dailog.DealInviteInfo;
 import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
@@ -37,6 +38,7 @@ public class InviteFragment extends Fragment implements XRecyclerView.LoadingLis
     private List msgList;
     private InviteListAdapter msgAdapter;
     private int pageIndex = 1, pageSize = 20;
+    private DealInviteInfo dealInviteInfo;
 
     @Nullable
     @Override
@@ -96,7 +98,13 @@ public class InviteFragment extends Fragment implements XRecyclerView.LoadingLis
         msgAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-
+                Bean_InviteList.InviteList inviteList = (Bean_InviteList.InviteList) msgList.get(position - 1);
+                if (dealInviteInfo == null)
+                    dealInviteInfo = new DealInviteInfo(getContext());
+                dealInviteInfo.setId(inviteList.FriendApplyId);
+                dealInviteInfo.setContent(inviteList.ApplyMsg);
+                dealInviteInfo.showPop(xRecyclerView
+                );
             }
 
             @Override

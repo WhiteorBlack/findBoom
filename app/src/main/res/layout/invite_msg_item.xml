@@ -39,6 +39,8 @@
         android:background="@drawable/bg_record_list"
         android:gravity="center_vertical"
         android:paddingLeft="5dp"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:paddingRight="5dp"
         android:text="埋雷成功获取10积分试试事实上事实上事实上事实上"
         android:textColor="@color/deep_yellow" />

@@ -4,6 +4,8 @@ package findboom.android.com.findboom.dailog;/**
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -17,6 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +48,7 @@ import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.widget.CircleImageView;
 import findboom.android.com.findboom.widget.xrecycleview.XRecyclerView;
+import findboom.android.com.findboom.wxpay.Constants;
 
 /**
  * author:${白曌勇} on 2016/9/10
@@ -149,7 +157,7 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                     rankList.clear();
                     rankList.addAll(bean_MyBoomRecord.Data);
                 }
-                getBoomAdapter.notifyDataSetChanged();
+                rankAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -232,6 +240,16 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
         rankListView.setLoadingListener(this);
         rankAdapter = new RankAdapter(rankList);
         rankListView.setAdapter(rankAdapter);
+        rankAdapter.setOnclick(new OnClickInterface() {
+            @Override
+            public void onClick(View view, int position) {
+                Bundle bundle=new Bundle();
+                bundle.putString("id",rankList.get(position).UserId);
+                bundle.putInt("type",1);
+                if (popInterfacer!=null)
+                    popInterfacer.OnConfirm(flag,bundle);
+            }
+        });
 
         viewList.add(myBoomView);
         viewList.add(myGetView);
@@ -280,9 +298,34 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.btn_share:
-
+                share();
                 break;
         }
+    }
+
+    IWXAPI msgApi;
+
+    private void share() {
+        WXWebpageObject webpageObject = new WXWebpageObject();
+        webpageObject.webpageUrl = CommonUntilities.SHARE_RECORD + AppPrefrence.getUserName(context);
+
+        WXMediaMessage msg = new WXMediaMessage(webpageObject);
+        msg.title = "快来看看我无敌的战绩";
+        msg.description = "我在激战中,需要你的支援";
+        Bitmap thumb = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_logo);
+        msg.thumbData = findboom.android.com.findboom.wxpay.Util.bmpToByteArray(thumb, true);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        if (msgApi == null)
+            msgApi = WXAPIFactory.createWXAPI(context, null);
+        msgApi.registerApp(Constants.APP_ID);
+        msgApi.sendReq(req);
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     float marginList = 0, contentWide, moveDis;

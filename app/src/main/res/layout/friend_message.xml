@@ -6,10 +6,21 @@
     android:background="@mipmap/bg_detial_new"
     android:orientation="vertical">
 
-    <ImageView
-        style="@style/PopClose"
-        android:layout_marginTop="15dp"
-        android:onClick="boomClick" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            style="@style/PopTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="好友消息" />
+
+        <ImageView
+            style="@style/PopClose"
+            android:onClick="boomClick" />
+    </FrameLayout>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
@@ -20,6 +31,7 @@
         android:layout_marginTop="40dp"
         app:tabIndicatorColor="@color/content_yellow"
         app:tabSelectedTextColor="@color/content_yellow"
+        app:tabTextAppearance="@style/tabLayoutStyle"
         app:tabTextColor="#89241B" />
 
     <android.support.v4.view.ViewPager

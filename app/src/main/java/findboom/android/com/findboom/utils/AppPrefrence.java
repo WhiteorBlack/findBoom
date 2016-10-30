@@ -21,7 +21,16 @@ public class AppPrefrence {
     private static final String ISREDSHOW = "isRedShow";
     private static final String ISBOOMSHOW = "isBoomShow";
     private static final String USERPHONE = "userPhone";
+    private static final String ISNOTIFY="isNotify";
 
+    public static void setIsNotify(Context context,boolean isNotify){
+        setting=getSp(context.getApplicationContext());
+        setting.edit().putBoolean(ISNOTIFY,isNotify).apply();
+    }
+    public static boolean getIsNotify(Context context){
+        setting=getSp(context.getApplicationContext());
+        return setting.getBoolean(ISNOTIFY,false);
+    }
 
     public static void setUserPhone(Context context,String phone){
         setting=getSp(context.getApplicationContext());

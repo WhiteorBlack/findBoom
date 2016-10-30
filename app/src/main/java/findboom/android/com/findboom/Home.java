@@ -2,6 +2,7 @@ package findboom.android.com.findboom;/**
  * Created by Administrator on 2016/8/8.
  */
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,13 +15,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -39,6 +41,7 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -49,6 +52,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMContactListener;
 import com.hyphenate.chat.EMClient;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.CropOptions;
@@ -67,19 +71,25 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import findboom.android.com.findboom.activity.FriendMessage;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.activity.PutCommenBoom;
 import findboom.android.com.findboom.activity.PutRedBoom;
 import findboom.android.com.findboom.activity.SystemMessage;
 import findboom.android.com.findboom.alipay.AliPayHelper;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.BaseBean;
-import findboom.android.com.findboom.bean.Bean_AllConfig;
 import findboom.android.com.findboom.bean.Bean_BoomBoom;
 import findboom.android.com.findboom.bean.Bean_MapBoom;
+import findboom.android.com.findboom.bean.Bean_RedBoom;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.bean.Bean_WXpay;
+import findboom.android.com.findboom.chat.db.EaseUser;
+import findboom.android.com.findboom.chat.db.InviteMessgeDao;
+import findboom.android.com.findboom.chat.db.UserDao;
+import findboom.android.com.findboom.dailog.AddFriendPop;
 import findboom.android.com.findboom.dailog.AdvicePop;
 import findboom.android.com.findboom.dailog.ArsenalPop;
 import findboom.android.com.findboom.dailog.BandPhonePop;
@@ -93,6 +103,7 @@ import findboom.android.com.findboom.dailog.FriendListPop;
 import findboom.android.com.findboom.dailog.GetRecordPop;
 import findboom.android.com.findboom.dailog.MessageDialog;
 import findboom.android.com.findboom.dailog.NewShopPop;
+import findboom.android.com.findboom.dailog.NotifyPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
 import findboom.android.com.findboom.dailog.PersonalInfo;
 import findboom.android.com.findboom.dailog.PickerDialog;
@@ -124,7 +135,7 @@ import okhttp3.Call;
  * author:${白曌勇} on 2016/8/8
  * TODO:
  */
-public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener {
+public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener, BaiduMap.OnMarkerClickListener {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg;
@@ -154,6 +165,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BandPhonePop bandPhonePop;
     private MessageDialog messageDialog;
     private ConvertRedPop convertRedPop;
+    private AddFriendPop addFriendPop;
+    private NotifyPop notifyPop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -161,6 +174,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     public static boolean isForeground;
     private boolean isPutBoom = false; //标识现在是否有放雷的动作
+    private boolean isScan = false; //标识现在是否使用扫雷器
 
     //百度地图定位相关
     public LocationClient mLocationClient = null;
@@ -177,6 +191,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private List<String> workStrings = new ArrayList<>();
     private List<String> ageStrings = new ArrayList<>();
 
+    private InviteMessgeDao inviteMessgeDao;
+    private UserDao userDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,6 +202,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         initView();
         getUserArm();
         getAllConfig();
+        getMyBoom();
         JPushInterface.init(getApplicationContext());
         JPushInterface.setAlias(getApplicationContext(), AppPrefrence.getUserName(this), new TagAliasCallback() {
             @Override
@@ -207,6 +225,45 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             }
         });
         registerMessageReceiver();
+        new AliPayHelper(this, payHandler).debugSign("123456");
+
+        inviteMessgeDao = new InviteMessgeDao(this);
+        userDao = new UserDao(this);
+        //注册联系人变动监听
+        EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+    }
+
+    /**
+     * 获取地图上我埋的雷
+     */
+    private void getMyBoom() {
+        Map<String, String> params = new HashMap<>();
+        params.put("PageIndex", "1");
+        params.put("PageSize", "1000");
+        PostTools.getData(context, CommonUntilities.USER_URL + "GetMyNormalMines", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                Tools.debug("myBoom" + response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                Bean_MapBoom beanMapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
+                if (beanMapBoom != null && beanMapBoom.Success && beanMapBoom.Data != null && beanMapBoom.Data.size() > 0) {
+                    for (int i = 0; i < beanMapBoom.Data.size(); i++) {
+                        Bean_MapBoom.MapBoom mapBoom = beanMapBoom.Data.get(i);
+                        boomRang = mapBoom.BombRange;
+                        addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+                        addOverLay(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Call call, Exception e) {
+                super.onError(call, e);
+                Tools.debug("myBoom" + e.toString());
+            }
+        });
     }
 
     private String configString = "";
@@ -354,7 +411,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     startActivity(new Intent(context, SystemMessage.class));
                 } else {
                     //好友消息
-
+                    startActivityForResult(new Intent(context, FriendMessage.class), 10);
                 }
                 expandableSelector.collapse();
             }
@@ -404,6 +461,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
         mBaiduMap.setOnMapClickListener(this);
         mBaiduMap.setOnMapLongClickListener(this);
+        mBaiduMap.setOnMarkerClickListener(this);
 
         imgDefense = (ImageView) findViewById(R.id.img_defense);
         imgDefense.setEnabled(false);
@@ -608,11 +666,17 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 25:
                 confirmPwdPop = null;
                 break;
+            case 26:
+                addFriendPop = null;
+                break;
+            case 27:
+                notifyPop = null;
+                break;
         }
     }
 
     private int chargeTyp = -1;
-    private float money;
+    private float money = 0.00f;
     private int armType = 0;
     private int goldAmout = 0;//金币数量
 
@@ -742,9 +806,30 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     convertRedPop.setPopInterfacer(this, 24);
                 }
                 break;
+            case 4:
+                //使用扫雷器
+                isPutBoom = false;
+                isScan = true;
+                if (!AppPrefrence.getIsNotify(this)) {
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.setNotify(R.string.scan_notify);
+                    notifyPop.showPop(txtArsenal);
+                    notifyPop.setPopInterfacer(this, 27);
+
+                }
+
+                break;
             case 5: //放置地雷
                 isPutBoom = true;
-                Tools.toastMsg(context, "请在地图上选择你要放置的地点");
+                isScan = false;
+                if (!AppPrefrence.getIsNotify(this)) {
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.setNotify(R.string.boom_notify);
+                    notifyPop.showPop(txtArsenal);
+                    notifyPop.setPopInterfacer(this, 27);
+                }
                 break;
             case 7:   //战绩-->举报
                 if (bundle != null && bundle.getInt("type", 0) == 0) {
@@ -753,6 +838,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     reportPop.showPop(imgArsenal);
                     reportPop.setId(bundle.getString("userId"));
                     reportPop.setPopInterfacer(this, 9);
+                }
+                if (bundle != null && bundle.getInt("type", -1) == 1) {
+                    //添加好友
+                    if (addFriendPop == null)
+                        addFriendPop = new AddFriendPop(context);
+                    addFriendPop.showPop(txtArsenal);
+                    addFriendPop.setId(bundle.getString("id"));
+                    addFriendPop.setPopInterfacer(this, 26);
                 }
                 break;
             case 12: //个人中心-->创建支付密码
@@ -1041,8 +1134,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                                 new PostResultPop(context, txtArsenal, R.drawable.icon_error, "支付失败,请重试", "").showPop();
                                 return;
                             }
-                            if (!TextUtils.isEmpty(orderInfo))
-                                orderInfo = orderInfo.replace("\\", "");
+
                             new AliPayHelper(Home.this, payHandler).pay(orderInfo);
                         }
 
@@ -1296,23 +1388,45 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private void logOut() {
         AppPrefrence.setIsLogin(context, false);
-        EMClient.getInstance().logout(true, new EMCallBack() {
+        final ProgressDialog pd = new ProgressDialog(this);
+        String st = getResources().getString(R.string.Are_logged_out);
+        pd.setMessage(st);
+        pd.setCanceledOnTouchOutside(false);
+        pd.show();
+        FindBoomApplication.getInstance().logout(false, new EMCallBack() {
+
             @Override
             public void onSuccess() {
-                Tools.debug("ease logout success");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        pd.dismiss();
+                        // 重新显示登陆页面
+                        finish();
+                        startActivity(new Intent(context, LoginActivity.class));
+
+                    }
+                });
             }
 
             @Override
-            public void onError(int i, String s) {
+            public void onProgress(int progress, String status) {
 
             }
 
             @Override
-            public void onProgress(int i, String s) {
+            public void onError(int code, String message) {
+                runOnUiThread(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        // TODO Auto-generated method stub
+                        pd.dismiss();
+
+
+                    }
+                });
             }
         });
-        startActivity(new Intent(context, LoginActivity.class));
         finish();
     }
 
@@ -1502,11 +1616,42 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
                 if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
                     mapBoomList.addAll(bean_MapBoom.Data);
+                    if (chbMoney.isChecked() || chbBoom.isChecked()) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (int i = 0; i < mapBoomList.size(); i++) {
+                                    Bean_MapBoom.MapBoom boom = mapBoomList.get(i);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("id", boom.MineRecordId);
+                                    bundle.putInt("type", boom.MineType);
+
+                                    if ((chbMoney.isChecked() && boom.MineType == 3) || (chbBoom.isChecked() && boom.MineType == 4)) {
+
+                                        addRedMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
+                                    }
+                                }
+                            }
+                        }).start();
+                    }
                 }
 
             }
         });
     }
+
+    private void addRedMarker(LatLng latLng, Bundle bundle) {
+
+        bitmap = BitmapDescriptorFactory
+                .fromResource(R.mipmap.icon_map_boom);
+        OverlayOptions options = new MarkerOptions()
+                .position(latLng)  //设置marker的位置
+                .icon(bitmap).extraInfo(bundle)  //设置marker图标
+                .zIndex(9)  //设置marker所在层级
+                .draggable(false);  //设置手势拖拽
+        mBaiduMap.addOverlay(options);
+    }
+
 
     private GeoCoder geoCoder;
 
@@ -1518,6 +1663,69 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             initGeoCoder(latLng);
             selectBoomPop(latLng);
         }
+        if (isScan) {
+            scanBoom(latLng);
+        }
+    }
+
+    private void scanBoom(LatLng location) {
+        int scanRange = 50;
+        Map<String, String> params = new HashMap<>();
+        params.put("IsContainRedPack", chbMoney.isChecked() ? "1" : "0");
+        params.put("IsContainGold", chbBoom.isChecked() ? "1" : "0");
+        params.put("Longitude", location.longitude + "");
+        params.put("Latitude", location.latitude + "");
+        params.put("Range", scanRange + "");
+        PostTools.postData(context, CommonUntilities.MINE_URL + "GetAreaMines", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                scanCount -= 1;
+                if (scanCount < 0)
+                    scanCount = 0;
+                txtScan.setText(scanCount + "");
+                if (scanCount > 0) {
+                    imgScan.setEnabled(true);
+                    txtScan.setVisibility(View.VISIBLE);
+                    txtScan.setText(scanCount + "");
+                } else {
+                    imgScan.setEnabled(false);
+                    txtScan.setVisibility(View.GONE);
+                }
+                isScan = false;
+                Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
+                if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
+                    Bean_MapBoom.MapBoom mapBoom = bean_MapBoom.Data.get(0);
+                    addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+                    useScan(mapBoom.MineRecordId, "1");
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "WOW!成功排除一颗雷", "您将获得一颗永久雷").showPop();
+                } else {
+                    useScan("0", "0");
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "很遗憾", "什么都没有,继续努力吧!").showPop();
+                }
+
+            }
+
+            @Override
+            public void onError(Call call, Exception e) {
+                super.onError(call, e);
+            }
+        });
+    }
+
+    private void useScan(String id, String type) {
+        Map<String, String> params = new HashMap<>();
+        params.put("MineRecordId", id);
+        params.put("IsCleanMine", type);
+        PostTools.postData(context, CommonUntilities.MINE_URL + "", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                Tools.debug("scan" + response);
+            }
+        });
     }
 
     private View selectBoomView;
@@ -1676,6 +1884,52 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .zIndex(9)  //设置marker所在层级
                 .draggable(false);  //设置手势拖拽
         mBaiduMap.addOverlay(options);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Bundle bundle = marker.getExtraInfo();
+        if (bundle != null) {
+            String id = bundle.getString("id");
+            int type = bundle.getInt("type");
+            if (!TextUtils.isEmpty(id)) {
+                boomRed(id);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 触发红包雷
+     *
+     * @param id
+     */
+    private void boomRed(String id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("MineRecordId", id);
+        PostTools.postData(context, CommonUntilities.MINE_URL + "BombRedPackMine", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response)) {
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "网络错误", "请稍后重试").showPop();
+                    return;
+                }
+                Bean_RedBoom redBoom = new Gson().fromJson(response, Bean_RedBoom.class);
+                if (redBoom != null && redBoom.Success) {
+                    Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+                    String money = user.RedPackBalance;
+                    float moneyF = Float.parseFloat(money);
+                    moneyF += redBoom.Data.Amount;
+                    money = decentFloat(moneyF);
+
+                    user.RedPackBalance = money;
+                    BoomDBManager.getInstance().setUserData(user);
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, redBoom.Data.RedPackText, "恭喜!获得" + redBoom.Data.Amount + "元红包").showPop();
+                } else
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", redBoom.Msg).showPop();
+            }
+        });
     }
 
     public class MessageReceiver extends BroadcastReceiver {
@@ -1840,5 +2094,91 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Tools.debug(e.toString());
             }
         });
+    }
+
+    /***
+     * 好友变化listener
+     */
+    public class MyContactListener implements EMContactListener {
+
+        @Override
+        public void onContactAdded(final String username) {
+            // 保存增加的联系人
+            Map<String, EaseUser> localUsers = FindBoomApplication.getInstance().getContactList();
+            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
+            EaseUser user = new EaseUser(username);
+            // 添加好友时可能会回调added方法两次
+            if (!localUsers.containsKey(username)) {
+                userDao.saveContact(user);
+            }
+            toAddUsers.put(username, user);
+            localUsers.putAll(toAddUsers);
+
+        }
+
+        @Override
+        public void onContactDeleted(final String username) {
+            // 被删除
+            Map<String, EaseUser> localUsers = FindBoomApplication.getInstance().getContactList();
+            localUsers.remove(username);
+            userDao.deleteContact(username);
+            inviteMessgeDao.deleteMessage(username);
+
+
+        }
+
+        @Override
+        public void onContactInvited(final String username, String reason) {
+            // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
+//            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+//
+//            for (InviteMessage inviteMessage : msgs) {
+//                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
+//                    inviteMessgeDao.deleteMessage(username);
+//                }
+//            }
+//            // 自己封装的javabean
+//            InviteMessage msg = new InviteMessage();
+//            msg.setFrom(username);
+//            msg.setTime(System.currentTimeMillis());
+//            msg.setReason(reason);
+//
+//            // 设置相应status
+//            msg.setStatus(InviteMessage.InviteMesageStatus.BEINVITEED);
+
+        }
+
+        @Override
+        public void onContactAgreed(final String username) {
+//            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+//            for (InviteMessage inviteMessage : msgs) {
+//                if (inviteMessage.getFrom().equals(username)) {
+//                    return;
+//                }
+//            }
+//            // 自己封装的javabean
+//            InviteMessage msg = new InviteMessage();
+//            msg.setFrom(username);
+//            msg.setTime(System.currentTimeMillis());
+//
+//            msg.setStatus(InviteMesageStatus.BEAGREED);
+//            notifyNewIviteMessage(msg);
+//            runOnUiThread(new Runnable(){
+//
+//                @Override
+//                public void run() {
+//                    Toast.makeText(getApplicationContext(), "好友申请同意：+"+username, Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//            });
+
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+            // 参考同意，被邀请实现此功能,demo未实现
+//            Log.d(username, username + "拒绝了你的好友请求");
+        }
     }
 }

@@ -5,10 +5,21 @@
     android:background="@mipmap/bg_detial_new"
     android:orientation="vertical">
 
-    <ImageView
-        style="@style/PopClose"
-        android:layout_marginTop="15dp"
-        android:onClick="boomClick" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            style="@style/PopTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="系统消息" />
+
+        <ImageView
+            style="@style/PopClose"
+            android:onClick="boomClick" />
+    </FrameLayout>
 
     <findboom.android.com.findboom.widget.xrecycleview.XRecyclerView
         android:id="@+id/xrecycleview"

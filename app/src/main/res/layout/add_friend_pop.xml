@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:background="@drawable/bg_select_pay_type">
+
+        <TextView
+            android:id="@+id/txt_name"
+            style="@style/settingContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:text="是否添加对方为好友?" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:text="附加信息:"
+            android:textColor="@color/detial_bg"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/edt_content"
+            style="@style/settingContent"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/advice_edit_bg"
+            android:gravity="top|left"
+            android:hint="请输入你想说的话"
+            android:padding="5dp"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="30dp">
+
+            <Button
+                android:id="@+id/btn_cancle"
+                android:layout_width="@dimen/pop_btn_wide"
+                android:layout_height="@dimen/pop_btn_height"
+                android:background="@mipmap/btn_send_cancle" />
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="@dimen/pop_btn_wide"
+                android:layout_height="@dimen/pop_btn_height"
+                android:layout_gravity="right"
+                android:background="@mipmap/btn_send_confirm" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

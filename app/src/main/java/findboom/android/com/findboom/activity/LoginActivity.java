@@ -12,20 +12,16 @@ import android.widget.Button;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.tencent.mm.sdk.modelbase.BaseReq;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.Home;
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.dailog.InputCodePop;
@@ -39,7 +35,6 @@ import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.wxpay.Constants;
 import okhttp3.Call;
-import okhttp3.Response;
 
 /**
  * author:${白曌勇} on 2016/9/1
@@ -183,22 +178,23 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
                     BoomDBManager.getInstance().setUserData(bean_userInfo.Data);
                     AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(bean_userInfo.Data.PayPassWord));
                     AppPrefrence.setUserPhone(context, bean_userInfo.Data.PhoneNumber);
-//                    EMClient.getInstance().login(bean_userInfo.Data.EasemobId, bean_userInfo.Data.EasemobPwd, new EMCallBack() {
-//                        @Override
-//                        public void onSuccess() {
-//                            Tools.debug("ease login succes");
-//                        }
-//
-//                        @Override
-//                        public void onError(int i, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onProgress(int i, String s) {
-//
-//                        }
-//                    });
+                    EMClient.getInstance().login(bean_userInfo.Data.EasemobId, bean_userInfo.Data.EasemobPwd, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            Tools.debug("ease login succes");
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
+                    FindBoomApplication.getInstance().setCurrentUserName(bean_userInfo.Data.EasemobId);
                     startActivity(new Intent(context, Home.class));
                     LoginActivity.this.finish();
                 } else

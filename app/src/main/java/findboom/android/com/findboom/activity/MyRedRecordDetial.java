@@ -18,10 +18,13 @@ import java.util.Map;
 
 import findboom.android.com.findboom.BaseFragmentActivity;
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.adapter.BaseRecyAdapter;
 import findboom.android.com.findboom.adapter.RedRecordAdapter;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_BoomDetial;
 import findboom.android.com.findboom.bean.RedRecord;
+import findboom.android.com.findboom.dailog.AddFriendPop;
+import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
@@ -30,7 +33,7 @@ import findboom.android.com.findboom.utils.Tools;
  * Created by Administrator on 2016/9/29.
  * 我埋雷记录详情
  */
-public class MyRedRecordDetial extends BaseFragmentActivity {
+public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterfacer {
     private TextView imgType;
     private TextView txtBoomType, txtBoomState;
     private TextView txtRemark;
@@ -42,11 +45,12 @@ public class MyRedRecordDetial extends BaseFragmentActivity {
     private List<RedRecord> redRecords;
     private RedRecordAdapter redRecordAdapter;
     private RecyclerView recyclerView;
+    private AddFriendPop addFriendPop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_record_detial);
+        setContentView(R.layout.my_red_record_detial);
         initView();
         getBoomInfo();
     }
@@ -68,6 +72,17 @@ public class MyRedRecordDetial extends BaseFragmentActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recy_record);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(redRecordAdapter);
+        redRecordAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(View view, int position) {
+                createPop(redRecords.get(position-1).ReceiveUserId);
+            }
+
+            @Override
+            public void onItemLongClickListener(View view, int position) {
+
+            }
+        });
     }
 
     @Override
@@ -77,7 +92,19 @@ public class MyRedRecordDetial extends BaseFragmentActivity {
             case R.id.img_close:
                 finish();
                 break;
+            case R.id.txt_user_name:
+                createPop(bean_BoomDetial.Data.UserId);
+                break;
         }
+    }
+
+    private void createPop(String id) {
+
+        if (addFriendPop == null)
+            addFriendPop = new AddFriendPop(this);
+        addFriendPop.showPop(txtBoomState);
+            addFriendPop.setId(id);
+        addFriendPop.setPopInterfacer(this, 0);
     }
 
     private Bean_BoomDetial bean_BoomDetial;
@@ -113,5 +140,20 @@ public class MyRedRecordDetial extends BaseFragmentActivity {
             redRecords.addAll(bean_BoomDetial.Data.RedPackReciveRecords);
             redRecordAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void OnDismiss(int flag) {
+
+    }
+
+    @Override
+    public void OnConfirm(int flag, Bundle bundle) {
+
+    }
+
+    @Override
+    public void OnCancle(int flag) {
+
     }
 }

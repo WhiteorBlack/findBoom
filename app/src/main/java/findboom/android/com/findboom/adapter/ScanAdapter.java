@@ -8,6 +8,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
@@ -48,6 +49,8 @@ public class ScanAdapter extends BaseRecyAdapter {
             mHolder.setText(R.id.txt_intro, "临时");
             mHolder.setImage(R.id.img_photo, R.mipmap.scan_temp);
         }
+        mHolder.setOnClick(R.id.btn_use,position);
+        mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.VISIBLE);
     }
 
     @Override

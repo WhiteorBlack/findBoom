@@ -19,5 +19,6 @@ public class Bean_FriendList {
         public String FriendNickName;
         public String FriendLevel;
         public String Avatar;
+        public String EasemobId;
     }
 }

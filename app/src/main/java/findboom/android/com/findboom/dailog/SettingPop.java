@@ -3,6 +3,8 @@ package findboom.android.com.findboom.dailog;/**
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,7 +17,17 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import com.bumptech.glide.util.Util;
+import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.sdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.sdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.utils.AppPrefrence;
+import findboom.android.com.findboom.utils.CommonUntilities;
+import findboom.android.com.findboom.wxpay.Constants;
 
 /**
  * author:${白曌勇} on 2016/9/3
@@ -60,14 +72,15 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
         super.onClick(v);
         switch (v.getId()) {
             case R.id.btn_advice:
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",0);
-                popInterfacer.OnConfirm(flag,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 0);
+                popInterfacer.OnConfirm(flag, bundle);
                 break;
             case R.id.btn_share:
-                Bundle bundleS=new Bundle();
-                bundleS.putInt("type",1);
-                popInterfacer.OnConfirm(flag,bundleS);
+//                Bundle bundleS=new Bundle();
+//                bundleS.putInt("type",1);
+//                popInterfacer.OnConfirm(flag,bundleS);
+                share();
                 break;
             case R.id.img_close:
                 dismiss();
@@ -77,6 +90,31 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
                 popInterfacer.OnCancle(flag);
                 break;
         }
+    }
+
+    IWXAPI msgApi;
+
+    private void share() {
+        WXWebpageObject webpageObject = new WXWebpageObject();
+        webpageObject.webpageUrl = CommonUntilities.SHARE_REGISTER+ AppPrefrence.getUserName(context);
+
+        WXMediaMessage msg = new WXMediaMessage(webpageObject);
+        msg.title = "邀你一起扫雷";
+        msg.description = "我在激战中,需要你的支援";
+        Bitmap thumb = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_logo);
+        msg.thumbData = findboom.android.com.findboom.wxpay.Util.bmpToByteArray(thumb, true);
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = buildTransaction("webpage");
+        req.message = msg;
+        req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        if (msgApi == null)
+            msgApi = WXAPIFactory.createWXAPI(context, null);
+        msgApi.registerApp(Constants.APP_ID);
+        msgApi.sendReq(req);
+    }
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     public void showPop(View parent) {

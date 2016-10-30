@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import findboom.android.com.findboom.utils.Tools;
+
 public class AliPayHelper {
 
     // 商户PID
@@ -134,7 +136,8 @@ public class AliPayHelper {
      * call alipay sdk pay. 调用SDK支付
      */
     public void pay(String orderInfo) {
-
+        orderInfo=orderInfo.substring(0,orderInfo.indexOf("&sign"));
+        Tools.debug("orderinfo--" + orderInfo);
         String sign = sign(orderInfo);
         try {
             // 仅需对sign 做URL编码
@@ -147,8 +150,8 @@ public class AliPayHelper {
             e.printStackTrace();
         }
         // 完整的符合支付宝参数规范的订单信息
-        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
-
+        final String payInfo = orderInfo+ "&sign=\"" + sign + "\"&" + getSignType();
+        Tools.debug("orderinfo--" + payInfo);
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -286,6 +289,10 @@ public class AliPayHelper {
      */
     public String getSignType() {
         return "sign_type=\"RSA\"";
+    }
+
+    public void debugSign(String content) {
+        Tools.debug(getSignType());
     }
 
 }

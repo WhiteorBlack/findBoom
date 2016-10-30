@@ -12,6 +12,7 @@ import java.util.List;
 import findboom.android.com.findboom.BaseFragmentActivity;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.FragmentWithTitleAdapter;
+import findboom.android.com.findboom.chat.activity.ConversationFragment;
 import findboom.android.com.findboom.fragment.InviteFragment;
 
 /**
@@ -25,6 +26,7 @@ public class FriendMessage extends BaseFragmentActivity {
     private List<String> titles;
     private InviteFragment inviteFragment;
     private FragmentWithTitleAdapter fragmentWithTitleAdapter;
+    private ConversationFragment conversationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,8 @@ public class FriendMessage extends BaseFragmentActivity {
     }
 
     private void initFragment() {
-
+        conversationFragment = new ConversationFragment();
+        fragments.add(conversationFragment);
         inviteFragment = new InviteFragment();
         fragments.add(inviteFragment);
         fragmentWithTitleAdapter.notifyDataSetChanged();

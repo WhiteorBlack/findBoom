@@ -3,6 +3,7 @@ package findboom.android.com.findboom.dailog;/**
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,8 +25,12 @@ import java.util.Map;
 
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.FriendAdapter;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_FriendList;
+import findboom.android.com.findboom.chat.activity.ChatActivity;
+import findboom.android.com.findboom.chat.db.EaseUser;
+import findboom.android.com.findboom.chat.db.UserDao;
 import findboom.android.com.findboom.interfacer.OnClickInterface;
 import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
@@ -83,7 +88,8 @@ public class FriendListPop extends BasePopupwind {
         friendAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
-
+                Bean_FriendList.Friend friend = (Bean_FriendList.Friend) friendList.get(position);
+                context.startActivity(new Intent(context, ChatActivity.class).putExtra("userId", friend.EasemobId).putExtra("username", friend.FriendNickName));
             }
         });
         recyFriend.setAdapter(friendAdapter);
@@ -103,8 +109,8 @@ public class FriendListPop extends BasePopupwind {
 
     private void getFriend() {
         Map<String, String> params = new HashMap<>();
-        params.put("pageIndex","1");
-        params.put("pageSize","1000");
+        params.put("pageIndex", "1");
+        params.put("pageSize", "1000");
         PostTools.getData(context, CommonUntilities.FRIEND_URL + "GetRecord", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -114,10 +120,19 @@ public class FriendListPop extends BasePopupwind {
                     return;
                 }
 
-                Bean_FriendList bean_friendList=new Gson().fromJson(response,Bean_FriendList.class);
-                if (bean_friendList!=null&&bean_friendList.Success){
+                Bean_FriendList bean_friendList = new Gson().fromJson(response, Bean_FriendList.class);
+                if (bean_friendList != null && bean_friendList.Success) {
                     friendList.addAll(bean_friendList.Data);
                     friendAdapter.notifyDataSetChanged();
+                    List<EaseUser> userList = new ArrayList<EaseUser>();
+                    for (int i = 0; i < friendList.size(); i++) {
+                        Bean_FriendList.Friend friend = (Bean_FriendList.Friend) friendList.get(i);
+                        EaseUser easeUser = new EaseUser(friend.EasemobId);
+                        easeUser.setAvatar(friend.Avatar);
+                        easeUser.setNick(friend.FriendNickName);
+                        userList.add(easeUser);
+                    }
+                    new UserDao(context).saveContactList(userList);
                 }
 
             }

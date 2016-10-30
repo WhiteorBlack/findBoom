@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import findboom.android.com.findboom.activity.LoginActivity;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.database.BoomDBManager;
@@ -58,22 +59,23 @@ public class SplashActivity extends BaseActivity {
                     AppPrefrence.setToken(context, bean_UserInfo.Data.Token);
                     AppPrefrence.setUserName(context, bean_UserInfo.Data.GameUserId);
                     AppPrefrence.setUserPhone(context, bean_UserInfo.Data.PhoneNumber);
-//                    EMClient.getInstance().login(bean_UserInfo.Data.EasemobId, bean_UserInfo.Data.EasemobPwd, new EMCallBack() {
-//                        @Override
-//                        public void onSuccess() {
-//                            Tools.debug("ease login succes");
-//                        }
-//
-//                        @Override
-//                        public void onError(int i, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onProgress(int i, String s) {
-//
-//                        }
-//                    });
+                    EMClient.getInstance().login(bean_UserInfo.Data.EasemobId, bean_UserInfo.Data.EasemobPwd, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            Tools.debug("ease login succes");
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+                            Tools.debug("error" + s);
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
+                    FindBoomApplication.getInstance().setCurrentUserName(bean_UserInfo.Data.EasemobId);
                     AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(bean_UserInfo.Data.PayPassWord));
                 }
             }

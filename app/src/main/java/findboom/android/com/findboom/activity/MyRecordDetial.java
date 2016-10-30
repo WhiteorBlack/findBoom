@@ -2,8 +2,11 @@ package findboom.android.com.findboom.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,11 +17,12 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
-import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.BaseFragmentActivity;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_BoomDetial;
+import findboom.android.com.findboom.dailog.AddFriendPop;
+import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
@@ -27,7 +31,8 @@ import findboom.android.com.findboom.utils.Tools;
  * Created by Administrator on 2016/9/29.
  * 我埋雷记录详情
  */
-public class MyRecordDetial extends BaseFragmentActivity {
+public class MyRecordDetial extends BaseFragmentActivity implements PopInterfacer {
+    private AddFriendPop addFriendPop;
     private TextView imgType;
     private TextView txtBoomType, txtBoomState;
     private TextView txtRemark, txtInfo;
@@ -99,7 +104,7 @@ public class MyRecordDetial extends BaseFragmentActivity {
         if (isMine) {
             if (bean_BoomDetial.Data.Status > 0) {
                 if (bean_BoomDetial.Data.BombType == 0) {
-                    txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
+                    txtInfo.append(getSpanString(bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
                     txtInfo.append("在 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 踩到了我埋的雷,");
@@ -131,7 +136,7 @@ public class MyRecordDetial extends BaseFragmentActivity {
                 txtInfo.append(" 我在");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 踩到了");
-                txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.UserNickName, Color.rgb(240, 165, 9)));
+                txtInfo.append(getSpanString( bean_BoomDetial.Data.UserNickName, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 埋的 ");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MineTypeTxt, Color.rgb(240, 165, 9)));
                 if (bean_BoomDetial.Data.IsHaveBombSuit) {
@@ -153,5 +158,44 @@ public class MyRecordDetial extends BaseFragmentActivity {
             }
 
         }
+    }
+
+    private SpannableString getSpanString(String content, int color) {
+        SpannableString spannableString = new SpannableString(content);
+        spannableString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                createPop();
+            }
+        }, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new ForegroundColorSpan(color), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
+
+    }
+
+    private void createPop() {
+
+        if (addFriendPop == null)
+            addFriendPop = new AddFriendPop(this);
+        addFriendPop.showPop(txtBoomState);
+        if (isMine)
+            addFriendPop.setId(bean_BoomDetial.Data.BombUserId);
+        else addFriendPop.setId(bean_BoomDetial.Data.UserId);
+        addFriendPop.setPopInterfacer(this, 0);
+    }
+
+    @Override
+    public void OnDismiss(int flag) {
+
+    }
+
+    @Override
+    public void OnConfirm(int flag, Bundle bundle) {
+
+    }
+
+    @Override
+    public void OnCancle(int flag) {
+
     }
 }

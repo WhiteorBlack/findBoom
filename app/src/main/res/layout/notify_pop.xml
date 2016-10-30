@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        style="@style/PopParent"
+        android:layout_height="200dp"
+        android:background="@mipmap/notify_bg">
+
+        <TextView
+            android:id="@+id/txt_notify"
+            style="@style/settingContent"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="信息"
+            android:layout_marginTop="50dp"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fl_content"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="20dp">
+
+            <CheckBox
+                android:id="@+id/chb_notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="不在提示"
+                android:layout_gravity="left|center_vertical"
+                android:textColor="@color/content_yellow"
+                android:textSize="12sp" />
+            <Button
+                android:layout_width="102dp"
+                android:layout_height="35dp"
+                android:id="@+id/btn_confirm"
+                android:layout_gravity="center"
+                android:background="@mipmap/btn_ok"/>
+        </FrameLayout>
+    </RelativeLayout>
+
+</LinearLayout>
