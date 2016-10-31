@@ -57,12 +57,15 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
 
         chbMusic = (CheckBox) view.findViewById(R.id.chb_music);
         chbMusic.setOnCheckedChangeListener(this);
+        chbMusic.setChecked(AppPrefrence.getIsBack(context));
 
         chbRemind = (CheckBox) view.findViewById(R.id.chb_remind);
         chbRemind.setOnCheckedChangeListener(this);
+        chbRemind.setChecked(AppPrefrence.getIsPush(context));
 
         chbSound = (CheckBox) view.findViewById(R.id.chb_sound_effect);
         chbSound.setOnCheckedChangeListener(this);
+        chbSound.setChecked(AppPrefrence.getIsBoom(context));
         this.setContentView(view);
 
     }
@@ -77,10 +80,10 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
                 popInterfacer.OnConfirm(flag, bundle);
                 break;
             case R.id.btn_share:
-//                Bundle bundleS=new Bundle();
-//                bundleS.putInt("type",1);
-//                popInterfacer.OnConfirm(flag,bundleS);
-                share();
+                Bundle bundleS = new Bundle();
+                bundleS.putInt("type", 1);
+                popInterfacer.OnConfirm(flag, bundleS);
+//                share();
                 break;
             case R.id.img_close:
                 dismiss();
@@ -96,7 +99,7 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
 
     private void share() {
         WXWebpageObject webpageObject = new WXWebpageObject();
-        webpageObject.webpageUrl = CommonUntilities.SHARE_REGISTER+ AppPrefrence.getUserName(context);
+        webpageObject.webpageUrl = CommonUntilities.SHARE_REGISTER + AppPrefrence.getUserName(context);
 
         WXMediaMessage msg = new WXMediaMessage(webpageObject);
         msg.title = "邀你一起扫雷";
@@ -124,17 +127,23 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        Bundle bundle = new Bundle();
         switch (buttonView.getId()) {
             case R.id.chb_music:
-
+                AppPrefrence.setIsBack(context, isChecked);
+                bundle.putInt("type", 4);
                 break;
             case R.id.chb_sound_effect:
-
+                AppPrefrence.setIsBoom(context, isChecked);
+                bundle.putInt("type", 2);
                 break;
             case R.id.chb_remind:
-
+                AppPrefrence.setIsPush(context, isChecked);
+                bundle.putInt("type", 3);
                 break;
 
         }
+        if (popInterfacer!=null)
+            popInterfacer.OnConfirm(flag,bundle);
     }
 }

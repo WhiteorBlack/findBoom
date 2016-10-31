@@ -10,6 +10,7 @@ import android.view.View;
 import com.jph.takephoto.app.TakePhotoActivity;
 
 import cn.jpush.android.api.JPushInterface;
+import findboom.android.com.findboom.application.FindBoomApplication;
 
 /**
  * author:${白曌勇} on 2016/8/8
@@ -20,6 +21,7 @@ public class BaseActivity extends TakePhotoActivity {
     public Context context;
     public Activity activity;
     public void boomClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         switch (v.getId()) {
 
         }

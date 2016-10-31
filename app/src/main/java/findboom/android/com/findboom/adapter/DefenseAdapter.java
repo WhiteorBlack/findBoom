@@ -38,18 +38,12 @@ public class DefenseAdapter extends BaseRecyAdapter {
         super.onBindViewHolder(holder, position);
         BaseRecyAdapter.ViewHolder mHolder = (BaseRecyAdapter.ViewHolder) holder;
         Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
-        TextView txtName = (TextView) mHolder.itemView.findViewById(R.id.txt_name);
-        txtName.append(userArm.ArmTypeTxt);
-        SpannableString count = new SpannableString(userArm.Count + "");
-        count.setSpan(new ForegroundColorSpan(mHolder.itemView.getContext().getResources().getColor(R.color.price_red)), 0, count.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        count.setSpan(new AbsoluteSizeSpan(20,true),0,count.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        txtName.append(count);
-        txtName.append("个");
+        mHolder.setText(R.id.txt_name, "防爆衣" + userArm.Count + "个");
         if (userArm.ArmType == 4) {
             mHolder.setText(R.id.txt_intro, "(永久期限)");
             mHolder.setImage(R.id.img_photo, R.mipmap.defense_perpetual);
         } else {
-            mHolder.setText(R.id.txt_intro, "(临时期限 24小时)");
+            mHolder.setText(R.id.txt_intro, "(当天使用)");
             mHolder.setImage(R.id.img_photo, R.mipmap.defense_temporary);
         }
     }

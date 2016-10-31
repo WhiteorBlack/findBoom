@@ -16,6 +16,7 @@ import java.util.Map;
 import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.MsgListAdapter;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_MsgList;
 import findboom.android.com.findboom.interfacer.PostCallBack;
@@ -84,9 +85,11 @@ public class SystemMessage extends Activity implements XRecyclerView.LoadingList
         xRecyclerView.setAdapter(msgAdapter);
     }
 
-    public void  boomClick(View v){
+    public void boomClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         finish();
     }
+
     @Override
     public void onRefresh() {
 

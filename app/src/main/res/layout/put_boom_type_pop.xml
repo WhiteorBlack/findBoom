@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/PopParent"
+        android:layout_height="250dp"
+        android:background="@mipmap/bg_put_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@mipmap/title_put_boom" />
+
+            <ImageView style="@style/PopClose" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/bg_put_boom" />
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="68dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/boom" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
+
+            <Button
+                android:id="@+id/btn_common"
+                android:layout_width="102dp"
+                android:layout_height="35dp"
+                android:background="@mipmap/btn_common_boom" />
+
+            <Button
+                android:id="@+id/btn_red"
+                android:layout_width="102dp"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:background="@mipmap/btn_red_boom" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

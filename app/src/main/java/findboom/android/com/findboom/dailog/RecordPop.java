@@ -298,7 +298,11 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.btn_share:
-                share();
+                Bundle bundle=new Bundle();
+                bundle.putInt("type",2);
+//                share();
+                if(popInterfacer!=null)
+                    popInterfacer.OnConfirm(flag,bundle);
                 break;
         }
     }

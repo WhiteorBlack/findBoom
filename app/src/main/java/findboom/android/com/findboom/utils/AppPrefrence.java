@@ -21,24 +21,59 @@ public class AppPrefrence {
     private static final String ISREDSHOW = "isRedShow";
     private static final String ISBOOMSHOW = "isBoomShow";
     private static final String USERPHONE = "userPhone";
-    private static final String ISNOTIFY="isNotify";
+    private static final String ISNOTIFY = "isNotify";
+    private static final String BACKSOUND = "backSound";
+    private static final String CLICKSOUND = "clickSound";
+    private static final String BOOMSOUND = "boomSound";
 
-    public static void setIsNotify(Context context,boolean isNotify){
-        setting=getSp(context.getApplicationContext());
-        setting.edit().putBoolean(ISNOTIFY,isNotify).apply();
-    }
-    public static boolean getIsNotify(Context context){
-        setting=getSp(context.getApplicationContext());
-        return setting.getBoolean(ISNOTIFY,false);
+    public static void setIsBoom(Context context, boolean isNotify) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putBoolean(BOOMSOUND, isNotify).apply();
     }
 
-    public static void setUserPhone(Context context,String phone){
-        setting=getSp(context.getApplicationContext());
-        setting.edit().putString(USERPHONE,phone).apply();
+    public static boolean getIsBoom(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getBoolean(BOOMSOUND, true);
     }
-    public static String getUserPhone(Context context){
-        setting=getSp(context.getApplicationContext());
-        return setting.getString(USERPHONE,"");
+
+    public static void setIsPush(Context context, boolean isNotify) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putBoolean(CLICKSOUND, isNotify).apply();
+    }
+
+    public static boolean getIsPush(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getBoolean(CLICKSOUND, false);
+    }
+
+    public static void setIsBack(Context context, boolean isNotify) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putBoolean(BACKSOUND, isNotify).apply();
+    }
+
+    public static boolean getIsBack(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getBoolean(BACKSOUND, true);
+    }
+
+    public static void setIsNotify(Context context, boolean isNotify) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putBoolean(ISNOTIFY, isNotify).apply();
+    }
+
+    public static boolean getIsNotify(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getBoolean(ISNOTIFY, false);
+    }
+
+    public static void setUserPhone(Context context, String phone) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putString(USERPHONE, phone).apply();
+    }
+
+    public static String getUserPhone(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getString(USERPHONE, "");
     }
 
     public static void setIsRedShow(Context context, boolean isShow) {

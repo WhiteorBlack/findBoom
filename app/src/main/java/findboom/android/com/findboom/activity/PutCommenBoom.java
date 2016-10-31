@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_AllConfig;
 import findboom.android.com.findboom.dailog.SelectBoomPic;
@@ -204,6 +205,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         switch (v.getId()) {
             case R.id.txt_type:
                 if (selectBoomType == null)

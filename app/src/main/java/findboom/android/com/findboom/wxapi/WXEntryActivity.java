@@ -38,7 +38,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wx_share_entry);
-        Constants.iwxapi.handleIntent(getIntent(), this);
+        try{
+            Constants.iwxapi.handleIntent(getIntent(), this);
+        }catch (Exception e){
+            finish();
+        }
+
     }
 
     @Override
@@ -51,7 +56,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
     @Override
     public void onReq(BaseReq baseReq) {
         Tools.debug("hahhha");
-
     }
 
     @Override

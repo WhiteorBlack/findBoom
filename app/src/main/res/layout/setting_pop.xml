@@ -51,13 +51,6 @@
                 android:paddingRight="30dp">
 
                 <CheckBox
-                    android:id="@+id/chb_music"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:button="@drawable/checkbox_music" />
-
-                <CheckBox
                     android:id="@+id/chb_sound_effect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,6 +65,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center_vertical"
                     android:button="@drawable/checkbox_remind" />
+
+                <CheckBox
+                    android:id="@+id/chb_music"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:button="@drawable/checkbox_music" />
             </FrameLayout>
 
             <FrameLayout

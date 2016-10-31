@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import okhttp.OkHttpUtils;
@@ -82,6 +83,7 @@ public class BasePopupwind extends PopupWindow implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         switch (v.getId()) {
             case R.id.img_close:
                 dismiss();

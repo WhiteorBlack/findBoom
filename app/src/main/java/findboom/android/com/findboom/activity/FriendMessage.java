@@ -12,6 +12,7 @@ import java.util.List;
 import findboom.android.com.findboom.BaseFragmentActivity;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.FragmentWithTitleAdapter;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.chat.activity.ConversationFragment;
 import findboom.android.com.findboom.fragment.InviteFragment;
 
@@ -60,6 +61,7 @@ public class FriendMessage extends BaseFragmentActivity {
 
 
     public void boomClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         finish();
     }
 

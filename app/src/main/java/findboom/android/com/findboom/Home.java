@@ -71,6 +71,8 @@ import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
 import findboom.android.com.findboom.activity.FriendMessage;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.activity.PutCommenBoom;
@@ -108,6 +110,7 @@ import findboom.android.com.findboom.dailog.PersonalCenterPop;
 import findboom.android.com.findboom.dailog.PersonalInfo;
 import findboom.android.com.findboom.dailog.PickerDialog;
 import findboom.android.com.findboom.dailog.PostResultPop;
+import findboom.android.com.findboom.dailog.PutBoomTypePop;
 import findboom.android.com.findboom.dailog.RecordListPop;
 import findboom.android.com.findboom.dailog.RecordPop;
 import findboom.android.com.findboom.dailog.ReportPop;
@@ -121,6 +124,7 @@ import findboom.android.com.findboom.interfacer.LocationListener;
 import findboom.android.com.findboom.interfacer.MyLocationListener;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.service.BackgroundService;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
@@ -167,6 +171,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ConvertRedPop convertRedPop;
     private AddFriendPop addFriendPop;
     private NotifyPop notifyPop;
+    private PutBoomTypePop putBoomTypePop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -194,10 +199,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private InviteMessgeDao inviteMessgeDao;
     private UserDao userDao;
 
+    private Intent backIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+        backIntent = new Intent(context, BackgroundService.class);
+        if (!AppPrefrence.getIsBack(context)) {
+            startService(backIntent);
+        }
         initLocation();
         initView();
         getUserArm();
@@ -672,6 +683,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 27:
                 notifyPop = null;
                 break;
+            case 28:
+                putBoomTypePop = null;
+                break;
         }
     }
 
@@ -691,7 +705,18 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     advicePop.setPopInterfacer(this, 8);
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 1) { //邀请好友
+                    showShare("需要你的支援", CommonUntilities.SHARE_REGISTER, "我已经被炸的体无完肤,速速支援寡人", "");
+                }
+                if (bundle != null && bundle.getInt("type", 0) == 2) { //音效
 
+                }
+                if (bundle != null && bundle.getInt("type", 0) == 3) { //推送
+
+                }
+                if (bundle != null && bundle.getInt("type", 0) == 4) { //背景音
+                    if (!AppPrefrence.getIsBack(context)) {
+                        startService(backIntent);
+                    } else stopService(backIntent);
                 }
                 break;
             case 1: //商店窗口
@@ -847,6 +872,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     addFriendPop.setId(bundle.getString("id"));
                     addFriendPop.setPopInterfacer(this, 26);
                 }
+                if (bundle != null && bundle.getInt("type", -1) == 2) {
+                    showShare("痛不欲生", CommonUntilities.SHARE_RECORD, "我已经被炸得怀疑人生,闪开,我想静静", "");
+                }
                 break;
             case 12: //个人中心-->创建支付密码
                 if (personalCenterPop != null)
@@ -947,6 +975,17 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 convertRed(bundle.getString("pwd"));
                 confirmPwdPop.dismiss();
+                break;
+            case 28:
+                if (bundle == null)
+                    return;
+                if (bundle.getInt("type", -1) == 0) {
+                    startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString), 0);
+                    isPutBoom = false;
+                } else if (bundle.getInt("type", -1) == 1) {
+                    startActivityForResult(new Intent(context, PutRedBoom.class).putExtra("config", configString), 1);
+                    isPutBoom = false;
+                }
                 break;
         }
     }
@@ -1575,6 +1614,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bean_boomBoom.Success) {
                     //根据类型做成功处理
                     removeBoom(mapBoom.MineRecordId);
+                    FindBoomApplication.getInstance().playBoomSound();
                     if (boomPop == null)
                         boomPop = new BoomPop(context);
                     boomPop.showPop(txtArsenal);
@@ -1661,7 +1701,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             longItude = latLng.longitude + "";
             latItude = latLng.latitude + "";
             initGeoCoder(latLng);
-            selectBoomPop(latLng);
+//            selectBoomPop(latLng);
+            if (putBoomTypePop == null)
+                putBoomTypePop = new PutBoomTypePop(context);
+            putBoomTypePop.showPop(txtArsenal);
+            putBoomTypePop.setPopInterfacer(this, 28);
         }
         if (isScan) {
             scanBoom(latLng);
@@ -2180,5 +2224,37 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             // 参考同意，被邀请实现此功能,demo未实现
 //            Log.d(username, username + "拒绝了你的好友请求");
         }
+    }
+
+
+    private void showShare(String title, String url, String text, String imgurl) {
+        ShareSDK.initSDK(this);
+        OnekeyShare oks = new OnekeyShare();
+        //关闭sso授权
+        oks.disableSSOWhenAuthorize();
+
+        // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
+        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
+        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
+        oks.setTitle(title);
+        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
+        oks.setTitleUrl(url);
+        // text是分享文本，所有平台都需要这个字段
+        oks.setText(text);
+        //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
+        oks.setImageUrl("http://img.sootuu.com/Exchange/2009-11/2009112481527754.jpg");
+        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
+        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
+        // url仅在微信（包括好友和朋友圈）中使用
+        oks.setUrl(url);
+        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
+//        oks.setComment("我是测试评论文本");
+        // site是分享此内容的网站名称，仅在QQ空间使用
+        oks.setSite("");
+        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
+        oks.setSiteUrl(url);
+
+        // 启动分享GUI
+        oks.show(this);
     }
 }

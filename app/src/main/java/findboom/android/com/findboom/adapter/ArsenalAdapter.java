@@ -41,19 +41,12 @@ public class ArsenalAdapter extends BaseRecyAdapter {
         super.onBindViewHolder(holder, position);
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
-        TextView txtName = (TextView) mHolder.itemView.findViewById(R.id.txt_name);
-        if (isArsenal)
-            txtName.append("地雷");
-        SpannableString count = new SpannableString(userArm.Count + "");
-        count.setSpan(new ForegroundColorSpan(mHolder.itemView.getContext().getResources().getColor(R.color.price_red)), 0, count.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        count.setSpan(new AbsoluteSizeSpan(20, true), 0, count.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        txtName.append(count);
-        txtName.append(" 个");
+        mHolder.setText(R.id.txt_name, "地雷" + userArm.Count + "个");
         if (userArm.ArmType == 0) {
-            mHolder.setText(R.id.txt_intro, "永久");
+            mHolder.setText(R.id.txt_intro, "(永久期限)");
             mHolder.setImage(R.id.img_photo, R.mipmap.boom_normal);
         } else {
-            mHolder.setText(R.id.txt_intro, "临时");
+            mHolder.setText(R.id.txt_intro, "(当天使用)");
             mHolder.setImage(R.id.img_photo, R.mipmap.boom_temp);
         }
         if (isArsenal)

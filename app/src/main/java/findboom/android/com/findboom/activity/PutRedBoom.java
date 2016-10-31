@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_AllConfig;
 import findboom.android.com.findboom.dailog.BandPhonePop;
@@ -105,6 +106,7 @@ public class PutRedBoom extends Activity implements PopInterfacer {
 
 
     public void boomClick(View v) {
+        FindBoomApplication.getInstance().playClickSound();
         switch (v.getId()) {
             case R.id.img_close:
                 finish();

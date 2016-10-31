@@ -5,6 +5,8 @@ package findboom.android.com.findboom.application;/**
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
 
@@ -19,10 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
+import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.db.EaseUser;
 import findboom.android.com.findboom.chat.db.Myinfo;
 import findboom.android.com.findboom.chat.db.UserDao;
+import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.Tools;
 
 /**
@@ -33,6 +37,9 @@ public class FindBoomApplication extends Application {
     private static FindBoomApplication instance;
     private String username;
     private Map<String, EaseUser> contactList;
+    private SoundPool clickSound;
+    private int clickMic;
+    private int boomMic;
 
     public static FindBoomApplication getInstance() {
         return instance;
@@ -42,10 +49,24 @@ public class FindBoomApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        if (clickSound == null)
+            clickSound = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
+        clickMic = clickSound.load(this, R.raw.clickmic, 1);
+        boomMic = clickSound.load(this, R.raw.boommic, 1);
         SDKInitializer.initialize(instance);
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         init(this);
+    }
+
+    public void playClickSound() {
+        if (!AppPrefrence.getIsBoom(this))
+            clickSound.play(clickMic, 1, 1, 0, 0, 1);
+    }
+
+    public void playBoomSound() {
+        if (!AppPrefrence.getIsBoom(this))
+            clickSound.play(boomMic, 1, 1, 0, 0, 1);
     }
     
     /*
