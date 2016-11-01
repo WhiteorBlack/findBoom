@@ -2,17 +2,24 @@ package findboom.android.com.findboom;/**
  * Created by Administrator on 2016/8/8.
  */
 
+import android.*;
+import android.Manifest;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -200,16 +207,24 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private UserDao userDao;
 
     private Intent backIntent;
+    private Vibrator vibrator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         backIntent = new Intent(context, BackgroundService.class);
-        if (!AppPrefrence.getIsBack(context)) {
-            startService(backIntent);
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        initLocation();
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            initLocation();
+        }
+
         initView();
         getUserArm();
         getAllConfig();
@@ -293,15 +308,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-    }
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            initLocation();
+        }
 
-    private void startRecordPop() {
-        if (getRecordPop == null)
-            getRecordPop = new GetRecordPop(context);
-        getRecordPop.showPop(imgArsenal);
-        getRecordPop.setPopInterfacer(this, 10);
     }
 
     private void initLocation() {
@@ -408,6 +420,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ExpandableSelector expandableSelector;
 
     private void initView() {
+        vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
         expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
         expandableSelector.setVisibility(View.INVISIBLE);
         List<ExpandableItem> expandableItems = new ArrayList<>();
@@ -1352,9 +1365,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "购买成功", "").showPop();
+                    confirmPwdPop.dismiss();
+                    shopBuyPop.dismiss();
                     switch (armType) {
                         case 0:
+                            boomList.clear();
                             boomList.addAll(baseBean.Data);
                             imgArsenal.setEnabled(true);
                             txtArsenal.setVisibility(View.VISIBLE);
@@ -1368,6 +1384,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                             break;
                         case 2:
+                            scanList.clear();
                             scanList.addAll(baseBean.Data);
                             imgScan.setEnabled(true);
                             txtScan.setVisibility(View.VISIBLE);
@@ -1378,6 +1395,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                             txtScan.setText(scanCount + "");
                             break;
                         case 4:
+                            defenseList.clear();
                             defenseList.addAll(baseBean.Data);
                             imgDefense.setEnabled(true);
                             txtDefense.setVisibility(View.VISIBLE);
@@ -1507,7 +1525,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             recharMoney = "";
             money = 0f;
         }
-
+        if (!AppPrefrence.getIsBack(this))
+            startService(backIntent);
     }
 
 
@@ -1515,12 +1534,15 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     protected void onPause() {
         isForeground = false;
         super.onPause();
+        if (!AppPrefrence.getIsBack(this))
+            stopService(backIntent);
     }
 
 
     @Override
     protected void onDestroy() {
         unregisterReceiver(mMessageReceiver);
+        stopService(backIntent);
         mMapView.onDestroy();
         if (geoCoder != null)
             geoCoder.destroy();
@@ -1619,6 +1641,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         boomPop = new BoomPop(context);
                     boomPop.showPop(txtArsenal);
                     boomPop.setPopInterfacer(Home.this, 18);
+                    if (!AppPrefrence.getIsBoom(context))
+                        vibrator.vibrate(300);
                 }
             }
         });
@@ -2242,7 +2266,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         // text是分享文本，所有平台都需要这个字段
         oks.setText(text);
         //分享网络图片，新浪微博分享网络图片需要通过审核后申请高级写入接口，否则请注释掉测试新浪微博
-        oks.setImageUrl("http://img.sootuu.com/Exchange/2009-11/2009112481527754.jpg");
+        oks.setImageUrl("http://api.open.qq.com/tfs/show_img.php?appid=1105792674&uuid=app1105792674_40_40%7C1048576%7C1477965705.1411");
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         // url仅在微信（包括好友和朋友圈）中使用

@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +37,12 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+        ImageView imgSplash=(ImageView)findViewById(R.id.img_splash);
+        Calendar calendar=Calendar.getInstance();
+        Tools.debug(calendar.get(Calendar.HOUR_OF_DAY)+"");
+        if (calendar.get(Calendar.HOUR_OF_DAY)<17)
+            Glide.with(this).load(R.mipmap.splash_day).into(imgSplash);
+        else Glide.with(this).load(R.mipmap.splash_night).into(imgSplash);
         if (AppPrefrence.getIsLogin(this)) {
             getUserData();
         }

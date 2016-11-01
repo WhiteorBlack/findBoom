@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
@@ -37,11 +37,12 @@
 
                 <TextView
                     android:id="@+id/txt_defense_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="top|right"
                     android:layout_marginRight="@dimen/home_scan_right"
                     android:layout_marginTop="@dimen/home_scan_top"
+                    android:gravity="center"
                     android:text="10"
                     android:textColor="@color/pop_bg"
                     android:textSize="12sp"
@@ -51,8 +52,8 @@
             <FrameLayout
                 android:id="@+id/rel_scan"
                 android:layout_width="70dp"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
                 android:onClick="boomClick">
 
                 <ImageView
@@ -65,8 +66,9 @@
 
                 <TextView
                     android:id="@+id/txt_scan_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
                     android:layout_gravity="top|right"
                     android:layout_marginRight="@dimen/home_scan_right"
                     android:layout_marginTop="@dimen/home_scan_top"
@@ -75,7 +77,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
             </FrameLayout>
-        </LinearLayout>
+        </FrameLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -107,8 +109,9 @@
 
                     <TextView
                         android:id="@+id/txt_arsenal_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:gravity="center"
                         android:layout_gravity="top|right"
                         android:layout_marginRight="@dimen/home_scan_right"
                         android:layout_marginTop="@dimen/home_scan_top"
@@ -134,8 +137,9 @@
 
                     <TextView
                         android:id="@+id/txt_record_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:gravity="center"
                         android:layout_gravity="top|right"
                         android:layout_marginRight="7dp"
                         android:layout_marginTop="5dp"
@@ -179,8 +183,8 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/img_msg"
                 android:layout_centerHorizontal="true"
-                android:onClick="boomClick"
                 android:layout_marginBottom="5dp"
+                android:onClick="boomClick"
                 expandable_selector:animation_duration="200"
                 expandable_selector:hide_background_if_collapsed="true"
                 expandable_selector:hide_first_item_on_collapse="true" />
