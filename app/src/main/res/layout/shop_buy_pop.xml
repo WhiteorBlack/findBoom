@@ -84,7 +84,7 @@
             android:orientation="vertical"
             android:paddingRight="30dp">
 
-            <TextView
+            <findboom.android.com.findboom.widget.StrokeTextView
                 android:id="@+id/txt_price"
                 style="@style/PopTitle"
                 android:layout_width="wrap_content"

@@ -910,6 +910,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bundle == null)
                     return;
                 goodsCount = bundle.getInt("count") + "";
+                money = bundle.getFloat("money", 0.00f);
                 if (confirmPwdPop == null)
                     confirmPwdPop = new ConfrimPwdPop(context);
                 confirmPwdPop.showPop(txtArsenal);
@@ -1365,54 +1366,82 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
+                    goodsCount = "0";
+                    Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+                    float balance = Float.parseFloat(user.UserBalance);
+                    balance -= money;
+                    user.UserBalance = decentFloat(balance) + "";
+                    BoomDBManager.getInstance().updateUserData(user);
+                    money = 0.00f;
                     new PostResultPop(context, txtArsenal, R.drawable.icon_right, "购买成功", "").showPop();
                     confirmPwdPop.dismiss();
                     shopBuyPop.dismiss();
-                    switch (armType) {
-                        case 0:
-                            boomList.clear();
-                            boomList.addAll(baseBean.Data);
-                            imgArsenal.setEnabled(true);
-                            txtArsenal.setVisibility(View.VISIBLE);
-                            boomCount = 0;
-                            for (int i = 0; i < boomList.size(); i++) {
-                                boomCount += boomList.get(i).Count;
-                            }
-                            txtArsenal.setText(boomCount + "");
-                            break;
-                        case 1:
+                    defenseList.clear();
+                    boomList.clear();
+                    scanList.clear();
+                    for (int i = 0; i < baseBean.Data.size(); i++) {
+                        switch (baseBean.Data.get(i).ArmType) {
+                            case 0:
+                                boomList.add(baseBean.Data.get(i));
+                                break;
+                            case 1:
+                                boomList.add(baseBean.Data.get(i));
+                                break;
+                            case 2:
+                                scanList.add(baseBean.Data.get(i));
 
-                            break;
-                        case 2:
-                            scanList.clear();
-                            scanList.addAll(baseBean.Data);
-                            imgScan.setEnabled(true);
-                            txtScan.setVisibility(View.VISIBLE);
-                            scanCount = 0;
-                            for (int i = 0; i < scanList.size(); i++) {
-                                scanCount += scanList.get(i).Count;
-                            }
-                            txtScan.setText(scanCount + "");
-                            break;
-                        case 4:
-                            defenseList.clear();
-                            defenseList.addAll(baseBean.Data);
-                            imgDefense.setEnabled(true);
-                            txtDefense.setVisibility(View.VISIBLE);
-                            defenseCount = 0;
-                            for (int i = 0; i < defenseList.size(); i++) {
-                                defenseCount += defenseList.get(i).Count;
-                            }
-                            txtDefense.setText(defenseCount + "");
-                            break;
+                                break;
+                            case 3:
+                                scanList.add(baseBean.Data.get(i));
+                                break;
+                            case 4:
+                                defenseList.add(baseBean.Data.get(i));
+
+                                break;
+                            case 5:
+                                defenseList.add(baseBean.Data.get(i));
+                                break;
+                        }
                     }
-
+                    countData();
                 } else
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
             }
         });
     }
 
+    private void countData() {
+        boomCount = 0;
+        for (int i = 0; i < boomList.size(); i++) {
+            boomCount += boomList.get(i).Count;
+        }
+        if (boomCount > 0) {
+            imgArsenal.setEnabled(true);
+            txtArsenal.setVisibility(View.VISIBLE);
+        }
+
+        txtArsenal.setText(boomCount + "");
+
+        defenseCount = 0;
+        for (int i = 0; i < defenseList.size(); i++) {
+            defenseCount += defenseList.get(i).Count;
+        }
+        if (defenseCount > 0) {
+            imgDefense.setEnabled(true);
+            txtDefense.setVisibility(View.VISIBLE);
+        }
+        txtDefense.setText(defenseCount + "");
+
+        scanCount = 0;
+        for (int i = 0; i < scanList.size(); i++) {
+            scanCount += scanList.get(i).Count;
+        }
+        if (scanCount > 0) {
+            imgScan.setEnabled(true);
+            txtScan.setVisibility(View.VISIBLE);
+        }
+        txtScan.setText(scanCount + "");
+    }
 
     @Override
     public void takeCancel() {

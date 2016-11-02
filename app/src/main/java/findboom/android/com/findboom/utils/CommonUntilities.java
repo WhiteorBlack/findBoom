@@ -24,6 +24,6 @@ public class CommonUntilities {
     public static String RECHARGE_URL=MAIN_URL+"Recharge/";
     public static String CONFIG_URL=MAIN_URL+"Config/";
     public static String WITH_URL=MAIN_URL+"Withdraw/";
-    public static String SHARE_REGISTER=MAIN_URL+"Mobile/Register?id=";
-    public static String SHARE_RECORD=MAIN_URL+"Mobile/Share?id=";
+    public static String SHARE_REGISTER="http://youxi.wfy188.com:84/Mobile/Register?id=";
+    public static String SHARE_RECORD="http://youxi.wfy188.com:84/Mobile/Share?id=";
 }

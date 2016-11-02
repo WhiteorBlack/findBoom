@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.widget.StrokeTextView;
 
 /**
  * author:${白曌勇} on 2016/9/11
@@ -21,7 +22,8 @@ public class ShopBuyPop extends BasePopupwind {
     private Context context;
     private View view;
     private ImageView imgGoods;
-    private TextView txtCount, txtPrice;
+    private TextView txtCount;
+    private StrokeTextView txtPrice;
     private int count = 1;
 
     public ShopBuyPop(Context context) {
@@ -45,7 +47,7 @@ public class ShopBuyPop extends BasePopupwind {
         imgGoods = (ImageView) view.findViewById(R.id.img_goods_pic);
         txtCount = (TextView) view.findViewById(R.id.txt_count);
         txtCount.setText(count + "");
-        txtPrice = (TextView) view.findViewById(R.id.txt_price);
+        txtPrice = (StrokeTextView) view.findViewById(R.id.txt_price);
         this.setContentView(view);
     }
 
@@ -98,6 +100,7 @@ public class ShopBuyPop extends BasePopupwind {
             case R.id.btn_buy:
                 Bundle bundle = new Bundle();
                 bundle.putInt("count", count);
+                bundle.putFloat("money", price * count);
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundle);
                 break;
