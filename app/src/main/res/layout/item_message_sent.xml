@@ -4,46 +4,48 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp" >
+    android:paddingTop="13dp">
 
     <TextView
-           android:visibility="gone"
         android:id="@+id/timestamp"
         style="@style/chat_text_date_style"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity" >
+        android:layout_marginTop="@dimen/margin_chat_activity">
 
-        <ImageView
+        <findboom.android.com.findboom.widget.CircleImageView
             android:id="@+id/iv_userhead"
             android:layout_width="@dimen/size_avatar"
             android:layout_height="@dimen/size_avatar"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:background="@drawable/default_avatar"
-            android:scaleType="fitXY" />
+            android:src="@mipmap/ic_logo"
+             />
 
-       <TextView
+        <TextView
             android:id="@+id/tv_chatcontent"
             style="@style/chat_content_date_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/margin_chat_activity"
+            android:paddingRight="20dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_toLeftOf="@id/iv_userhead"
-            android:autoLink="web"
-            android:background="@drawable/chatto_bg"
             android:gravity="left|center"
             android:lineSpacingExtra="2dp"
+            android:background="@drawable/chatfrom_bg"
             android:maxWidth="225.0dip"
-            android:paddingLeft="8dip"
+            android:minHeight="40dp"
+            android:paddingLeft="5dip"
             android:textSize="15sp" />
 
-         
 
         <ImageView
             android:id="@+id/msg_status"
@@ -78,13 +80,12 @@
             android:visibility="invisible" />
 
         <ProgressBar
-               android:visibility="gone"
             android:id="@+id/pb_sending"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv_chatcontent"
-            />
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -29,7 +29,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="11dp"
             android:scaleType="fitXY"
-            android:src="@drawable/default_avatar" />
+            android:src="@mipmap/ic_logo" />
 
         <TextView
             android:id="@+id/unread_msg_number"

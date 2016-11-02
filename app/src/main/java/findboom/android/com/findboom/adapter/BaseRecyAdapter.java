@@ -83,6 +83,7 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
         void onItemLongClickListener(View view, int position);
     }
 
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public View itemView;
 
@@ -110,7 +111,7 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         public void setRadiusImage(int id, String url) {
-            Glide.with(itemView.getContext()).load(url).into((CircleImageView) itemView.findViewById(id));
+            Glide.with(itemView.getContext()).load(url).error(R.mipmap.ic_logo).into((CircleImageView) itemView.findViewById(id));
         }
 
         public void setOnClick(int id, final int position) {

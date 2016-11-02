@@ -2,12 +2,14 @@ package findboom.android.com.findboom.chat.activity;
 
 import java.util.List;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.exceptions.HyphenateException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,8 +27,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.utils.EaseCommonUtils;
+import findboom.android.com.findboom.dailog.BasePopupwind;
+import findboom.android.com.findboom.database.BoomDBManager;
+import findboom.android.com.findboom.utils.AppPrefrence;
+import findboom.android.com.findboom.widget.CircleImageView;
 
 public class ChatActivity extends Activity {
     private ListView listView;
@@ -40,11 +47,12 @@ public class ChatActivity extends Activity {
     private EMConversation conversation;
     protected int pagesize = 20;
 
+
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
         setContentView(R.layout.activity_chat);
-        toChatUserId=this.getIntent().getStringExtra("userId");
+        toChatUserId = this.getIntent().getStringExtra("userId");
         toChatUsername = this.getIntent().getStringExtra("username");
         TextView tv_toUsername = (TextView) this.findViewById(R.id.tv_toUsername);
         tv_toUsername.setText(toChatUsername);
@@ -62,7 +70,6 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 String content = et_content.getText().toString().trim();
                 if (TextUtils.isEmpty(content)) {
-
                     return;
                 }
                 setMesaage(content);
@@ -101,6 +108,10 @@ public class ChatActivity extends Activity {
         // 如果是群聊，设置chattype，默认是单聊
         if (chatType == Constant.CHATTYPE_GROUP)
             message.setChatType(ChatType.GroupChat);
+        Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(ChatActivity.this));
+        message.setAttribute("avatar", user.Avatar);
+
+        message.setAttribute("name", TextUtils.isEmpty(user.NickName) ? user.GameUserId : user.NickName);
         // 发送消息
         EMClient.getInstance().chatManager().sendMessage(message);
         msgList.add(message);
@@ -223,20 +234,30 @@ public class ChatActivity extends Activity {
             if (holder == null) {
                 holder = new ViewHolder();
                 holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
+                holder.imgPhoto = (CircleImageView) convertView.findViewById(R.id.iv_userhead);
                 convertView.setTag(holder);
             }
 
             EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
             holder.tv.setText(txtBody.getMessage());
+            if (viewType != 0) {
+                Glide.with(context).load(BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context)).Avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
+            } else {
+                try {
+                    Glide.with(context).load(message.getStringAttribute("avatar")).error(R.mipmap.ic_logo).into(holder.imgPhoto);
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    Glide.with(context).load(R.mipmap.ic_logo).into(holder.imgPhoto);
+                }
+            }
             return convertView;
         }
 
     }
 
     public static class ViewHolder {
-
         TextView tv;
-
+        CircleImageView imgPhoto;
     }
 
 

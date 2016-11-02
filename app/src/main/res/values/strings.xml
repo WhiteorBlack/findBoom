@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FindBoom</string>
+    <string name="app_name">扫雷高手</string>
     <string name="action_settings">Settings</string>
     <string name="defense">防弹衣</string>
     <string name="scanName">扫雷器</string>

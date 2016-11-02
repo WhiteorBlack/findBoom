@@ -42,6 +42,7 @@ public class ReportPop extends BasePopupwind {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.advice_pop, null);
         view.findViewById(R.id.btn_advice).setOnClickListener(this);
+        view.findViewById(R.id.img_close).setOnClickListener(this);
         edtAdvice = (EditText) view.findViewById(R.id.edt_advice);
         this.setContentView(view);
     }

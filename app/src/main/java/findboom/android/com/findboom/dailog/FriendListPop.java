@@ -4,6 +4,7 @@ package findboom.android.com.findboom.dailog;/**
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -89,7 +90,12 @@ public class FriendListPop extends BasePopupwind {
             @Override
             public void onClick(View view, int position) {
                 Bean_FriendList.Friend friend = (Bean_FriendList.Friend) friendList.get(position);
-                context.startActivity(new Intent(context, ChatActivity.class).putExtra("userId", friend.EasemobId).putExtra("username", friend.FriendNickName));
+//                context.startActivity(new Intent(context, ChatActivity.class).putExtra("userId", friend.EasemobId).putExtra("username", friend.FriendNickName));
+                Bundle bundle = new Bundle();
+                bundle.putString("id", friend.EasemobId);
+                bundle.putString("name", friend.FriendNickName);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle);
             }
         });
         recyFriend.setAdapter(friendAdapter);

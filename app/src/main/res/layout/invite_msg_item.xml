@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="5dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,7 +16,7 @@
             style="@style/settingContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="2016" />
 
         <TextView
@@ -33,15 +35,15 @@
         style="@style/settingContent"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/bg_record_list"
+        android:ellipsize="end"
         android:gravity="center_vertical"
         android:paddingLeft="5dp"
-        android:singleLine="true"
-        android:ellipsize="end"
         android:paddingRight="5dp"
+        android:singleLine="true"
         android:text="埋雷成功获取10积分试试事实上事实上事实上事实上"
         android:textColor="@color/deep_yellow" />
 

@@ -214,6 +214,7 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 popInterfacer.OnConfirm(flag, bundle);
             }
         });
+
         getBoomAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {

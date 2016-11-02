@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.DateUtils;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Map;
 
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.application.FindBoomApplication;
+import findboom.android.com.findboom.widget.CircleImageView;
 
 /**
  * author:${白曌勇} on 2016/10/30
@@ -39,7 +41,6 @@ import findboom.android.com.findboom.application.FindBoomApplication;
 public class ConversationFragment extends Fragment {
     private View view;
     private ListView listView;
-
     private List<EMConversation> conversationList = new ArrayList<EMConversation>();
     private EaseConversationAdapater adapter;
 
@@ -68,13 +69,20 @@ public class ConversationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 EMConversation conversation = adapter.getItem(position);
-                String username = conversation.getUserName();
-                if (username.equals(FindBoomApplication.getInstance().getCurrentUserName()))
+                String userId = conversation.getUserName();
+                String userName = "玩家";
+                try {
+                    userName = conversation.getLastMessage().getStringAttribute("name");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+                if (userId.equals(FindBoomApplication.getInstance().getCurrentUserName()))
                     Toast.makeText(getContext(), st2, Toast.LENGTH_SHORT).show();
                 else {
                     // 进入聊天页面
                     Intent intent = new Intent(getContext(), ChatActivity.class);
-                    intent.putExtra("username", username);
+                    intent.putExtra("username", userName);
+                    intent.putExtra("userId", userId);
                     startActivity(intent);
                 }
             }
@@ -84,7 +92,6 @@ public class ConversationFragment extends Fragment {
     /**
      * 获取会话列表
      *
-     * @param context
      * @return +
      */
     protected List<EMConversation> loadConversationList() {
@@ -119,8 +126,6 @@ public class ConversationFragment extends Fragment {
 
     /**
      * 根据最后一条消息的时间排序
-     *
-     * @param usernames
      */
     private void sortConversationByLastChatTime(List<Pair<Long, EMConversation>> conversationList) {
         Collections.sort(conversationList, new Comparator<Pair<Long, EMConversation>>() {
@@ -190,13 +195,20 @@ public class ConversationFragment extends Fragment {
                 holder.message = (TextView) convertView.findViewById(R.id.message);
                 holder.time = (TextView) convertView.findViewById(R.id.time);
                 holder.msgState = convertView.findViewById(R.id.msg_state);
+                holder.imgPhoto = (CircleImageView) convertView.findViewById(R.id.avatar);
                 convertView.setTag(holder);
             }
             // 获取与此用户/群组的会话
             EMConversation conversation = getItem(position);
             // 获取用户username或者群组groupid
             String username = conversation.getUserName();
-            holder.name.setText("与 " + username + " 的会话");
+            EMMessage msg = conversation.getLastMessage();
+            try {
+                holder.name.setText(conversation.getLastMessage().getStringAttribute("name"));
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+                holder.name.setText("玩儿家");
+            }
             if (conversation.getUnreadMsgCount() > 0) {
                 // 显示与此用户的消息未读数
                 holder.unreadLabel.setText(String.valueOf(conversation.getUnreadMsgCount()));
@@ -276,7 +288,10 @@ public class ConversationFragment extends Fragment {
          * 最后一条消息的发送状态
          */
         View msgState;
-        /** 整个list中每一行总布局 */
+        /**
+         * 整个list中每一行总布局
+         */
+        CircleImageView imgPhoto;
 
     }
 }

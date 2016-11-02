@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
@@ -105,7 +107,7 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
             if (bean_BoomDetial.Data.Status > 0) {
                 if (bean_BoomDetial.Data.BombType == 0) {
                     txtInfo.append(getSpanString(bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
-                    txtInfo.append("在 ");
+                    txtInfo.append(" 在 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 踩到了我埋的雷,");
                     if (bean_BoomDetial.Data.IsHaveBombSuit) {
@@ -119,7 +121,7 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
                         txtInfo.append("积分。");
                     }
                 } else {
-                    txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
+                    txtInfo.append(getSpanString( bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 使用扫雷器在 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 扫到到了我埋的雷,并成功排除");
@@ -133,11 +135,10 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
             }
         } else {
             if (bean_BoomDetial.Data.BombType == 0) {
-                txtInfo.append(" 我在");
+                txtInfo.append(" 我在 ");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 踩到了");
-                txtInfo.append(getSpanString( bean_BoomDetial.Data.UserNickName, Color.rgb(240, 165, 9)));
-                txtInfo.append(" 埋的 ");
+                txtInfo.append(getSpanString(bean_BoomDetial.Data.MineUserNickName, Color.rgb(240, 165, 9)));
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MineTypeTxt, Color.rgb(240, 165, 9)));
                 if (bean_BoomDetial.Data.IsHaveBombSuit) {
                     txtInfo.append("但是被我的防弹衣成功防御。");
@@ -153,11 +154,12 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
                 txtInfo.append(" 我使用扫雷器在 ");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 扫到到了");
-                txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
+                txtInfo.append(getSpanString( bean_BoomDetial.Data.MineUserNickName, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 埋的雷,并成功排除");
             }
 
         }
+        txtInfo.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private SpannableString getSpanString(String content, int color) {
@@ -169,12 +171,11 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
             }
         }, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new ForegroundColorSpan(color), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new AbsoluteSizeSpan(18,true), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
-
     }
 
     private void createPop() {
-
         if (addFriendPop == null)
             addFriendPop = new AddFriendPop(this);
         addFriendPop.showPop(txtBoomState);

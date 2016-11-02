@@ -52,6 +52,8 @@ public class InviteFragment extends Fragment implements XRecyclerView.LoadingLis
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+        pageIndex=1;
+        getMsgData();
     }
 
     private void getMsgData() {

@@ -18,6 +18,7 @@ import findboom.android.com.findboom.adapter.BaseRecyAdapter;
 import findboom.android.com.findboom.adapter.DefenseAdapter;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.interfacer.OnClickInterface;
+import findboom.android.com.findboom.utils.Tools;
 
 /**
  * author:${白曌勇} on 2016/9/10
@@ -27,7 +28,7 @@ public class ArsenalPop extends BasePopupwind {
     private Context context;
     private View view;
     private RecyclerView recyDefense;
-    private List defenseList;
+    private List<Bean_UserArm.UserArm> defenseList;
     private ArsenalAdapter defenseAdapter;
 
     public ArsenalPop(Context context) {
@@ -69,6 +70,10 @@ public class ArsenalPop extends BasePopupwind {
         defenseAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
+                if (defenseList.get(0).Count == 0 && defenseList.get(1).Count == 0) {
+                    Tools.toastMsg(context, "地雷已用完,请购买后使用");
+                    return;
+                }
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, null);
                 dismiss();

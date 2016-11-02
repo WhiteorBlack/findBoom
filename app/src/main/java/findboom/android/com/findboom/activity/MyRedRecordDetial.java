@@ -31,7 +31,7 @@ import findboom.android.com.findboom.utils.Tools;
 
 /**
  * Created by Administrator on 2016/9/29.
- * 我埋雷记录详情
+ * 红包雷记录详情
  */
 public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterfacer {
     private TextView imgType;
@@ -75,7 +75,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         redRecordAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                createPop(redRecords.get(position-1).ReceiveUserId);
+                createPop(redRecords.get(position - 1).ReceiveUserId);
             }
 
             @Override
@@ -103,7 +103,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         if (addFriendPop == null)
             addFriendPop = new AddFriendPop(this);
         addFriendPop.showPop(txtBoomState);
-            addFriendPop.setId(id);
+        addFriendPop.setId(id);
         addFriendPop.setPopInterfacer(this, 0);
     }
 
