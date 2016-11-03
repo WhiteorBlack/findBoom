@@ -41,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp"
-                android:text="爆炸"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -54,6 +53,7 @@
                 <TextView
                     android:id="@+id/txt_address"
                     style="@style/PopNmaeWhite"
+                    android:textSize="14sp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"

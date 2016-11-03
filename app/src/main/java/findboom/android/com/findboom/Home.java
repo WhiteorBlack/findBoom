@@ -108,6 +108,7 @@ import findboom.android.com.findboom.dailog.ChatPop;
 import findboom.android.com.findboom.dailog.ConfrimPwdPop;
 import findboom.android.com.findboom.dailog.ConvertRedPop;
 import findboom.android.com.findboom.dailog.CreatePayPwdPop;
+import findboom.android.com.findboom.dailog.DealInviteInfo;
 import findboom.android.com.findboom.dailog.DefensePop;
 import findboom.android.com.findboom.dailog.FriendListPop;
 import findboom.android.com.findboom.dailog.GetRecordPop;
@@ -388,7 +389,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 txtScan.setText(scanCount + "");
             } else {
                 imgScan.setEnabled(false);
-                txtScan.setVisibility(View.GONE);
+                txtScan.setVisibility(View.INVISIBLE);
             }
             defenseCount = 0;
             for (int i = 0; i < defenseList.size(); i++) {
@@ -400,7 +401,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 txtDefense.setText(defenseCount + "");
             } else {
                 imgDefense.setEnabled(false);
-                txtDefense.setVisibility(View.GONE);
+                txtDefense.setVisibility(View.INVISIBLE);
             }
 
             boomCount = 0;
@@ -413,7 +414,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 txtArsenal.setText(boomCount + "");
             } else {
                 imgArsenal.setEnabled(false);
-                txtArsenal.setVisibility(View.GONE);
+                txtArsenal.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -705,6 +706,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 29:
                 chatPop = null;
                 break;
+            case 30:
+                notifyPop = null;
+                break;
+            case 31:
+                notifyPop = null;
+                break;
         }
     }
 
@@ -852,6 +859,30 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 4:
                 //使用扫雷器
+                if (bundle == null) {
+                    isScan = false;
+                    return;
+                }
+                if (scanCount <= 0) {
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.invisiableChb();
+                    notifyPop.setNotify("扫雷器已用完,请购买后使用");
+//                    notifyPop.setPopInterfacer(this,30);
+                    isScan = false;
+                    return;
+                }
+                int pos = bundle.getInt("pos");
+                if (scanList.get(pos).ArmType == 3 && scanList.get(pos).Count == 0) {
+                    //没有临时扫雷器
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.invisiableChb();
+                    notifyPop.visiableClose();
+                    notifyPop.setNotify("临时扫雷器已用完,继续将使用永久扫雷器");
+                    notifyPop.setPopInterfacer(this, 30);
+                    return;
+                }
                 isPutBoom = false;
                 isScan = true;
                 if (!AppPrefrence.getIsNotify(this)) {
@@ -860,11 +891,34 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     notifyPop.setNotify(R.string.scan_notify);
                     notifyPop.showPop(txtArsenal);
                     notifyPop.setPopInterfacer(this, 27);
-
                 }
 
                 break;
             case 5: //放置地雷
+                if (bundle == null) {
+                    isPutBoom = false;
+                    return;
+                }
+                if (boomCount <= 0) {
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.invisiableChb();
+                    notifyPop.setNotify("地雷已用完,请购买后使用");
+//                    notifyPop.setPopInterfacer(this,30);
+                    isPutBoom = false;
+                    return;
+                }
+                int posB = bundle.getInt("pos");
+                if (boomList.get(posB).ArmType == 1 && boomList.get(posB).Count == 0) {
+                    //没有临时雷
+                    if (notifyPop == null)
+                        notifyPop = new NotifyPop(context);
+                    notifyPop.invisiableChb();
+                    notifyPop.visiableClose();
+                    notifyPop.setNotify("临时雷已用完,继续将使用永久雷");
+                    notifyPop.setPopInterfacer(this, 31);
+                    return;
+                }
                 isPutBoom = true;
                 isScan = false;
                 if (!AppPrefrence.getIsNotify(this)) {
@@ -1019,6 +1073,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     isPutBoom = false;
                 }
                 break;
+            case 30:
+                isScan = true;
+                isPutBoom = false;
+                break;
+            case 31:
+                isPutBoom = true;
+                isPutBoom = false;
+                break;
         }
     }
 
@@ -1134,6 +1196,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     changePayPwd.showPop(imgArsenal);
                     changePayPwd.setPopInterfacer(this, 13);
                 }
+                break;
+            case 30:
+                isScan = false;
+                isPutBoom = false;
+                break;
+            case 31:
+                isScan = false;
+                isPutBoom = false;
                 break;
         }
     }
@@ -1436,6 +1506,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (boomCount > 0) {
             imgArsenal.setEnabled(true);
             txtArsenal.setVisibility(View.VISIBLE);
+        } else {
+            imgArsenal.setEnabled(false);
+            txtArsenal.setVisibility(View.INVISIBLE);
         }
 
         txtArsenal.setText(boomCount + "");
@@ -1447,6 +1520,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (defenseCount > 0) {
             imgDefense.setEnabled(true);
             txtDefense.setVisibility(View.VISIBLE);
+        } else {
+            imgDefense.setEnabled(false);
+            txtDefense.setVisibility(View.INVISIBLE);
         }
         txtDefense.setText(defenseCount + "");
 
@@ -1457,6 +1533,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (scanCount > 0) {
             imgScan.setEnabled(true);
             txtScan.setVisibility(View.VISIBLE);
+        } else {
+            imgScan.setEnabled(false);
+            txtScan.setVisibility(View.INVISIBLE);
         }
         txtScan.setText(scanCount + "");
     }
@@ -1589,6 +1668,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     @Override
     protected void onDestroy() {
         unregisterReceiver(mMessageReceiver);
+        mLocationClient.stop();
+        mLocationClient.unRegisterLocationListener(myListener);
         stopService(backIntent);
         mMapView.onDestroy();
         if (geoCoder != null)
@@ -1663,7 +1744,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
     }
 
-    private void boomBoom(final Bean_MapBoom.MapBoom mapBoom) {
+    synchronized private void boomBoom(final Bean_MapBoom.MapBoom mapBoom) {
         Map<String, String> params = new HashMap<>();
         String url = "";
         params.put("MineRecordId", mapBoom.MineRecordId);
@@ -1690,6 +1771,19 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     boomPop.setPopInterfacer(Home.this, 18);
                     if (!AppPrefrence.getIsBoom(context))
                         vibrator.vibrate(300);
+                    if (defenseCount > 0) {
+                        defenseCount -= 1;
+                        if (defenseList.get(0).ArmType == 5) {
+                            if (defenseList.get(0).Count > 0) {
+                                defenseList.get(0).Count -= 1;
+                            } else defenseList.get(1).Count -= 1;
+                        } else {
+                            if (defenseList.get(1).Count > 0) {
+                                defenseList.get(1).Count -= 1;
+                            } else defenseList.get(0).Count -= 1;
+                        }
+                        countData();
+                    }
                 }
             }
         });
@@ -1851,6 +1945,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         } else scanList.get(0).Count -= 1;
                     }
                 }
+                countData();
             }
         });
     }

@@ -89,6 +89,13 @@ public class ConversationFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
     /**
      * 获取会话列表
      *

@@ -146,6 +146,9 @@ public class Tools {
     }
 
     public static SpannableString getSpanString(Context context, String content, int color) {
+        if (TextUtils.isEmpty(content)) {
+            content = "玩儿家";
+        }
         SpannableString spannableString = new SpannableString(content);
         spannableString.setSpan(new ForegroundColorSpan(color), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;

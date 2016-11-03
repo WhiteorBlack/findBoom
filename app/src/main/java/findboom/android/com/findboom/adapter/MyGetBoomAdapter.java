@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
 
@@ -35,6 +36,10 @@ public class MyGetBoomAdapter extends BaseRecyAdapter {
         Bean_MyBoomRecord.BoomInfo boomInfo = (Bean_MyBoomRecord.BoomInfo) dataList.get(position);
         mHolder.setText(R.id.txt_name, boomInfo.MineTypeTxt);
         TextView txtContent = (TextView) mHolder.itemView.findViewById(R.id.txt_state);
+        if (TextUtils.isEmpty(boomInfo.MineUserNickName)){
+            boomInfo.MineUserNickName="玩儿家";
+        }
+        txtContent.setText("");
         SpannableString content = new SpannableString(boomInfo.MineUserNickName);
         content.setSpan(new ForegroundColorSpan(mHolder.itemView.getContext().getResources().getColor(R.color.content_yellow)), 0, boomInfo.MineUserNickName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         txtContent.append(boomInfo.CreateTime + "踩到了");

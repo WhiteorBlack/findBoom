@@ -24,8 +24,10 @@ import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_BoomDetial;
 import findboom.android.com.findboom.dailog.AddFriendPop;
+import findboom.android.com.findboom.dailog.PostResultPop;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 
@@ -40,7 +42,6 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
     private TextView txtRemark, txtInfo;
     private ImageView imgPhoto;
     private String boomId;
-    private int type = 0;
     private boolean isMine = false; //标示是不是我埋的雷
 
     @Override
@@ -53,7 +54,6 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
 
     private void initView() {
         boomId = getIntent().getStringExtra("id");
-        type = getIntent().getIntExtra("type", 0);
         isMine = getIntent().getBooleanExtra("isMine", false);
         imgType = (TextView) findViewById(R.id.txt_type);
 
@@ -88,7 +88,13 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
                     return;
                 bean_BoomDetial = new Gson().fromJson(response, Bean_BoomDetial.class);
                 if (bean_BoomDetial != null && bean_BoomDetial.Success) {
-                    setData();
+                    try {
+                        setData();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Tools.debug("sssssssss" + e.toString());
+                    }
+
                 }
             }
         });
@@ -106,7 +112,7 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
         if (isMine) {
             if (bean_BoomDetial.Data.Status > 0) {
                 if (bean_BoomDetial.Data.BombType == 0) {
-                    txtInfo.append(getSpanString(bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
+                    txtInfo.append(getSpanString(TextUtils.isEmpty(bean_BoomDetial.Data.BombUserNickName) ? bean_BoomDetial.Data.BombUserId : bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 在 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 踩到了我埋的雷,");
@@ -115,13 +121,13 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
                     } else {
                         txtInfo.append("减少对方 ");
                         txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MinusScore, Color.rgb(240, 165, 9)));
-                        txtInfo.append("积分,");
+                        txtInfo.append(" 积分,");
                         txtInfo.append("为我增加 ");
                         txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.PlusScore, Color.rgb(240, 165, 9)));
-                        txtInfo.append("积分。");
+                        txtInfo.append(" 积分。");
                     }
                 } else {
-                    txtInfo.append(getSpanString( bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
+                    txtInfo.append(getSpanString(TextUtils.isEmpty(bean_BoomDetial.Data.BombUserNickName) ? bean_BoomDetial.Data.BombUserId : bean_BoomDetial.Data.BombUserNickName, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 使用扫雷器在 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                     txtInfo.append(" 扫到到了我埋的雷,并成功排除");
@@ -138,24 +144,25 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
                 txtInfo.append(" 我在 ");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 踩到了");
-                txtInfo.append(getSpanString(bean_BoomDetial.Data.MineUserNickName, Color.rgb(240, 165, 9)));
-                txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MineTypeTxt, Color.rgb(240, 165, 9)));
+                txtInfo.append(getSpanString(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? bean_BoomDetial.Data.UserId : bean_BoomDetial.Data.UserNickName, Color.rgb(240, 165, 9)));
+                txtInfo.append(" 的" + bean_BoomDetial.Data.MineTypeTxt);
+//                txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MineTypeTxt, Color.rgb(240, 165, 9)));
                 if (bean_BoomDetial.Data.IsHaveBombSuit) {
                     txtInfo.append("但是被我的防弹衣成功防御。");
                 } else {
                     txtInfo.append("减少我 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.MinusScore, Color.rgb(240, 165, 9)));
-                    txtInfo.append("积分,");
+                    txtInfo.append(" 积分,");
                     txtInfo.append("为对方增加 ");
                     txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.PlusScore, Color.rgb(240, 165, 9)));
-                    txtInfo.append("积分。");
+                    txtInfo.append(" 积分。");
                 }
             } else {
                 txtInfo.append(" 我使用扫雷器在 ");
                 txtInfo.append(Tools.getSpanString(this, bean_BoomDetial.Data.Address, Color.rgb(240, 165, 9)));
                 txtInfo.append(" 扫到到了");
-                txtInfo.append(getSpanString( bean_BoomDetial.Data.MineUserNickName, Color.rgb(240, 165, 9)));
-                txtInfo.append(" 埋的雷,并成功排除");
+                txtInfo.append(getSpanString(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? bean_BoomDetial.Data.UserId : bean_BoomDetial.Data.UserNickName, Color.rgb(240, 165, 9)));
+                txtInfo.append(" 埋的" + bean_BoomDetial.Data.MineTypeTxt + ",并成功排除");
             }
 
         }
@@ -163,6 +170,9 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
     }
 
     private SpannableString getSpanString(String content, int color) {
+        if (TextUtils.isEmpty(content)) {
+            content = "玩儿家";
+        }
         SpannableString spannableString = new SpannableString(content);
         spannableString.setSpan(new ClickableSpan() {
             @Override
@@ -171,17 +181,23 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
             }
         }, 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannableString.setSpan(new ForegroundColorSpan(color), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new AbsoluteSizeSpan(18,true), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableString.setSpan(new AbsoluteSizeSpan(18, true), 0, content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
     }
 
     private void createPop() {
         if (addFriendPop == null)
             addFriendPop = new AddFriendPop(this);
-        addFriendPop.showPop(txtBoomState);
+        String id = "";
         if (isMine)
-            addFriendPop.setId(bean_BoomDetial.Data.BombUserId);
-        else addFriendPop.setId(bean_BoomDetial.Data.UserId);
+            id = bean_BoomDetial.Data.BombUserId;
+//            addFriendPop.setId();
+        else id = bean_BoomDetial.Data.UserId;
+//            addFriendPop.setId();
+        if (TextUtils.equals(id, AppPrefrence.getUserName(context))) {
+            return;
+        }
+        addFriendPop.showPop(txtBoomState);
         addFriendPop.setPopInterfacer(this, 0);
     }
 

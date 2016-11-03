@@ -3,6 +3,7 @@ package findboom.android.com.findboom.dailog;/**
  */
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,9 +52,14 @@ public class DealInviteInfo extends BasePopupwind {
 
     private String userId = "";
     String type = "2";
+    int flag = 0;
 
     public void setId(String id) {
         this.userId = id;
+    }
+
+    public void setType(int type) {
+        this.flag = type;
     }
 
     public void setContent(String content) {
@@ -71,7 +77,11 @@ public class DealInviteInfo extends BasePopupwind {
                 type = "1";
                 break;
         }
-        sendRequest();
+        if (!TextUtils.isEmpty(userId))
+            sendRequest();
+        else {
+            dismiss();
+        }
     }
 
     private void sendRequest() {

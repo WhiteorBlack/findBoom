@@ -26,6 +26,7 @@ import findboom.android.com.findboom.bean.RedRecord;
 import findboom.android.com.findboom.dailog.AddFriendPop;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 
@@ -66,6 +67,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         txtUserName = (TextView) findViewById(R.id.txt_user_name);
         txtBoomState = (TextView) findViewById(R.id.txt_boom_state);
         txtBoomType = (TextView) findViewById(R.id.txt_boom_type);
+        txtCount = (TextView) findViewById(R.id.txt_count);
 
         if (redRecordAdapter == null)
             redRecordAdapter = new RedRecordAdapter(redRecords);
@@ -75,7 +77,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         redRecordAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                createPop(redRecords.get(position - 1).ReceiveUserId);
+                createPop(redRecords.get(position ).ReceiveUserId);
             }
 
             @Override
@@ -99,7 +101,8 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
     }
 
     private void createPop(String id) {
-
+        if (TextUtils.isEmpty(id) || TextUtils.equals(id, AppPrefrence.getUserName(context)))
+            return;
         if (addFriendPop == null)
             addFriendPop = new AddFriendPop(this);
         addFriendPop.showPop(txtBoomState);
@@ -112,7 +115,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
     private void getBoomInfo() {
         Map<String, String> params = new HashMap<>();
         params.put("mineRecordId", boomId);
-        PostTools.getData(this, CommonUntilities.USER_URL + "RedPackMineRecord", params, new PostCallBack() {
+        PostTools.getData(this, CommonUntilities.USER_URL + "GetRedPackMineInfo", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -133,7 +136,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         txtBoomType.append(Tools.getSpanString(this, bean_BoomDetial.Data.TotalAmount, Color.rgb(255, 255, 255)));
         txtBoomType.append("元");
         txtRemark.setText(bean_BoomDetial.Data.RedPackText);
-        txtUserName.setText(bean_BoomDetial.Data.UserNickName + " 的红包雷");
+        txtUserName.setText(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家" : bean_BoomDetial.Data.UserNickName + " 的红包雷");
         txtCount.setText("剩余个数:" + bean_BoomDetial.Data.LeftCount + "/" + bean_BoomDetial.Data.Count);
 
         if (bean_BoomDetial.Data.RedPackReciveRecords != null) {

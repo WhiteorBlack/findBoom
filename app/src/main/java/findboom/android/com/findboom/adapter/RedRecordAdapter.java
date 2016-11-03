@@ -42,10 +42,17 @@ public class RedRecordAdapter extends BaseRecyAdapter {
         super.onBindViewHolder(holder, position);
         ViewHolder mHolder = (ViewHolder) holder;
         RedRecord redRecord = (RedRecord) dataList.get(position);
-        mHolder.setText(R.id.txt_name, redRecord.ReceiveUserId);
-        mHolder.setText(R.id.txt_money, redRecord.Amount);
-        mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
-        mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
+        mHolder.setText(R.id.txt_name, "玩儿家");
+        if (redRecord.Status==1){
+            mHolder.setText(R.id.txt_money, redRecord.Amount+"元");
+            mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
+            mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
+        }else {
+            mHolder.setText(R.id.txt_money, redRecord.StatusTxt);
+            mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
+//            mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
+        }
+
     }
 
     @Override

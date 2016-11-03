@@ -200,7 +200,7 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
         getListView = (XRecyclerView) myGetView.findViewById(R.id.xrecycleview);
         getListView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         getListView.setPullRefreshEnabled(false);
-        getListView.setLoadingMoreEnabled(false);
+        getListView.setLoadingMoreEnabled(true);
         getListView.setLoadingListener(this);
         getBoomAdapter = new MyGetBoomAdapter(getBoomList);
         getListView.setAdapter(getBoomAdapter);
@@ -218,7 +218,7 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
         getBoomAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                Bean_MyBoomRecord.BoomInfo boomInfo = myBoomList.get(position);
+                Bean_MyBoomRecord.BoomInfo boomInfo = getBoomList.get(position - 1);
                 if (boomInfo.MineType == 3)
                     context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
                 else
@@ -244,11 +244,11 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
         rankAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
-                Bundle bundle=new Bundle();
-                bundle.putString("id",rankList.get(position).UserId);
-                bundle.putInt("type",1);
-                if (popInterfacer!=null)
-                    popInterfacer.OnConfirm(flag,bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString("id", rankList.get(position).UserId);
+                bundle.putInt("type", 1);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle);
             }
         });
 
@@ -299,11 +299,11 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 viewPager.setCurrentItem(1);
                 break;
             case R.id.btn_share:
-                Bundle bundle=new Bundle();
-                bundle.putInt("type",2);
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 2);
 //                share();
-                if(popInterfacer!=null)
-                    popInterfacer.OnConfirm(flag,bundle);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle);
                 break;
         }
     }
@@ -355,7 +355,13 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
             case 1:
                 if (getBoomList == null || getBoomList.size() == 0) {
                     getIndex = 1;
-                    getBoom();
+                    try{
+                        getBoom();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        Tools.debug("--------"+e.toString());
+                    }
+
                 }
                 getSelected();
                 break;

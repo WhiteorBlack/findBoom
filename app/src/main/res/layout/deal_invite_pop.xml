@@ -7,6 +7,7 @@
 
     <LinearLayout
         style="@style/PopParent"
+        android:layout_height="160dp"
         android:background="@drawable/bg_select_pay_type">
 
         <TextView
@@ -15,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="35dp"
             android:text="是否同意对方好友请求?" />
 
         <TextView
@@ -25,28 +26,27 @@
             android:layout_marginTop="15dp"
             android:text="附加信息:"
             android:textColor="@color/detial_bg"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/edt_content"
             style="@style/settingContent"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="35dp"
             android:layout_marginRight="35dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/advice_edit_bg"
             android:gravity="top|left"
-            android:padding="5dp"
             android:textSize="14sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_margin="35dp"
-            android:layout_marginRight="35dp"
-            android:layout_marginTop="30dp">
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp">
 
             <Button
                 android:id="@+id/btn_cancle"
