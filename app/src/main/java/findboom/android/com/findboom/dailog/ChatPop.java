@@ -61,15 +61,10 @@ public class ChatPop extends BasePopupwind {
 
     public void setChatId(String id) {
         this.toChatUserId = id;
-        try {
-            getAllMessage();
-            msgList.addAll(conversation.getAllMessages());
-            listView.setSelection(listView.getCount() - 1);
-        } catch (Exception e) {
-            Tools.debug(e.toString());
-        }
-
+        getAllMessage();
+        msgList.addAll(conversation.getAllMessages());
         adapter.notifyDataSetChanged();
+        listView.setSelection(listView.getCount() - 1);
     }
 
     public void setChatName(String name) {
@@ -88,7 +83,7 @@ public class ChatPop extends BasePopupwind {
         msgList = new ArrayList<>();
         adapter = new MessageAdapter(msgList, context);
         listView.setAdapter(adapter);
-
+        listView.setSelection(listView.getCount() - 1);
         btn_send.setOnClickListener(new OnClickListener() {
 
             @Override

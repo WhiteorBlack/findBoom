@@ -859,16 +859,17 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 4:
                 //使用扫雷器
-                if (bundle == null) {
-                    isScan = false;
-                    return;
-                }
+//                if (bundle == null) {
+//                    isScan = false;
+//                    return;
+//                }
                 if (scanCount <= 0) {
                     if (notifyPop == null)
                         notifyPop = new NotifyPop(context);
                     notifyPop.invisiableChb();
                     notifyPop.setNotify("扫雷器已用完,请购买后使用");
 //                    notifyPop.setPopInterfacer(this,30);
+                    notifyPop.showPop(txtArsenal);
                     isScan = false;
                     return;
                 }
@@ -881,6 +882,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     notifyPop.visiableClose();
                     notifyPop.setNotify("临时扫雷器已用完,继续将使用永久扫雷器");
                     notifyPop.setPopInterfacer(this, 30);
+                    notifyPop.showPop(txtArsenal);
                     return;
                 }
                 isPutBoom = false;
@@ -895,16 +897,17 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                 break;
             case 5: //放置地雷
-                if (bundle == null) {
-                    isPutBoom = false;
-                    return;
-                }
+//                if (bundle == null) {
+//                    isPutBoom = false;
+//                    return;
+//                }
                 if (boomCount <= 0) {
                     if (notifyPop == null)
                         notifyPop = new NotifyPop(context);
                     notifyPop.invisiableChb();
                     notifyPop.setNotify("地雷已用完,请购买后使用");
 //                    notifyPop.setPopInterfacer(this,30);
+                    notifyPop.showPop(txtArsenal);
                     isPutBoom = false;
                     return;
                 }
@@ -917,6 +920,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     notifyPop.visiableClose();
                     notifyPop.setNotify("临时雷已用完,继续将使用永久雷");
                     notifyPop.setPopInterfacer(this, 31);
+                    notifyPop.showPop(txtArsenal);
                     return;
                 }
                 isPutBoom = true;
@@ -1079,7 +1083,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 31:
                 isPutBoom = true;
-                isPutBoom = false;
+                isScan = false;
                 break;
         }
     }
