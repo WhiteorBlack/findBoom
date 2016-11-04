@@ -23,6 +23,7 @@ public class ShopBuyPop extends BasePopupwind {
     private View view;
     private ImageView imgGoods;
     private TextView txtCount;
+    private TextView txtTitle;
     private StrokeTextView txtPrice;
     private int count = 1;
 
@@ -47,6 +48,7 @@ public class ShopBuyPop extends BasePopupwind {
         imgGoods = (ImageView) view.findViewById(R.id.img_goods_pic);
         txtCount = (TextView) view.findViewById(R.id.txt_count);
         txtCount.setText(count + "");
+        txtTitle=(TextView)view.findViewById(R.id.txt_name);
         txtPrice = (StrokeTextView) view.findViewById(R.id.txt_price);
         this.setContentView(view);
     }
@@ -64,20 +66,25 @@ public class ShopBuyPop extends BasePopupwind {
 
     public void setGoodPic(int ur) {
         int id = 0;
+        String name="";
         switch (ur) {
             case 0:
                 id = R.mipmap.icon_boom;
+                name="地雷";
                 break;
             case 1:
 
                 break;
             case 2:
                 id = R.mipmap.icon_scan;
+                name="扫雷器";
                 break;
             case 4:
                 id = R.mipmap.icon_defense;
+                name="防爆衣";
                 break;
         }
+        txtTitle.setText(name);
         Glide.with(context).load(id).into(imgGoods);
     }
 

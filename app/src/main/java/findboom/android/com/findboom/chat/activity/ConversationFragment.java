@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
@@ -211,7 +213,7 @@ public class ConversationFragment extends Fragment {
             String username = conversation.getUserName();
             EMMessage msg = conversation.getLastMessage();
             try {
-                holder.name.setText(conversation.getLastMessage().getStringAttribute("name"));
+                holder.name.setText(msg.getStringAttribute("name"));
             } catch (HyphenateException e) {
                 e.printStackTrace();
                 holder.name.setText("玩儿家");
@@ -226,7 +228,19 @@ public class ConversationFragment extends Fragment {
             if (conversation.getAllMsgCount() != 0) {
                 // 把最后一条消息的内容作为item的message内容
                 EMMessage lastMessage = conversation.getLastMessage();
-                holder.message.setText(lastMessage.getBody().toString());
+                String avatar="";
+                try {
+                    avatar=lastMessage.getStringAttribute("avatar");
+
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+                Glide.with(getContext()).load(avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
+                String message=lastMessage.getBody().toString();
+                if (!TextUtils.isEmpty(message)){
+                    message=message.substring(message.indexOf(":")+2,message.length()-1);
+                }
+                holder.message.setText(message);
                 holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));
                 if (lastMessage.direct() == EMMessage.Direct.SEND && lastMessage.status() == EMMessage.Status.FAIL) {
                     holder.msgState.setVisibility(View.VISIBLE);

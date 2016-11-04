@@ -27,6 +27,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
+import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.wxpay.Constants;
 
 /**

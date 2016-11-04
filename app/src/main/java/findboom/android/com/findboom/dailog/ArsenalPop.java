@@ -71,12 +71,14 @@ public class ArsenalPop extends BasePopupwind {
         defenseAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
-                if (defenseList.get(0).Count == 0 && defenseList.get(1).Count == 0) {
-                    Tools.toastMsg(context, "地雷已用完,请购买后使用");
-                    return;
-                }
+//                if (defenseList.get(0).Count == 0 && defenseList.get(1).Count == 0) {
+//                    Tools.toastMsg(context, "地雷已用完,请购买后使用");
+//                    return;
+//                }
+                Bundle bundle = new Bundle();
+                bundle.putInt("pos", position);
                 if (popInterfacer != null)
-                    popInterfacer.OnConfirm(flag, new Bundle());
+                    popInterfacer.OnConfirm(flag,bundle);
                 dismiss();
             }
         });

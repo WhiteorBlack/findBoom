@@ -60,7 +60,9 @@ import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TResult;
@@ -95,6 +97,7 @@ import findboom.android.com.findboom.bean.Bean_RedBoom;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.bean.Bean_WXpay;
+import findboom.android.com.findboom.chat.EaseNotifier;
 import findboom.android.com.findboom.chat.db.EaseUser;
 import findboom.android.com.findboom.chat.db.InviteMessgeDao;
 import findboom.android.com.findboom.chat.db.UserDao;
@@ -261,6 +264,15 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         userDao = new UserDao(this);
         //注册联系人变动监听
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
+
+        initNotifier();
+    }
+
+    private EaseNotifier notifier;
+
+    void initNotifier() {
+        notifier = new EaseNotifier();
+        notifier.init(this);
     }
 
     /**
@@ -731,7 +743,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     advicePop.setPopInterfacer(this, 8);
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 1) { //邀请好友
-                    showShare("需要你的支援", CommonUntilities.SHARE_REGISTER, "我已经被炸的体无完肤,速速支援寡人", "");
+                    showShare("需要你的支援", CommonUntilities.SHARE_REGISTER + AppPrefrence.getUserName(context), "我已经被炸的体无完肤,速速支援寡人", "");
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 2) { //音效
 
@@ -868,7 +880,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         notifyPop = new NotifyPop(context);
                     notifyPop.invisiableChb();
                     notifyPop.setNotify("扫雷器已用完,请购买后使用");
-//                    notifyPop.setPopInterfacer(this,30);
                     notifyPop.showPop(txtArsenal);
                     isScan = false;
                     return;
@@ -897,10 +908,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                 break;
             case 5: //放置地雷
-//                if (bundle == null) {
-//                    isPutBoom = false;
-//                    return;
-//                }
                 if (boomCount <= 0) {
                     if (notifyPop == null)
                         notifyPop = new NotifyPop(context);
@@ -962,7 +969,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     addFriendPop.setPopInterfacer(this, 26);
                 }
                 if (bundle != null && bundle.getInt("type", -1) == 2) {
-                    showShare("痛不欲生", CommonUntilities.SHARE_RECORD, "我已经被炸得怀疑人生,闪开,我想静静", "");
+                    showShare("痛不欲生", CommonUntilities.SHARE_RECORD + AppPrefrence.getUserName(context), "我已经被炸得怀疑人生,闪开,我想静静", "");
                 }
                 break;
             case 12: //个人中心-->创建支付密码
@@ -1657,8 +1664,46 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
         if (!AppPrefrence.getIsBack(this))
             startService(backIntent);
+        EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+    }
+
+    EMMessageListener messageListener = new EMMessageListener() {
+        @Override
+        public void onMessageReceived(List<EMMessage> list) {
+            notifier.onNewMesg(list);
+            refreshUI();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> list) {
+
+        }
+
+        @Override
+        public void onMessageReadAckReceived(List<EMMessage> list) {
+
+        }
+
+        @Override
+        public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage emMessage, Object o) {
+
+        }
+    };
+
+    private void refreshUI() {
+
+    }
 
     @Override
     protected void onPause() {
@@ -1713,7 +1758,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .direction(0).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
         // 设置定位数据
-        if (!isPutBoom && (endLat == null || walkLat == null || DistanceUtil.getDistance(startLat, endLat) > 5))
+        if (!isScan && !isPutBoom && (endLat == null || walkLat == null || (startLat != null && DistanceUtil.getDistance(startLat, endLat) > 5)))
             mBaiduMap.setMyLocationData(locData);
         if (startLat == null) {
             startLat = new LatLng(location.getLatitude(), location.getLongitude());
@@ -1899,18 +1944,24 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 isScan = false;
                 Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
                 if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
-                    boomCount += 1;
-                    for (int i = 0; i < boomList.size(); i++) {
-                        if (boomList.get(i).ArmType == 0) {
-                            boomList.get(i).Count += 1;
+                    for (int i = 0; i < bean_MapBoom.Data.size(); i++) {
+                        Bean_MapBoom.MapBoom mapBoom = bean_MapBoom.Data.get(i);
+                        if (!TextUtils.equals(mapBoom.UserId, AppPrefrence.getUserName(context))) {
+                            countData();
+                            addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+                            useScan(mapBoom.MineRecordId, "1");
+                            new PostResultPop(context, txtArsenal, R.drawable.icon_right, "WOW!成功排除一颗雷", "您将获得一颗永久雷").showPop();
+                            for (int j = 0; j < boomList.size(); j++) {
+                                if (boomList.get(j).ArmType == 0) {
+                                    boomList.get(j).Count += 1;
+                                    countData();
+                                    break;
+                                }
+                            }
                             break;
                         }
                     }
-                    txtArsenal.setText(boomCount + "");
-                    Bean_MapBoom.MapBoom mapBoom = bean_MapBoom.Data.get(0);
-                    addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
-                    useScan(mapBoom.MineRecordId, "1");
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "WOW!成功排除一颗雷", "您将获得一颗永久雷").showPop();
+
                 } else {
                     useScan("0", "0");
                     new PostResultPop(context, txtArsenal, R.drawable.icon_right, "很遗憾", "什么都没有,继续努力吧!").showPop();
@@ -1999,7 +2050,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             @Override
             public void onGetReverseGeoCodeResult(ReverseGeoCodeResult reverseGeoCodeResult) {
                 provice = reverseGeoCodeResult.getAddressDetail().province;
-                city = reverseGeoCodeResult.getAddressDetail().city;
+                boomCity = reverseGeoCodeResult.getAddressDetail().city;
                 street = reverseGeoCodeResult.getAddressDetail().street;
                 area = reverseGeoCodeResult.getAddressDetail().district;
             }
@@ -2018,7 +2069,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 //        initGeoCoder(latLng);
     }
 
-    private String provice = "", city = "", area = "", street = "", longItude = "", latItude = "", mineType = "", remark = "", text = "", picUrl = "", picTitle = "";
+    private String provice = "", boomCity = "", city = "", area = "", street = "", longItude = "", latItude = "", mineType = "", remark = "", text = "", picUrl = "", picTitle = "";
 
     /**
      * 放置普通雷
@@ -2026,7 +2077,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private void putCommentBoom() {
         Map<String, String> params = new HashMap<>();
         params.put("Provice", provice);
-        params.put("City", city);
+        params.put("City", boomCity);
         params.put("Area", area);
         params.put("Street", street);
         params.put("Longitude", longItude);
@@ -2063,6 +2114,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         if (boomCount <= 0) {
                             imgArsenal.setEnabled(false);
                             boomCount = 0;
+                            txtArsenal.setVisibility(View.INVISIBLE);
                         }
                         txtArsenal.setText(boomCount + "");
                     }
@@ -2241,7 +2293,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private void putRedBoom() {
         Map<String, String> params = new HashMap<>();
         params.put("Provice", provice);
-        params.put("City", city);
+        params.put("City", boomCity);
         params.put("Area", area);
         params.put("Street", street);
         params.put("Longitude", longItude);
@@ -2279,6 +2331,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         if (boomCount <= 0) {
                             imgArsenal.setEnabled(false);
                             boomCount = 0;
+                            txtArsenal.setVisibility(View.INVISIBLE);
                         }
                         txtArsenal.setText(boomCount + "");
                     }

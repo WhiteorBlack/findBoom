@@ -16,6 +16,7 @@ public class RedRecord {
     public String ReceiveTime;
     public int Status;
     public String StatusTxt;
-    public String ReceiveNick;
+    public String ReceiveUserAvatar;
+    public String ReceiveUserNickName;
     public String Avatar;
 }

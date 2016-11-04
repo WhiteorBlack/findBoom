@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.widget.TextView;
@@ -42,16 +43,11 @@ public class RedRecordAdapter extends BaseRecyAdapter {
         super.onBindViewHolder(holder, position);
         ViewHolder mHolder = (ViewHolder) holder;
         RedRecord redRecord = (RedRecord) dataList.get(position);
-        mHolder.setText(R.id.txt_name, "玩儿家");
-        if (redRecord.Status==1){
-            mHolder.setText(R.id.txt_money, redRecord.Amount+"元");
-            mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
-            mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
-        }else {
-            mHolder.setText(R.id.txt_money, redRecord.StatusTxt);
-            mHolder.setRadiusImage(R.id.img_photo, redRecord.Avatar);
-//            mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
-        }
+        mHolder.setText(R.id.txt_name, TextUtils.isEmpty(redRecord.ReceiveUserNickName) ? redRecord.ReceiveUserId : redRecord.ReceiveUserNickName);
+        mHolder.setText(R.id.txt_money, redRecord.Amount + "元");
+        mHolder.setRadiusImage(R.id.img_photo, redRecord.ReceiveUserAvatar);
+        mHolder.setText(R.id.txt_info, redRecord.ReceiveTime);
+
 
     }
 

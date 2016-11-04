@@ -19,7 +19,6 @@
             android:layout_height="50dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:background="@mipmap/ic_logo"
             app:border_color="@color/content_yellow"
             app:border_width="2dp" />
 
