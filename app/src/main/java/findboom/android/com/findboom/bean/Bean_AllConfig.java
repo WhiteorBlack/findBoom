@@ -37,6 +37,8 @@ public class Bean_AllConfig extends BaseBean {
         public int MinAmount;
         public int MaxAmount;
         public int BombRange;
+        public int VisibleRange;
+        public int CanRecRange;
         public String ArmDesc;
         public String ValidDays;
         public String MineType;

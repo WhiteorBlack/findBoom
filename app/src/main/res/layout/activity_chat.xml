@@ -8,8 +8,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/tv_toUsername"
@@ -19,7 +18,15 @@
             android:text="title"
             android:textColor="@color/content_yellow"
             android:textSize="18sp" />
+
+        <ImageView
+            style="@style/PopClose"
+            android:onClick="boomClick"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="0dp" />
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/re_bottom"

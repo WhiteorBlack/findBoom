@@ -48,6 +48,7 @@ public class FriendListPop extends BasePopupwind {
     private RecyclerView recyFriend;
     private EditText edtSearch;
     private List friendList;
+    private List<Bean_FriendList.Friend> allList;
     private FriendAdapter friendAdapter;
 
     public FriendListPop(Context context) {
@@ -69,7 +70,7 @@ public class FriendListPop extends BasePopupwind {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                getSearchFriend(s);
             }
 
             @Override
@@ -85,6 +86,7 @@ public class FriendListPop extends BasePopupwind {
         recyFriend.setItemAnimator(new DefaultItemAnimator());
 
         friendList = new ArrayList();
+        allList=new ArrayList();
         friendAdapter = new FriendAdapter(context, friendList);
         friendAdapter.setOnclick(new OnClickInterface() {
             @Override
@@ -100,6 +102,18 @@ public class FriendListPop extends BasePopupwind {
         });
         recyFriend.setAdapter(friendAdapter);
         this.setContentView(view);
+    }
+
+    private void getSearchFriend(CharSequence s) {
+        if (allList==null&&allList.size()==0)
+            return;
+        friendList.clear();
+        for (int i = 0; i <allList.size() ; i++) {
+            if (allList.get(i).FriendNickName.contains(s)){
+                friendList.add(allList.get(i));
+            }
+        }
+        friendAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -129,6 +143,7 @@ public class FriendListPop extends BasePopupwind {
                 Bean_FriendList bean_friendList = new Gson().fromJson(response, Bean_FriendList.class);
                 if (bean_friendList != null && bean_friendList.Success) {
                     friendList.addAll(bean_friendList.Data);
+                    allList.addAll(bean_friendList.Data);
                     friendAdapter.notifyDataSetChanged();
                     List<EaseUser> userList = new ArrayList<EaseUser>();
                     for (int i = 0; i < friendList.size(); i++) {

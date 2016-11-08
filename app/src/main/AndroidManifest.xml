@@ -53,6 +53,7 @@
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
+            android:launchMode="standard"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -104,10 +105,12 @@
         <activity
             android:name=".activity.FriendMessage"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".chat.activity.ChatActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.mob.tools.MobUIShell"

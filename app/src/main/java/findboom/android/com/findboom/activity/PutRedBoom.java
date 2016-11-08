@@ -72,7 +72,9 @@ public class PutRedBoom extends Activity implements PopInterfacer {
         if (!TextUtils.isEmpty(configString)) {
             bean_config = new Gson().fromJson(configString, Bean_AllConfig.class);
             redBoom = bean_config.Data.RedPackMineConfig;
-            rang=redBoom.BombRange;
+            rang = redBoom.CanRecRange;
+            txtDistance.setText(redBoom.VisibleRange + "m");
+            txtReduceRecord.setText(rang + "m");
         } else getAllConfig();
 
     }
@@ -178,7 +180,7 @@ public class PutRedBoom extends Activity implements PopInterfacer {
 
     @Override
     public void OnCancle(int flag) {
-        if (flag==0){
+        if (flag == 0) {
             //忘记密码
             if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
                 //忘记密码-->绑定手机号码

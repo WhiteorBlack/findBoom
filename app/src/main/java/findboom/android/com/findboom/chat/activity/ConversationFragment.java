@@ -34,6 +34,7 @@ import java.util.Map;
 
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.application.FindBoomApplication;
+import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.widget.CircleImageView;
 
 /**
@@ -57,7 +58,12 @@ public class ConversationFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initView();
+        try {
+            initView();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Tools.debug("conversation--" + e.toString());
+        }
     }
 
     private void initView() {
@@ -65,7 +71,7 @@ public class ConversationFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.listView);
         adapter = new EaseConversationAdapater(getContext(), 1, conversationList);
         listView.setAdapter(adapter);
-        final String st2 = getResources().getString(R.string.Cant_chat_with_yourself);
+        final String st2 = "不能和自己聊天";
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -228,17 +234,17 @@ public class ConversationFragment extends Fragment {
             if (conversation.getAllMsgCount() != 0) {
                 // 把最后一条消息的内容作为item的message内容
                 EMMessage lastMessage = conversation.getLastMessage();
-                String avatar="";
+                String avatar = "";
                 try {
-                    avatar=lastMessage.getStringAttribute("avatar");
+                    avatar = lastMessage.getStringAttribute("avatar");
 
                 } catch (HyphenateException e) {
                     e.printStackTrace();
                 }
                 Glide.with(getContext()).load(avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
-                String message=lastMessage.getBody().toString();
-                if (!TextUtils.isEmpty(message)){
-                    message=message.substring(message.indexOf(":")+2,message.length()-1);
+                String message = lastMessage.getBody().toString();
+                if (!TextUtils.isEmpty(message)) {
+                    message = message.substring(message.indexOf(":") + 2, message.length() - 1);
                 }
                 holder.message.setText(message);
                 holder.time.setText(DateUtils.getTimestampString(new Date(lastMessage.getMsgTime())));

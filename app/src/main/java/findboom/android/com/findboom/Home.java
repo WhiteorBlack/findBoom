@@ -2,7 +2,6 @@ package findboom.android.com.findboom;/**
  * Created by Administrator on 2016/8/8.
  */
 
-import android.*;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.app.Service;
@@ -15,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -22,14 +22,15 @@ import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -41,6 +42,7 @@ import com.baidu.mapapi.map.CircleOptions;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.LogoPosition;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -48,7 +50,6 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.Overlay;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -63,6 +64,8 @@ import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.exceptions.HyphenateException;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.TResult;
@@ -76,6 +79,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
@@ -91,13 +95,16 @@ import findboom.android.com.findboom.alipay.AliPayHelper;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.BaseBean;
+import findboom.android.com.findboom.bean.Bean_AllConfig;
 import findboom.android.com.findboom.bean.Bean_BoomBoom;
 import findboom.android.com.findboom.bean.Bean_MapBoom;
 import findboom.android.com.findboom.bean.Bean_RedBoom;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.bean.Bean_WXpay;
+import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.EaseNotifier;
+import findboom.android.com.findboom.chat.activity.ChatActivity;
 import findboom.android.com.findboom.chat.db.EaseUser;
 import findboom.android.com.findboom.chat.db.InviteMessgeDao;
 import findboom.android.com.findboom.chat.db.UserDao;
@@ -111,7 +118,6 @@ import findboom.android.com.findboom.dailog.ChatPop;
 import findboom.android.com.findboom.dailog.ConfrimPwdPop;
 import findboom.android.com.findboom.dailog.ConvertRedPop;
 import findboom.android.com.findboom.dailog.CreatePayPwdPop;
-import findboom.android.com.findboom.dailog.DealInviteInfo;
 import findboom.android.com.findboom.dailog.DefensePop;
 import findboom.android.com.findboom.dailog.FriendListPop;
 import findboom.android.com.findboom.dailog.GetRecordPop;
@@ -119,7 +125,6 @@ import findboom.android.com.findboom.dailog.MessageDialog;
 import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.NotifyPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
-import findboom.android.com.findboom.dailog.PersonalInfo;
 import findboom.android.com.findboom.dailog.PickerDialog;
 import findboom.android.com.findboom.dailog.PostResultPop;
 import findboom.android.com.findboom.dailog.PutBoomTypePop;
@@ -140,7 +145,6 @@ import findboom.android.com.findboom.service.BackgroundService;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
-import findboom.android.com.findboom.widget.StrokeTextView;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableItem;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelector;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelectorListener;
@@ -152,11 +156,11 @@ import okhttp3.Call;
  * author:${白曌勇} on 2016/8/8
  * TODO:
  */
-public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener, BaiduMap.OnMarkerClickListener {
+public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapStatusChangeListener {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg;
-    private TextView txtDefense, txtScan, txtRecord, txtArsenal;
+    private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg;
     private CheckBox chbMoney, chbBoom;
 
     private SettingPop settingPop;
@@ -190,10 +194,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
     private List<Bean_UserArm.UserArm> scanList;
+    private List<Marker> redMarkers; //红包marker,动态隐藏展示区域红包雷
+    private List<Marker> goldMarkers; //寻宝雷marker,动态展示隐藏寻宝雷
 
     public static boolean isForeground;
     private boolean isPutBoom = false; //标识现在是否有放雷的动作
     private boolean isScan = false; //标识现在是否使用扫雷器
+    private boolean isDrag = false; //标识用户是否操作地图,如果操作地图则取消地图跟随
 
     //百度地图定位相关
     public LocationClient mLocationClient = null;
@@ -215,6 +222,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private Intent backIntent;
     private Vibrator vibrator;
+
+    private int redGetRange = 100; //红包雷可以领取距离
+    private int redVisRange = 1000; //红包雷可以显示距离
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,6 +329,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             public void onResponse(String response) {
                 super.onResponse(response);
                 configString = response;
+                if (!TextUtils.isEmpty(response)) {
+                    Bean_AllConfig bean_allConfig = new Gson().fromJson(response, Bean_AllConfig.class);
+                    if (bean_allConfig.Success) {
+                        redGetRange = bean_allConfig.Data.RedPackMineConfig.CanRecRange;
+                        redVisRange = bean_allConfig.Data.RedPackMineConfig.VisibleRange;
+                    }
+                }
             }
         });
     }
@@ -502,6 +519,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         mBaiduMap.setOnMapClickListener(this);
         mBaiduMap.setOnMapLongClickListener(this);
         mBaiduMap.setOnMarkerClickListener(this);
+        mBaiduMap.setOnMapStatusChangeListener(this);
 
         imgDefense = (ImageView) findViewById(R.id.img_defense);
         imgDefense.setEnabled(false);
@@ -527,6 +545,21 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         chbBoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked && redMarkers != null && redMarkers.size() > 0) {
+                    List<Marker> tempMarkers = new ArrayList<Marker>();
+                    for (int i = 0; i < redMarkers.size(); i++) {
+                        Marker marker = redMarkers.get(i);
+                        OverlayOptions options = new MarkerOptions().draggable(false).extraInfo(marker.getExtraInfo())
+                                .icon(marker.getIcon()).position(marker.getPosition()).zIndex(marker.getZIndex());
+                        tempMarkers.add((Marker) mBaiduMap.addOverlay(options));
+                    }
+                    redMarkers.clear();
+                    redMarkers.addAll(tempMarkers);
+                } else {
+                    for (int i = 0; i < redMarkers.size(); i++) {
+                        redMarkers.get(i).remove();
+                    }
+                }
                 AppPrefrence.setIsBoomShow(context, isChecked);
             }
         });
@@ -536,11 +569,91 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         chbMoney.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 AppPrefrence.setIsRedShow(context, isChecked);
             }
         });
+
+        txtMsg = (TextView) findViewById(R.id.txt_home_msg);
+        txtMsg.setVisibility(View.GONE);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) txtMsg.getLayoutParams();
+        params.width = (int) (Tools.getScreenWide(context) * 0.6);
     }
 
+    /**
+     * 隐藏msgTextView
+     */
+    private void txtMsgGone() {
+        int type = TranslateAnimation.RELATIVE_TO_SELF;
+        TranslateAnimation goneAim = new TranslateAnimation(type, 0f, type, 1f, type, 0f, type, 0f);
+        goneAim.setFillAfter(true);
+        goneAim.setDuration(200);
+        goneAim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txtMsg.setVisibility(View.GONE);
+                        txtMsg.clearAnimation();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        txtMsg.setAnimation(goneAim);
+        txtMsg.startAnimation(goneAim);
+        txtMsg.setVisibility(View.GONE);
+
+    }
+
+    private void txtMsgVis() {
+        txtMsg.setVisibility(View.VISIBLE);
+        int type = TranslateAnimation.RELATIVE_TO_SELF;
+        TranslateAnimation visAnim = new TranslateAnimation(type, 1f, type, 0f, type, 0f, type, 0f);
+        visAnim.setDuration(200);
+        visAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        txtMsg.setAnimation(visAnim);
+        txtMsg.startAnimation(visAnim);
+        new CountDownTimer(2000, 2000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                txtMsg.clearAnimation();
+                txtMsgGone();
+            }
+        }.start();
+    }
 
     @Override
     public void boomClick(View v) {
@@ -614,7 +727,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     expandableSelector.setVisibility(View.INVISIBLE);
                     expandableSelector.collapse();
                 }
-
                 break;
         }
     }
@@ -717,6 +829,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 29:
                 chatPop = null;
+                addMsgListener();
                 break;
             case 30:
                 notifyPop = null;
@@ -912,7 +1025,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (notifyPop == null)
                         notifyPop = new NotifyPop(context);
                     notifyPop.invisiableChb();
-                    notifyPop.setNotify("地雷已用完,请购买后使用");
+                    notifyPop.setNotify(R.string.boom_empty);
 //                    notifyPop.setPopInterfacer(this,30);
                     notifyPop.showPop(txtArsenal);
                     isPutBoom = false;
@@ -951,6 +1064,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 chatPop.setPopInterfacer(this, 29);
                 if (friendListPop != null && friendListPop.isShowing())
                     friendListPop.dismiss();
+                removeMsgListener();
                 break;
             case 7:   //战绩-->举报
                 if (bundle != null && bundle.getInt("type", 0) == 0) {
@@ -1568,12 +1682,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         super.takeSuccess(result);
         Tools.debug(result.getImage().getPath());
         photoPath = result.getImage().getPath();
-//        if (!TextUtils.isEmpty(photoPath)) {
-//            if (personalCenterPop != null && personalCenterPop.isShowing())
-//                personalCenterPop.setPhoto(photoPath);
-//            if (personalInfo != null && personalInfo.isShowing())
-//                personalInfo.setPhoto(photoPath);
-//        }
         if (!TextUtils.isEmpty(photoPath)) {
             if (personalCenterPop != null && personalCenterPop.isShowing())
                 personalCenterPop.setPhoto(photoPath);
@@ -1664,20 +1772,101 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
         if (!AppPrefrence.getIsBack(this))
             startService(backIntent);
+        addMsgListener();
+    }
+
+    private void addMsgListener() {
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
+    }
+
+    public void removeMsgListener() {
+        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+
     }
 
     EMMessageListener messageListener = new EMMessageListener() {
         @Override
         public void onMessageReceived(List<EMMessage> list) {
-            notifier.onNewMesg(list);
-            refreshUI();
+            EMMessage msg = list.get(0);
+            if (!Constant.isRuning && (chatPop == null || !chatPop.isShowing()) && !TextUtils.equals(Constant.CHAT_USER, msg.getFrom())) //如果当前在聊天页面则不推送消息
+            {
+                notifier.onNewMesg(list);
+            } else refreshUI(list.size());
+            String title = "";
+            if (msg != null) {
+                try {
+                    title = msg.getStringAttribute("name");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    title = "玩儿家" + new Random().nextInt();
+                }
+            }
+            title += ": " + ((EMTextMessageBody) msg.getBody()).getMessage();
+            txtMsg.setText(title);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtMsgVis();
+                }
+            });
+
+            notifier.setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
+                @Override
+                public String getDisplayedText(EMMessage message) {
+                    String msg = "";
+                    if (message != null) {
+                        msg = ((EMTextMessageBody) message.getBody()).getMessage();
+                    }
+                    return msg;
+                }
+
+                @Override
+                public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                    return null;
+                }
+
+                @Override
+                public String getTitle(EMMessage message) {
+                    String title = "";
+                    if (message != null) {
+                        try {
+                            title = message.getStringAttribute("name");
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            title = "玩儿家" + new Random().nextInt();
+                        }
+                    }
+                    title += "发来消息";
+                    return title;
+                }
+
+                @Override
+                public int getSmallIcon(EMMessage message) {
+                    return 0;
+                }
+
+                @Override
+                public Intent getLaunchIntent(EMMessage message) {
+                    String title = "";
+                    if (message != null) {
+                        try {
+                            title = message.getStringAttribute("name");
+                        } catch (HyphenateException e) {
+                            e.printStackTrace();
+                            title = "玩儿家" + new Random().nextInt();
+                        }
+                    }
+                    Tools.debug(title);
+                    return new Intent(context, ChatActivity.class).putExtra("userId", message.getFrom()).putExtra("username", title);
+                }
+            });
+
         }
 
         @Override
@@ -1701,7 +1890,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
     };
 
-    private void refreshUI() {
+    private void refreshUI(int count) {
 
     }
 
@@ -1709,10 +1898,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     protected void onPause() {
         isForeground = false;
         super.onPause();
+//        if (!Tools.isForeground(this, "Home"))
+//            stopService(backIntent);
         if (!AppPrefrence.getIsBack(this))
             stopService(backIntent);
     }
-
 
     @Override
     protected void onDestroy() {
@@ -1723,12 +1913,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         mMapView.onDestroy();
         if (geoCoder != null)
             geoCoder.destroy();
+//        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
         super.onDestroy();
     }
 
     //for receive customer msg from jpush server
     private MessageReceiver mMessageReceiver;
-    public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
+    public static final String MESSAGE_RECEIVED_ACTION = "findboom.android.com.findboom.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
     public static final String KEY_EXTRAS = "extras";
@@ -1758,7 +1949,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .direction(0).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
         // 设置定位数据
-        if (!isScan && !isPutBoom && (endLat == null || walkLat == null || (startLat != null && DistanceUtil.getDistance(startLat, endLat) > 5)))
+//        if (!isScan && !isPutBoom && (endLat == null || walkLat == null || (startLat != null && DistanceUtil.getDistance(startLat, endLat) > 5)))
+        if (!isDrag)
             mBaiduMap.setMyLocationData(locData);
         if (startLat == null) {
             startLat = new LatLng(location.getLatitude(), location.getLongitude());
@@ -1813,13 +2005,17 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bean_boomBoom.Success) {
                     //根据类型做成功处理
                     removeBoom(mapBoom.MineRecordId);
-                    FindBoomApplication.getInstance().playBoomSound();
+
                     if (boomPop == null)
                         boomPop = new BoomPop(context);
                     boomPop.showPop(txtArsenal);
                     boomPop.setPopInterfacer(Home.this, 18);
-                    if (!AppPrefrence.getIsBoom(context))
+                    if (!AppPrefrence.getIsBoom(context) && isForeground) {
+                        FindBoomApplication.getInstance().playBoomSound();
                         vibrator.vibrate(300);
+                    } else if (!isForeground)
+                        vibrator.vibrate(300);
+
                     if (defenseCount > 0) {
                         defenseCount -= 1;
                         if (defenseList.get(0).ArmType == 5) {
@@ -1874,14 +2070,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
+                                clearRedMarker();
                                 for (int i = 0; i < mapBoomList.size(); i++) {
                                     Bean_MapBoom.MapBoom boom = mapBoomList.get(i);
                                     Bundle bundle = new Bundle();
                                     bundle.putString("id", boom.MineRecordId);
                                     bundle.putInt("type", boom.MineType);
-
+                                    bundle.putInt("boomRange", boom.BombRange);
+//                                    bundle.putDouble("lat",boom.Latitude);
+//                                    bundle.putDouble("lng",boom.Longitude);
                                     if ((chbMoney.isChecked() && boom.MineType == 3) || (chbBoom.isChecked() && boom.MineType == 4)) {
-
                                         addRedMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
                                     }
                                 }
@@ -1894,8 +2092,18 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         });
     }
 
-    private void addRedMarker(LatLng latLng, Bundle bundle) {
+    private void clearRedMarker() {
+        if (redMarkers != null && redMarkers.size() > 0) {
+            for (int i = 0; i < redMarkers.size(); i++) {
+                redMarkers.get(i).remove();
+            }
+            redMarkers.clear();
+        }
+    }
 
+    private void addRedMarker(LatLng latLng, Bundle bundle) {
+        if (redMarkers == null)
+            redMarkers = new ArrayList<>();
         bitmap = BitmapDescriptorFactory
                 .fromResource(R.mipmap.icon_map_boom);
         OverlayOptions options = new MarkerOptions()
@@ -1903,9 +2111,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .icon(bitmap).extraInfo(bundle)  //设置marker图标
                 .zIndex(9)  //设置marker所在层级
                 .draggable(false);  //设置手势拖拽
-        mBaiduMap.addOverlay(options);
+        redMarkers.add((Marker) mBaiduMap.addOverlay(options));
     }
-
 
     private GeoCoder geoCoder;
 
@@ -1924,6 +2131,31 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (isScan) {
             scanBoom(latLng);
         }
+    }
+
+    @Override
+    public boolean onMapPoiClick(MapPoi mapPoi) {
+        return false;
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        longItude = latLng.longitude + "";
+        latItude = latLng.latitude + "";
+        initGeoCoder(latLng);
+        if (boomCount > 0) {
+            if (putBoomTypePop == null)
+                putBoomTypePop = new PutBoomTypePop(context);
+            putBoomTypePop.showPop(txtArsenal);
+            putBoomTypePop.setPopInterfacer(this, 28);
+        } else {
+            if (notifyPop == null)
+                notifyPop = new NotifyPop(context);
+            notifyPop.setNotify(R.string.boom_empty);
+            notifyPop.showPop(txtArsenal);
+            notifyPop.invisiableChb();
+        }
+
     }
 
     private void scanBoom(LatLng location) {
@@ -2057,17 +2289,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         });
     }
 
-    @Override
-    public boolean onMapPoiClick(MapPoi mapPoi) {
-        return false;
-    }
-
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-//        longItude = latLng.longitude + "";
-//        latItude = latLng.latitude + "";
-//        initGeoCoder(latLng);
-    }
 
     private String provice = "", boomCity = "", city = "", area = "", street = "", longItude = "", latItude = "", mineType = "", remark = "", text = "", picUrl = "", picTitle = "";
 
@@ -2154,8 +2375,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         Bundle bundle = marker.getExtraInfo();
         if (bundle != null) {
+            if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
+                //大于可领取距离,提示不能领取
+                txtMsg.setText("再靠近一点点,就让你领取~");
+                txtMsgVis();
+                Tools.debug("boomRange" + redGetRange);
+                return false;
+            }
             String id = bundle.getString("id");
             int type = bundle.getInt("type");
             if (!TextUtils.isEmpty(id)) {
@@ -2197,6 +2426,21 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         });
     }
 
+    @Override
+    public void onMapStatusChangeStart(MapStatus mapStatus) {
+        isDrag = true;
+    }
+
+    @Override
+    public void onMapStatusChange(MapStatus mapStatus) {
+
+    }
+
+    @Override
+    public void onMapStatusChangeFinish(MapStatus mapStatus) {
+
+    }
+
     public class MessageReceiver extends BroadcastReceiver {
 
         @Override
@@ -2209,6 +2453,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (!Tools.isEmpty(extras)) {
                     showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
                 }
+                Tools.debug("esae" + showMsg);
             }
         }
     }

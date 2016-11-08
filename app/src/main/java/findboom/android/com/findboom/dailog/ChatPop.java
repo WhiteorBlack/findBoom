@@ -1,9 +1,6 @@
 package findboom.android.com.findboom.dailog;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import findboom.android.com.findboom.R;
-import findboom.android.com.findboom.adapter.MessageAdapter;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.utils.EaseCommonUtils;
@@ -47,7 +42,7 @@ public class ChatPop extends BasePopupwind {
     private Button btn_send;
     private EditText et_content;
     private List<EMMessage> msgList;
-    MessageAdapter adapter;
+    private MessageAdapter adapter;
     private EMConversation conversation;
     protected int pagesize = 20;
     private View view;
@@ -61,6 +56,7 @@ public class ChatPop extends BasePopupwind {
 
     public void setChatId(String id) {
         this.toChatUserId = id;
+        Constant.CHAT_USER = toChatUserId;
         getAllMessage();
         msgList.addAll(conversation.getAllMessages());
         adapter.notifyDataSetChanged();
@@ -167,9 +163,9 @@ public class ChatPop extends BasePopupwind {
                 if (username.equals(toChatUserId)) {
                     msgList.addAll(messages);
                     adapter.notifyDataSetChanged();
-                    if (msgList.size() > 0) {
-                        et_content.setSelection(listView.getCount() - 1);
 
+                    if (msgList.size() > 0) {
+                        listView.setSelection(listView.getCount() - 1);
                     }
 
                 }
@@ -203,85 +199,86 @@ public class ChatPop extends BasePopupwind {
     public void dismiss() {
         super.dismiss();
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
+        Constant.CHAT_USER = "";
     }
 
 
-//    class MessageAdapter extends BaseAdapter {
-//        private List<EMMessage> msgs;
-//        private Context context;
-//        private LayoutInflater inflater;
-//
-//        public MessageAdapter(List<EMMessage> msgs, Context context_) {
-//            this.msgs = msgs;
-//            this.context = context_;
-//            inflater = LayoutInflater.from(context);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return msgs.size();
-//        }
-//
-//        @Override
-//        public EMMessage getItem(int position) {
-//            return msgs.get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public int getItemViewType(int position) {
-//            EMMessage message = getItem(position);
-//            return message.direct() == EMMessage.Direct.RECEIVE ? 0 : 1;
-//        }
-//
-//        @Override
-//        public int getViewTypeCount() {
-//            return 2;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            EMMessage message = getItem(position);
-//            int viewType = getItemViewType(position);
-//            if (convertView == null) {
-//                if (viewType == 0) {
-//                    convertView = inflater.inflate(R.layout.item_message_received, parent, false);
-//                } else {
-//                    convertView = inflater.inflate(R.layout.item_message_sent, parent, false);
-//                }
-//            }
-//            ViewHolder holder = (ViewHolder) convertView.getTag();
-//            if (holder == null) {
-//                holder = new ViewHolder();
-//                holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
-//                holder.imgPhoto = (CircleImageView) convertView.findViewById(R.id.iv_userhead);
-//                convertView.setTag(holder);
-//            }
-//
-//            EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
-//            holder.tv.setText(txtBody.getMessage());
-//            if (viewType != 0) {
-//                Glide.with(context).load(BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context)).Avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
-//            } else {
-//                try {
-//                    Glide.with(context).load(message.getStringAttribute("avatar")).error(R.mipmap.ic_logo).into(holder.imgPhoto);
-//                } catch (HyphenateException e) {
-//                    e.printStackTrace();
-//                    Glide.with(context).load(R.mipmap.ic_logo).into(holder.imgPhoto);
-//                }
-//            }
-//            return convertView;
-//        }
-//
-//        public class ViewHolder {
-//            TextView tv;
-//            CircleImageView imgPhoto;
-//        }
-//    }
+    class MessageAdapter extends BaseAdapter {
+        private List<EMMessage> msgs;
+        private Context context;
+        private LayoutInflater inflater;
+
+        public MessageAdapter(List<EMMessage> msgs, Context context_) {
+            this.msgs = msgs;
+            this.context = context_;
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return msgs.size();
+        }
+
+        @Override
+        public EMMessage getItem(int position) {
+            return msgs.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            EMMessage message = getItem(position);
+            return message.direct() == EMMessage.Direct.RECEIVE ? 0 : 1;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            EMMessage message = getItem(position);
+            int viewType = getItemViewType(position);
+            if (convertView == null) {
+                if (viewType == 0) {
+                    convertView = inflater.inflate(R.layout.item_message_received, parent, false);
+                } else {
+                    convertView = inflater.inflate(R.layout.item_message_sent, parent, false);
+                }
+            }
+            ViewHolder holder = (ViewHolder) convertView.getTag();
+            if (holder == null) {
+                holder = new ViewHolder();
+                holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
+                holder.imgPhoto = (CircleImageView) convertView.findViewById(R.id.iv_userhead);
+                convertView.setTag(holder);
+            }
+
+            EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
+            holder.tv.setText(txtBody.getMessage());
+            if (viewType != 0) {
+                Glide.with(context).load(BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context)).Avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
+            } else {
+                try {
+                    Glide.with(context).load(message.getStringAttribute("avatar")).error(R.mipmap.ic_logo).into(holder.imgPhoto);
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                    Glide.with(context).load(R.mipmap.ic_logo).into(holder.imgPhoto);
+                }
+            }
+            return convertView;
+        }
+
+        public class ViewHolder {
+            TextView tv;
+            CircleImageView imgPhoto;
+        }
+    }
 
 
 }

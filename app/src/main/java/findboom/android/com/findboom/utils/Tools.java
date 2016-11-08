@@ -1,6 +1,8 @@
 package findboom.android.com.findboom.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -66,6 +68,29 @@ public class Tools {
             str = str.replaceAll("\\r|\\n", "");
             Log.e(DEBUG_TAG, str + "");
         }
+    }
+
+    /**
+     * 判断某个界面是否在前台
+     *
+     * @param context
+     * @param className 某个界面名称
+     */
+    public static boolean isForeground(Context context, String className) {
+        if (context == null || TextUtils.isEmpty(className)) {
+            return false;
+        }
+
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(3);
+        if (list != null && list.size() > 0) {
+            ComponentName cpn = list.get(0).topActivity;
+            debug(cpn.getClassName());
+            if (className.equals(cpn.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static <T> T[] concat(T[] first, T[] second) {

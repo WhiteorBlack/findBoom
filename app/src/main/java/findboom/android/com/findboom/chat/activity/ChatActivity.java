@@ -1,5 +1,6 @@
 package findboom.android.com.findboom.chat.activity;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bumptech.glide.Glide;
@@ -10,6 +11,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMMessage.ChatType;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.DateUtils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -54,11 +56,18 @@ public class ChatActivity extends Activity {
         setContentView(R.layout.activity_chat);
         toChatUserId = this.getIntent().getStringExtra("userId");
         toChatUsername = this.getIntent().getStringExtra("username");
+        Constant.CHAT_USER = toChatUserId;
         TextView tv_toUsername = (TextView) this.findViewById(R.id.tv_toUsername);
         tv_toUsername.setText(toChatUsername);
         listView = (ListView) this.findViewById(R.id.listView);
         btn_send = (Button) this.findViewById(R.id.btn_send);
         et_content = (EditText) this.findViewById(R.id.et_content);
+        findViewById(R.id.img_close).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         getAllMessage();
         msgList = conversation.getAllMessages();
         adapter = new MessageAdapter(msgList, ChatActivity.this);
@@ -77,7 +86,7 @@ public class ChatActivity extends Activity {
 
         });
         EMClient.getInstance().chatManager().addMessageListener(msgListener);
-
+        Constant.isRuning = true;
     }
 
     protected void getAllMessage() {
@@ -178,6 +187,8 @@ public class ChatActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         EMClient.getInstance().chatManager().removeMessageListener(msgListener);
+        Constant.CHAT_USER = "";
+        Constant.isRuning = false;
     }
 
     @SuppressLint("InflateParams")
@@ -235,11 +246,27 @@ public class ChatActivity extends Activity {
                 holder = new ViewHolder();
                 holder.tv = (TextView) convertView.findViewById(R.id.tv_chatcontent);
                 holder.imgPhoto = (CircleImageView) convertView.findViewById(R.id.iv_userhead);
+                holder.txtTime = (TextView) convertView.findViewById(R.id.timestamp);
                 convertView.setTag(holder);
             }
 
             EMTextMessageBody txtBody = (EMTextMessageBody) message.getBody();
             holder.tv.setText(txtBody.getMessage());
+            if (holder.txtTime != null) {
+                if (position == 0) {
+                    holder.txtTime.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                    holder.txtTime.setVisibility(View.VISIBLE);
+                } else {
+                    // 两条消息时间离得如果稍长，显示时间
+                    EMMessage prevMessage = (EMMessage) adapter.getItem(position - 1);
+                    if (prevMessage != null && DateUtils.isCloseEnough(message.getMsgTime(), prevMessage.getMsgTime())) {
+                        holder.txtTime.setVisibility(View.GONE);
+                    } else {
+                        holder.txtTime.setText(DateUtils.getTimestampString(new Date(message.getMsgTime())));
+                        holder.txtTime.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
             if (viewType != 0) {
                 Glide.with(context).load(BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context)).Avatar).error(R.mipmap.ic_logo).into(holder.imgPhoto);
             } else {
@@ -258,6 +285,7 @@ public class ChatActivity extends Activity {
     public static class ViewHolder {
         TextView tv;
         CircleImageView imgPhoto;
+        TextView txtTime;
     }
 
 

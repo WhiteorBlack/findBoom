@@ -40,4 +40,9 @@ public class Constant {
 	
 	//Myinfo中保存环信账号
 	public static final String KEY_USERNAME = "username";
+	/**
+	 * 标识当前正在聊天的用户
+	 */
+	public static  String CHAT_USER="";
+	public static boolean isRuning=false; //标识ChatActivity是否在运行
 }
