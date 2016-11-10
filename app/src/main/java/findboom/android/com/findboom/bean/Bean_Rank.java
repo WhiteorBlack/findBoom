@@ -16,5 +16,6 @@ public class Bean_Rank extends BaseBean {
         public String RankDate;
         public String BombCount;
         public String Avatar;
+        public String UserAvatar;
     }
 }

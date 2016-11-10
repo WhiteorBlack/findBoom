@@ -178,6 +178,7 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
                     BoomDBManager.getInstance().setUserData(bean_userInfo.Data);
                     AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(bean_userInfo.Data.PayPassWord));
                     AppPrefrence.setUserPhone(context, bean_userInfo.Data.PhoneNumber);
+                    AppPrefrence.setEaseId(context,bean_userInfo.Data.EasemobId);
                     EMClient.getInstance().login(bean_userInfo.Data.EasemobId, bean_userInfo.Data.EasemobPwd, new EMCallBack() {
                         @Override
                         public void onSuccess() {

@@ -40,11 +40,14 @@ public class RankAdapter extends BaseRecyAdapter {
         mHolder.setText(R.id.txt_name, rankUser.UserNickName);
         mHolder.setOnClick(R.id.txt_name, position);
         mHolder.setText(R.id.txt_rank, position == 9 ? "10" : "0" + (1 + position));
-        mHolder.setRadiusImage(R.id.img_photo, rankUser.Avatar);
+        mHolder.setRadiusImage(R.id.img_photo, rankUser.UserAvatar);
         TextView txtInfo = (TextView) mHolder.getView(R.id.txt_info);
         txtInfo.setText("");
         txtInfo.append("被炸 ");
         txtInfo.append(Tools.getSpanString(context, rankUser.BombCount + " 次", Color.rgb(255, 255, 255)));
+        if (position==0)
+            mHolder.getView(R.id.img_first).setVisibility(View.VISIBLE);
+        else mHolder.getView(R.id.img_first).setVisibility(View.INVISIBLE);
     }
 
 

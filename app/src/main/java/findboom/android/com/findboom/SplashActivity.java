@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
@@ -46,6 +47,7 @@ public class SplashActivity extends BaseActivity {
         if (AppPrefrence.getIsLogin(this)) {
             getUserData();
         }
+        JPushInterface.init(getApplicationContext());
         countDown();
     }
 
@@ -68,6 +70,7 @@ public class SplashActivity extends BaseActivity {
                     AppPrefrence.setToken(context, bean_UserInfo.Data.Token);
                     AppPrefrence.setUserName(context, bean_UserInfo.Data.GameUserId);
                     AppPrefrence.setUserPhone(context, bean_UserInfo.Data.PhoneNumber);
+                    AppPrefrence.setEaseId(context,bean_UserInfo.Data.EasemobId);
                     EMClient.getInstance().login(bean_UserInfo.Data.EasemobId, bean_UserInfo.Data.EasemobPwd, new EMCallBack() {
                         @Override
                         public void onSuccess() {

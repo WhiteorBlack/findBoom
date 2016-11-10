@@ -23,7 +23,7 @@ public class PostTools {
         paramsList.put("Timestamp", time + "");
         if (AppPrefrence.getIsLogin(context))
             paramsList.put("Token", AppPrefrence.getToken(context));
-        OkHttpUtils.getInstance().setConnectTimeout(10 * 1000, TimeUnit.MILLISECONDS);
+        OkHttpUtils.getInstance().setConnectTimeout(20 * 1000, TimeUnit.MILLISECONDS);
         OkHttpUtils.post().url(url).params(paramsList).tag(context).build().execute(postCallBack);
 
 

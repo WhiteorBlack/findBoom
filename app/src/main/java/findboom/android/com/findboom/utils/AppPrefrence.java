@@ -25,6 +25,17 @@ public class AppPrefrence {
     private static final String BACKSOUND = "backSound";
     private static final String CLICKSOUND = "clickSound";
     private static final String BOOMSOUND = "boomSound";
+    private static final String EASEID="easeId";
+
+    public static void setEaseId(Context context, String phone) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putString(EASEID, phone).apply();
+    }
+
+    public static String getEaseId(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getString(EASEID, "");
+    }
 
     public static void setIsBoom(Context context, boolean isNotify) {
         setting = getSp(context.getApplicationContext());

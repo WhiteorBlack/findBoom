@@ -24,7 +24,10 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -145,12 +148,15 @@ import findboom.android.com.findboom.service.BackgroundService;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
+import findboom.android.com.findboom.widget.RotateAnimation;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableItem;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelector;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelectorListener;
 import findboom.android.com.findboom.widget.expandableselector.OnExpandableItemClickListener;
 import findboom.android.com.findboom.wxpay.WxPayHelper;
 import okhttp3.Call;
+
+import static com.baidu.location.g.j.w;
 
 /**
  * author:${白曌勇} on 2016/8/8
@@ -159,7 +165,7 @@ import okhttp3.Call;
 public class Home extends BaseActivity implements PopInterfacer, LocationListener, BaiduMap.OnMapClickListener, BaiduMap.OnMapLongClickListener, BaiduMap.OnMarkerClickListener, BaiduMap.OnMapStatusChangeListener {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
-    private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg;
+    private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg, imgLocation;
     private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg;
     private CheckBox chbMoney, chbBoom;
 
@@ -196,6 +202,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private List<Bean_UserArm.UserArm> scanList;
     private List<Marker> redMarkers; //红包marker,动态隐藏展示区域红包雷
     private List<Marker> goldMarkers; //寻宝雷marker,动态展示隐藏寻宝雷
+    private List<Bean_MapBoom.MapBoom> redBooms;
+    private List<Bean_MapBoom.MapBoom> goldBooms;
 
     public static boolean isForeground;
     private boolean isPutBoom = false; //标识现在是否有放雷的动作
@@ -246,8 +254,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         getUserArm();
         getAllConfig();
         getMyBoom();
-        JPushInterface.init(getApplicationContext());
-        JPushInterface.setAlias(getApplicationContext(), AppPrefrence.getUserName(this), new TagAliasCallback() {
+        JPushInterface.setAlias(getApplicationContext(), AppPrefrence.getEaseId(this), new TagAliasCallback() {
             @Override
             public void gotResult(int code, String s, Set<String> set) {
                 String logs;
@@ -304,8 +311,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     for (int i = 0; i < beanMapBoom.Data.size(); i++) {
                         Bean_MapBoom.MapBoom mapBoom = beanMapBoom.Data.get(i);
                         boomRang = mapBoom.BombRange;
-                        addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
-                        addOverLay(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+
+                        addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude), mapBoom.MineType);
+                        if (mapBoom.MineType != 3 && mapBoom.MineType != 4)
+                            addOverLay(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
                     }
                 }
             }
@@ -498,6 +507,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         boomList = new ArrayList<>();
         defenseList = new ArrayList<>();
         scanList = new ArrayList<>();
+        redBooms = new ArrayList<>();
+        goldBooms = new ArrayList<>();
         mMapView = (MapView) findViewById(R.id.mapView);
         mMapView.setLogoPosition(LogoPosition.logoPostionRightTop);
         mMapView.showScaleControl(false);
@@ -540,12 +551,34 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         txtScan = (TextView) findViewById(R.id.txt_scan_count);
         txtScan.setVisibility(View.GONE);
 
+        imgLocation = (ImageView) findViewById(R.id.img_location);
+        imgLocation.setVisibility(View.GONE);
+
         chbBoom = (CheckBox) findViewById(R.id.chb_set_treasure);
         chbBoom.setChecked(AppPrefrence.getIsBoomShow(context));
         chbBoom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked && redMarkers != null && redMarkers.size() > 0) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { //红包雷
+                AppPrefrence.setIsBoomShow(context, isChecked);
+                if ((redMarkers == null || redMarkers.size() == 0) && (redBooms == null || redBooms.size() == 0))
+                    return;
+                else if ((redMarkers == null || redMarkers.size() == 0) && redBooms.size() > 0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < redBooms.size(); i++) {
+                                Bean_MapBoom.MapBoom boom = redBooms.get(i);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", boom.MineRecordId);
+                                bundle.putInt("type", boom.MineType);
+                                bundle.putInt("boomRange", boom.BombRange);
+                                addRedMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
+                            }
+                        }
+                    }).start();
+                    return;
+                }
+                if (isChecked) {
                     List<Marker> tempMarkers = new ArrayList<Marker>();
                     for (int i = 0; i < redMarkers.size(); i++) {
                         Marker marker = redMarkers.get(i);
@@ -560,7 +593,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         redMarkers.get(i).remove();
                     }
                 }
-                AppPrefrence.setIsBoomShow(context, isChecked);
             }
         });
 
@@ -568,9 +600,43 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         chbMoney.setChecked(AppPrefrence.getIsRedShow(context));
         chbMoney.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { //寻宝雷
                 AppPrefrence.setIsRedShow(context, isChecked);
+                if ((goldMarkers == null || goldMarkers.size() == 0) && (goldBooms == null || goldBooms.size() == 0))
+                    return;
+                else if (isChecked && (goldMarkers == null || goldMarkers.size() == 0) && goldBooms.size() > 0) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < goldBooms.size(); i++) {
+                                Bean_MapBoom.MapBoom boom = goldBooms.get(i);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", boom.MineRecordId);
+                                bundle.putInt("type", boom.MineType);
+                                bundle.putInt("boomRange", boom.BombRange);
+                                addGoldMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
+                            }
+                        }
+                    }).start();
+                    return;
+                }
+
+                if (isChecked) {
+                    List<Marker> tempMarkers = new ArrayList<Marker>();
+                    for (int i = 0; i < goldMarkers.size(); i++) {
+                        Marker marker = goldMarkers.get(i);
+                        OverlayOptions options = new MarkerOptions().draggable(false).extraInfo(marker.getExtraInfo())
+                                .icon(marker.getIcon()).position(marker.getPosition()).zIndex(marker.getZIndex());
+                        tempMarkers.add((Marker) mBaiduMap.addOverlay(options));
+                    }
+                    goldMarkers.clear();
+                    goldMarkers.addAll(tempMarkers);
+                } else {
+                    for (int i = 0; i < goldMarkers.size(); i++) {
+                        goldMarkers.get(i).remove();
+                    }
+
+                }
             }
         });
 
@@ -727,6 +793,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     expandableSelector.setVisibility(View.INVISIBLE);
                     expandableSelector.collapse();
                 }
+                break;
+            case R.id.img_location:
+                MyLocationData locData = new MyLocationData.Builder()
+
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                        .direction(0).latitude(walkLat.latitude)
+                        .longitude(walkLat.longitude).build();
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(walkLat, 20f);
+                mBaiduMap.animateMapStatus(update);
+                imgLocation.setVisibility(View.GONE);
                 break;
         }
     }
@@ -2051,8 +2127,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private void getBoom(BDLocation location) {
         Map<String, String> params = new HashMap<>();
-        params.put("IsContainRedPack", chbMoney.isChecked() ? "1" : "0");
-        params.put("IsContainGold", chbBoom.isChecked() ? "1" : "0");
+        params.put("IsContainRedPack", "1");
+        params.put("IsContainGold", "1");
         params.put("Longitude", location.getLongitude() + "");
         params.put("Latitude", location.getLatitude() + "");
         params.put("Range", radius + "");
@@ -2066,30 +2142,57 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
                 if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
                     mapBoomList.addAll(bean_MapBoom.Data);
-                    if (chbMoney.isChecked() || chbBoom.isChecked()) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clearRedMarker();
-                                for (int i = 0; i < mapBoomList.size(); i++) {
-                                    Bean_MapBoom.MapBoom boom = mapBoomList.get(i);
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("id", boom.MineRecordId);
-                                    bundle.putInt("type", boom.MineType);
-                                    bundle.putInt("boomRange", boom.BombRange);
-//                                    bundle.putDouble("lat",boom.Latitude);
-//                                    bundle.putDouble("lng",boom.Longitude);
-                                    if ((chbMoney.isChecked() && boom.MineType == 3) || (chbBoom.isChecked() && boom.MineType == 4)) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            clearRedMarker();
+                            clearGoldMarker();
+                            for (int i = 0; i < mapBoomList.size(); i++) {
+                                Bean_MapBoom.MapBoom boom = mapBoomList.get(i);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("id", boom.MineRecordId);
+                                bundle.putInt("type", boom.MineType);
+                                bundle.putInt("boomRange", boom.BombRange);
+                                if (boom.MineType == 4) {
+                                    goldBooms.add(boom);
+                                    if (chbMoney.isChecked())
+                                        addGoldMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
+                                }
+                                if (boom.MineType == 3) {
+                                    redBooms.add(boom);
+                                    if (chbBoom.isChecked())
                                         addRedMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
-                                    }
+
                                 }
                             }
-                        }).start();
-                    }
+                        }
+                    }).start();
                 }
 
             }
         });
+    }
+
+    private void clearGoldMarker() {
+        if (goldMarkers != null && goldMarkers.size() > 0) {
+            for (int i = 0; i < goldMarkers.size(); i++) {
+                goldMarkers.get(i).remove();
+            }
+            goldMarkers.clear();
+        }
+    }
+
+    private void addGoldMarker(LatLng latLng, Bundle bundle) {
+        if (goldMarkers == null)
+            goldMarkers = new ArrayList<>();
+        bitmap = BitmapDescriptorFactory
+                .fromResource(R.mipmap.icon_gold_boom);
+        OverlayOptions options = new MarkerOptions()
+                .position(latLng)  //设置marker的位置
+                .icon(bitmap).extraInfo(bundle)  //设置marker图标
+                .zIndex(9)  //设置marker所在层级
+                .draggable(false);  //设置手势拖拽
+        goldMarkers.add((Marker) mBaiduMap.addOverlay(options));
     }
 
     private void clearRedMarker() {
@@ -2105,7 +2208,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (redMarkers == null)
             redMarkers = new ArrayList<>();
         bitmap = BitmapDescriptorFactory
-                .fromResource(R.mipmap.icon_map_boom);
+                .fromResource(R.mipmap.icon_red_boom);
         OverlayOptions options = new MarkerOptions()
                 .position(latLng)  //设置marker的位置
                 .icon(bitmap).extraInfo(bundle)  //设置marker图标
@@ -2178,9 +2281,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
                     for (int i = 0; i < bean_MapBoom.Data.size(); i++) {
                         Bean_MapBoom.MapBoom mapBoom = bean_MapBoom.Data.get(i);
-                        if (!TextUtils.equals(mapBoom.UserId, AppPrefrence.getUserName(context))) {
+                        if (!TextUtils.equals(mapBoom.UserId, AppPrefrence.getUserName(context)) && mapBoom.MineType != 3 && mapBoom.MineType != 4) {
                             countData();
-                            addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude));
+                            addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude), 2);
                             useScan(mapBoom.MineRecordId, "1");
                             new PostResultPop(context, txtArsenal, R.drawable.icon_right, "WOW!成功排除一颗雷", "您将获得一颗永久雷").showPop();
                             for (int j = 0; j < boomList.size(); j++) {
@@ -2340,7 +2443,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         txtArsenal.setText(boomCount + "");
                     }
 
-                    addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
+                    addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), 2);
                     addOverLay(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
                 }
             }
@@ -2362,9 +2465,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private BitmapDescriptor bitmap;
 
-    private void addMarker(LatLng latLng) {
-        bitmap = BitmapDescriptorFactory
-                .fromResource(R.mipmap.icon_map_boom);
+    private void addMarker(LatLng latLng, int type) {
+        if (type == 3)
+            bitmap = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.icon_red_boom);
+        else if (type == 4)
+            bitmap = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.icon_gold_boom);
+        else
+            bitmap = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.icon_map_boom);
         OverlayOptions options = new MarkerOptions()
                 .position(latLng)  //设置marker的位置
                 .icon(bitmap)  //设置marker图标
@@ -2375,9 +2485,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
         Bundle bundle = marker.getExtraInfo();
-        if (bundle != null) {
+        if (bundle != null && bundle.getInt("type") == 3) {
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
                 //大于可领取距离,提示不能领取
                 txtMsg.setText("再靠近一点点,就让你领取~");
@@ -2433,6 +2542,53 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     @Override
     public void onMapStatusChange(MapStatus mapStatus) {
+        if (mapStatus.bound.contains(walkLat)) {
+            invisLocation();
+        } else visLocation();
+//        if (DistanceUtil.getDistance(walkLat, mapStatus.target) > radius * (22 - mapStatus.zoom)/3) {
+//            imgLocation.setVisibility(View.VISIBLE);
+//        } else imgLocation.setVisibility(View.GONE);
+    }
+
+    private void visLocation() {
+        imgLocation.setVisibility(View.VISIBLE);
+//        Animation anim= AnimationUtils.loadAnimation(context,R.anim.locationshake);
+//        imgLocation.startAnimation(anim);
+        ViewTreeObserver vto = imgLocation.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                imgLocation.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                rotateAnim(imgLocation.getWidth(), imgLocation.getHeight());
+            }
+        });
+    }
+
+    private void invisLocation() {
+        imgLocation.setVisibility(View.GONE);
+        imgLocation.clearAnimation();
+    }
+
+    /**
+     * 实现动画旋转效果
+     */
+    private void rotateAnim(float w, float y) {
+        //图片旋转中心坐标
+        if (imgLocation.getAnimation() != null) {
+            imgLocation.getAnimation().cancel();
+        }
+        final float centerX = w / 2.0f;
+        final float centerY = y / 2.0f;
+        RotateAnimation rotation;
+        rotation = new RotateAnimation(0, -360, centerX, centerY, 310.0f,
+                false);
+        rotation.setDuration(1000);//动画持续时间
+        rotation.setFillAfter(true);
+        rotation.setInterpolator(new DecelerateInterpolator());//设置加速度
+        rotation.setRepeatCount(1);//重复次数
+//        rotation.setRepeatMode(Animation.RESTART);//重复动画
+        imgLocation.startAnimation(rotation);
 
     }
 
@@ -2581,8 +2737,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         txtArsenal.setText(boomCount + "");
                     }
 
-                    addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
-                    addOverLay(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
+                    addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), 3);
+//                    addOverLay(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
                 } else
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
             }

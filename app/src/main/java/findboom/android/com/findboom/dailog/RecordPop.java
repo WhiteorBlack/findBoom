@@ -26,6 +26,7 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +146,7 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
 
     private void getRank() {
         Map<String, String> params = new HashMap<>();
-        params.put("rankDate", System.currentTimeMillis() + "");
+        params.put("rankDate", getPreDate());
         PostTools.getData(context, CommonUntilities.RANK_URL, params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -166,6 +167,25 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
 //                getListView.loadMoreComplete();
             }
         });
+    }
+
+    private String getPreDate() {
+        String monthString,dayString;
+        int month;
+        int day;
+
+        Calendar calendar=Calendar.getInstance();
+        month=calendar.get(Calendar.MONTH)+1;
+        if (month<10)
+            monthString="0"+month;
+        else
+        monthString=month+"";
+        day=calendar.get(Calendar.DAY_OF_MONTH);
+        day-=1;
+        if (day<10)
+            dayString="0"+day;
+        else dayString=day+"";
+        return calendar.get(Calendar.YEAR)+"-"+monthString+"-"+dayString;
     }
 
     private void initData() {
@@ -355,11 +375,11 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
             case 1:
                 if (getBoomList == null || getBoomList.size() == 0) {
                     getIndex = 1;
-                    try{
+                    try {
                         getBoom();
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
-                        Tools.debug("--------"+e.toString());
+                        Tools.debug("--------" + e.toString());
                     }
 
                 }

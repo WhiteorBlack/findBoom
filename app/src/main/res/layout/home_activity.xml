@@ -221,6 +221,16 @@
                     expandable_selector:hide_first_item_on_collapse="true" />
             </FrameLayout>
 
+            <ImageView
+                android:id="@+id/img_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="25dp"
+                android:onClick="boomClick"
+                android:background="@mipmap/icon_location"
+                />
+
         </RelativeLayout>
 
 

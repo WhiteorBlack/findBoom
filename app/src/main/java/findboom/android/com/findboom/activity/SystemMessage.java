@@ -1,6 +1,7 @@
 package findboom.android.com.findboom.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.MsgListAdapter;
@@ -99,5 +101,22 @@ public class SystemMessage extends Activity implements XRecyclerView.LoadingList
     public void onLoadMore() {
         pageIndex++;
         getMsgData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 }
