@@ -69,4 +69,5 @@ dependencies {
     compile files('libs/ShareSDK-SinaWeibo-2.7.8.jar')
     compile files('libs/ShareSDK-QZone-2.7.8.jar')
     compile files('libs/ShareSDK-TencentWeibo-2.7.8.jar')
+    compile project(':brokenview')
 }

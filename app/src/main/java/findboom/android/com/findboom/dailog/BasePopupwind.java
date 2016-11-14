@@ -33,6 +33,7 @@ public class BasePopupwind extends PopupWindow implements View.OnClickListener {
         this.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         this.getBackground().setAlpha(120);
         this.context = context;
+        this.setAnimationStyle(R.style.goodsPopStyle);
     }
 
     public void setPopInterfacer(PopInterfacer l, int flag) {

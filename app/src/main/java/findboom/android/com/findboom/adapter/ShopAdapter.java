@@ -34,7 +34,7 @@ public class ShopAdapter extends BaseRecyAdapter {
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_ShopList.GoodsInfo goodsInfo = (Bean_ShopList.GoodsInfo) dataList.get(position);
         mHolder.setText(R.id.txt_name, goodsInfo.ArmTypeTxt);
-        mHolder.setStrokeText(R.id.txt_price, goodsInfo.Price + " 金币");
+        mHolder.setStrokeText(R.id.txt_price, (int)goodsInfo.Price + " 金币");
         int id = 0;
         switch (goodsInfo.ArmType) {
             case 0:

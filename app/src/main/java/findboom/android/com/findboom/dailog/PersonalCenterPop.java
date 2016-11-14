@@ -223,9 +223,11 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         //编辑个人信息
                         edtName.setVisibility(View.VISIBLE);
                         txtName.setVisibility(View.GONE);
+                        edtName.setFocusable(true);
                         isEdit = true;
                         btnBottom.setTag(6);
                         btnBottom.setBackgroundResource(R.mipmap.btn_save_info);
+                        Tools.openInput(edtName,context);
                         break;
                     case 2:
                         //创建支付密码
@@ -304,6 +306,14 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 bundleA.putInt("type", 8);
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundleA);
+                break;
+            case R.id.img_user_photo:
+                if (!isEdit)
+                    return;
+                Bundle bundle1P = new Bundle();
+                bundle1P.putInt("type", 10);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle1P);
                 break;
         }
     }

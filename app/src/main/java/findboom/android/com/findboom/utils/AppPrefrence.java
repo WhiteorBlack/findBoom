@@ -44,7 +44,7 @@ public class AppPrefrence {
 
     public static boolean getIsBoom(Context context) {
         setting = getSp(context.getApplicationContext());
-        return setting.getBoolean(BOOMSOUND, true);
+        return setting.getBoolean(BOOMSOUND, false);
     }
 
     public static void setIsPush(Context context, boolean isNotify) {
@@ -64,7 +64,7 @@ public class AppPrefrence {
 
     public static boolean getIsBack(Context context) {
         setting = getSp(context.getApplicationContext());
-        return setting.getBoolean(BACKSOUND, true);
+        return setting.getBoolean(BACKSOUND, false);
     }
 
     public static void setIsNotify(Context context, boolean isNotify) {

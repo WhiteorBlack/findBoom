@@ -55,7 +55,7 @@ public class ShopBuyPop extends BasePopupwind {
 
     float price = 0;
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
         txtPrice.setText("￥ " + price);
     }

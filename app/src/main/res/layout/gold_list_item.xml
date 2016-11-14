@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/pop_bg"
     android:orientation="vertical">
 
@@ -25,11 +26,15 @@
                 android:background="@mipmap/gold_bg"
                 android:scaleType="fitCenter" />
 
-            <TextView
+            <findboom.android.com.findboom.widget.StrokeTextView
                 android:id="@+id/txt_gold"
                 style="@style/PopTitle"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                app:innnerColor="@color/content_yellow"
+                app:outerColor="@color/price_red"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:text="100"
@@ -64,8 +69,8 @@
 
         <Button
             android:id="@+id/btn_buy"
-            android:layout_width="102dp"
-            android:layout_height="35dp"
+            android:layout_width="87dp"
+            android:layout_height="30dp"
             android:background="@mipmap/btn_buy" />
     </LinearLayout>
 

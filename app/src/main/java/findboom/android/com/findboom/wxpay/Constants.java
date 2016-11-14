@@ -18,5 +18,4 @@ public class Constants {
     public static final String APP_SCECET = "3e63d9844fd26c0d6a56c74af3673187";
 
     public static IWXAPI iwxapi;
-
 }

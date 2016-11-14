@@ -53,6 +53,7 @@ public class FindBoomApplication extends Application {
             clickSound = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
         clickMic = clickSound.load(this, R.raw.clickmic, 1);
         boomMic = clickSound.load(this, R.raw.boommic, 1);
+
         SDKInitializer.initialize(instance);
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
@@ -80,7 +81,7 @@ public class FindBoomApplication extends Application {
         boolean success = initSDK(context, options);
         if (success) {
             // 设为调试模式，打成正式包时，最好设为false，以免消耗额外的资源
-            EMClient.getInstance().setDebugMode(true);
+            EMClient.getInstance().setDebugMode(false);
             // 初始化数据库
             initDbDao(context);
             Tools.debug("init Success easeMob");

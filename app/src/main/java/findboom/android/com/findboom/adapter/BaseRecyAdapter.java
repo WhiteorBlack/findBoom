@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -70,7 +72,19 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
             });
         }
+        setAnimation(holder.itemView, holder.getLayoutPosition());
     }
+
+    private int lastPosition = -1;
+
+    protected void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), R.anim.item_bottom_in);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
 
     @Override
     public int getItemCount() {
@@ -95,9 +109,11 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
         public void setText(int id, String text) {
             ((TextView) itemView.findViewById(id)).setText(text);
         }
-        public View getView(int id){
+
+        public View getView(int id) {
             return itemView.findViewById(id);
         }
+
         public void setStrokeText(int id, String text) {
             ((StrokeTextView) itemView.findViewById(id)).setText(text);
         }

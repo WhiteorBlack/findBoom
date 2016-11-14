@@ -33,7 +33,7 @@ public class GoldAdapter extends BaseRecyAdapter {
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_GoldList.GoldList goodsInfo= (Bean_GoldList.GoldList) dataList.get(position);
         mHolder.setText(R.id.txt_gold, goodsInfo.GoldAmount+"");
-        mHolder.setText(R.id.txt_price, "￥" + goodsInfo.Price);
+        mHolder.setText(R.id.txt_price, "￥" + (int)goodsInfo.Price);
         if (TextUtils.equals(goodsInfo.Status, "0")) {
             mHolder.setText(R.id.txt_name, "在售");
         } else mHolder.setText(R.id.txt_name, "已售罄");

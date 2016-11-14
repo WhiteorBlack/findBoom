@@ -263,9 +263,9 @@ public class WxPayHelper {
 		signParams.add(new BasicNameValuePair("prepayid", req.prepayId));
 		signParams.add(new BasicNameValuePair("timestamp", req.timeStamp));
 
-		req.sign = genAppSign(signParams);
+//		req.sign = genAppSign(signParams);
 		Tools.debug("微信支付中的签名是？？？"+req.sign);
-		// req.sign = sign;
+		 req.sign = sign;
 
 		sb.append("sign\n" + req.sign + "\n\n");
 
