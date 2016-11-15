@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +41,7 @@ import findboom.android.com.findboom.utils.Tools;
 public class PutCommenBoom extends Activity implements PopInterfacer, View.OnClickListener {
     private ImageView imgBoom;
     private TextView txtType, txtIntro, txtInfo, txtDistance, txtTime, txtReduceRecord, txtAddRecord;
+    private EditText edtText;
     private String[] typeList = new String[]{"普通雷", "文字雷", "图片雷"};
     private int type = 0;
     private SelectBoomType selectBoomType;
@@ -51,7 +53,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
     private Bean_AllConfig.PicBoom picBoom;
     private String configString;
     private String picUrl, picInfo, textInfo;
-    private int rang=50;
+    private int rang = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,36 +61,33 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
         setContentView(R.layout.put_common_boom_pop);
         context = this;
         initView();
+        type = getIntent().getIntExtra("type", -1);
         initData();
     }
 
     public void setChoice(int type) {
         switch (type) {
-            case 0:
-                txtInfo.setText(commonBoom.ArmDesc);
-                txtTime.setText(commonBoom.ValidDays + " 天");
-                txtReduceRecord.setText(commonBoom.MinusScore + "积分");
-                txtAddRecord.setText(commonBoom.PlusScore + "积分");
-                txtDistance.setText(commonBoom.BombRange + " m");
-                txtIntro.setText("");
-                Glide.with(context).load(R.mipmap.boom_detial).into(imgBoom);
-                rang=commonBoom.BombRange;
-                break;
-            case 1:
-                rang=textBoom.BombRange;
+            case 3:
+                rang = textBoom.BombRange;
+                txtIntro.setVisibility(View.GONE);
                 txtInfo.setText(textBoom.ArmDesc);
                 txtTime.setText(textBoom.ValidDays + " 天");
                 txtReduceRecord.setText(textBoom.MinusScore + "积分");
                 txtAddRecord.setText(textBoom.PlusScore + "积分");
                 txtDistance.setText(textBoom.BombRange + " m");
+                edtText.setVisibility(View.VISIBLE);
+                txtType.setText("文字雷");
                 if (textBoom.Texts != null && textBoom.Texts.length > 0) {
                     textInfo = textBoom.Texts[0];
                     txtIntro.setText(textInfo);
                     Glide.with(context).load(R.mipmap.boom_detial).into(imgBoom);
                 }
                 break;
-            case 2:
-                rang=picBoom.BombRange;
+            case 1:
+                rang = picBoom.BombRange;
+                edtText.setVisibility(View.GONE);
+                txtIntro.setVisibility(View.VISIBLE);
+                txtType.setText("图片雷");
                 txtInfo.setText(picBoom.ArmDesc);
                 txtTime.setText(picBoom.ValidDays + " 天");
                 txtReduceRecord.setText(picBoom.MinusScore + "积分");
@@ -99,7 +98,6 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
                     picUrl = picBoom.MinePics.get(0).PicUrl;
                     txtIntro.setText(picInfo);
                     Glide.with(context).load(picUrl).into(imgBoom);
-
                 }
                 break;
         }
@@ -114,7 +112,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
             commonBoom = bean_config.Data.CommonMineConfig;
             textBoom = bean_config.Data.TextMineConfig;
             picBoom = bean_config.Data.PicMineConfig;
-            setChoice(0);
+            setChoice(type);
 
         } else getAllConfig();
 
@@ -141,11 +139,12 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
         txtDistance = (TextView) findViewById(R.id.txt_boom_distance);
         txtInfo = (TextView) findViewById(R.id.txt_info);
         txtIntro = (TextView) findViewById(R.id.txt_boom_intro);
-        txtIntro.setOnClickListener(this);
+//        txtIntro.setOnClickListener(this);
         txtReduceRecord = (TextView) findViewById(R.id.txt_reduce_record);
         txtTime = (TextView) findViewById(R.id.txt_boom_time);
         txtType = (TextView) findViewById(R.id.txt_type);
-        txtType.setOnClickListener(this);
+        edtText=(EditText)findViewById(R.id.edt_text);
+//        txtType.setOnClickListener(this);
     }
 
 
@@ -155,12 +154,13 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
                 finish();
                 break;
             case R.id.btn_confirm:
+                textInfo=edtText.getText().toString();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", type + "");
                 bundle.putString("imgUrl", picUrl);
                 bundle.putString("imgInfo", picInfo);
                 bundle.putString("text", textInfo);
-                bundle.putInt("rang",rang);
+                bundle.putInt("rang", rang);
                 setResult(RESULT_OK, new Intent().putExtra("data", bundle));
                 finish();
                 break;

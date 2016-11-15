@@ -116,4 +116,9 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
+    <style name="PwdBtn">
+        <item name="android:layout_width">@dimen/pop_pwd_btn_wide</item>
+        <item name="android:layout_height">@dimen/pop_pwd_btn_height</item>
+    </style>
+
 </resources>

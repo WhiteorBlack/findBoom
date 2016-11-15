@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_boom_detial"
+    android:background="@mipmap/bg_detial_new"
     android:orientation="vertical">
 
     <FrameLayout
@@ -18,10 +18,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1.5"
-        android:gravity="bottom|center_horizontal"
+        android:layout_height="wrap_content"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical">
 
         <ImageView
@@ -39,9 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:drawableRight="@mipmap/icon_arrow_down"
-            android:text="普通雷"
             android:drawablePadding="5dp"
+            android:text="普通雷"
             android:textStyle="bold" />
 
         <TextView
@@ -50,8 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp"
-            android:text="" />
+            android:layout_marginTop="5dp" />
     </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -72,6 +68,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="说明" />
+            <EditText
+                android:id="@+id/edt_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/pop_title_height"
+                android:layout_margin="10dp"
+                style="@style/settingContent"
+                android:gravity="top|left"
+                android:textSize="14sp"
+                android:hint="请输入想说的话"
+                android:padding="5dp"
+                android:background="@drawable/advice_edit_bg"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

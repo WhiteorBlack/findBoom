@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <ImageView style="@style/PopClose"
-            android:onClick="boomClick"/>
+        <ImageView
+            style="@style/PopClose"
+            android:onClick="boomClick" />
 
 
     </FrameLayout>
@@ -36,17 +37,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
-            android:text="红包雷"
+            android:text="寻宝雷"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txt_boom_intro"
-            style="@style/settingContent"
+            style="@style/text18White"
+            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
-            android:text="" />
+            android:text="寻宝雷介绍" />
     </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
@@ -60,6 +62,51 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <ImageView
+                android:id="@+id/img_take_photo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                android:layout_gravity="center_horizontal"
+                android:background="@mipmap/icon_take_photo"
+                android:onClick="boomClick" />
+
+            <EditText
+                android:id="@+id/edt_remark"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/advice_edit_bg"
+                android:hint="请输入备注信息"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/settingContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="优惠个数:" />
+
+                <EditText
+                    android:id="@+id/edt_count"
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/advice_edit_bg"
+                    android:hint="优惠个数"
+                    android:inputType="number"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -144,9 +191,9 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:visibility="invisible"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:visibility="invisible">
 
                     <TextView
                         style="@style/settingContent"
@@ -165,45 +212,6 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
-
-            <EditText
-                android:id="@+id/edt_money"
-                style="@style/settingContent"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                android:inputType="numberDecimal"
-                android:background="@drawable/bg_white_corner"
-                android:hint="请输入红包金额"
-                android:paddingLeft="10dp" />
-
-            <EditText
-                android:id="@+id/edt_count"
-                style="@style/settingContent"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                android:inputType="number"
-                android:background="@drawable/bg_white_corner"
-                android:hint="请输入红包个数"
-                android:paddingLeft="10dp" />
-
-            <EditText
-                android:id="@+id/edt_remark"
-                style="@style/settingContent"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/bg_white_corner"
-                android:hint="恭喜发财"
-                android:paddingLeft="10dp" />
-
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
