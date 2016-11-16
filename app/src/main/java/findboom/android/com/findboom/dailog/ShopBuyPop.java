@@ -36,12 +36,12 @@ public class ShopBuyPop extends BasePopupwind {
     private void initView() {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.shop_buy_pop, null);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dismiss();
+//            }
+//        });
         view.findViewById(R.id.fl_add).setOnClickListener(this);
         view.findViewById(R.id.fl_minute).setOnClickListener(this);
         view.findViewById(R.id.btn_buy).setOnClickListener(this);

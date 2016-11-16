@@ -197,6 +197,7 @@ public class MyRecordDetial extends BaseFragmentActivity implements PopInterface
         if (TextUtils.equals(id, AppPrefrence.getUserName(context))) {
             return;
         }
+        addFriendPop.setId(id);
         addFriendPop.showPop(txtBoomState);
         addFriendPop.setPopInterfacer(this, 0);
     }
