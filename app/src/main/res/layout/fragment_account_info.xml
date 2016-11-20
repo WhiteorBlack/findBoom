@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
-                android:background="@mipmap/account_yuan" />
+                android:background="@mipmap/count" />
 
             <Button
                 android:id="@+id/btn_charge_money"

@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@mipmap/title_shop" />
+                android:background="@mipmap/title_arsenal" />
 
             <ImageView style="@style/PopClose" />
         </FrameLayout>

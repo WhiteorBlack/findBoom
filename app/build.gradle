@@ -5,8 +5,8 @@ android {
         config {
             keyAlias 'findboom'
             keyPassword 'findboom2016'
-//            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
-            storeFile file('F:\\myProject\\FindBoom\\FindBoom.jks')
+            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
+//            storeFile file('F:\\myProject\\FindBoom\\FindBoom.jks')
             storePassword 'findboom2016'
         }
     }
@@ -52,7 +52,6 @@ dependencies {
     compile files('libs/alipaySingle-20160516.jar')
     compile files('libs/IndoorscapeAlbumPlugin.jar')
     compile files('libs/BaiduLBS_Android.jar')
-    compile files('libs/jpush-android-2.1.9.jar')
     compile files('libs/httpmime-4.1.2.jar')
     compile files('libs/org.apache.http.legacy.jar')
     compile project(':takephoto_library')
@@ -70,4 +69,5 @@ dependencies {
     compile files('libs/ShareSDK-QZone-2.7.8.jar')
     compile files('libs/ShareSDK-TencentWeibo-2.7.8.jar')
     compile project(':brokenview')
+    compile files('libs/jpush-android-2.2.0.jar')
 }

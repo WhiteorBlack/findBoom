@@ -27,7 +27,7 @@ import okhttp3.Call;
 
 /**
  * author:${白曌勇} on 2016/9/10
- * TODO:编辑个人资料
+ * TODO:修改支付密码
  */
 public class ChangePayPwdPop extends BasePopupwind {
     private Context context;

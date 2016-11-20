@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@mipmap/title_report" />
+                android:background="@mipmap/title_report_new" />
 
             <ImageView style="@style/PopClose" />
         </FrameLayout>
