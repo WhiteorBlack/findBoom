@@ -12,5 +12,7 @@ public class Bean_GoldBoom extends BaseBean {
         public String PicUrl;
         public String PicTitle;
         public String ReceiveTime;
+        public int VisibleRange;
+        public int CanRecRange;
     }
 }

@@ -237,6 +237,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private int redGetRange = 100; //红包雷可以领取距离
     private int redVisRange = 1000; //红包雷可以显示距离
 
+    private int goldGetRange = 100; //红包雷可以领取距离
+    private int goldVisRange = 1000; //红包雷可以显示距离
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -346,6 +349,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (bean_allConfig.Success) {
                         redGetRange = bean_allConfig.Data.RedPackMineConfig.CanRecRange;
                         redVisRange = bean_allConfig.Data.RedPackMineConfig.VisibleRange;
+                        goldGetRange=bean_allConfig.Data.GoldMineConfig.CanRecRange;
+                        goldVisRange=bean_allConfig.Data.GoldMineConfig.VisibleRange;
                     }
                 }
             }
@@ -2596,7 +2601,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     public boolean onMarkerClick(Marker marker) {
         Bundle bundle = marker.getExtraInfo();
         if (bundle != null && bundle.getInt("type") == 4) {
-            if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
+            if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > goldGetRange) {
                 //大于可领取距离,提示不能领取
                 txtMsg.setText("再靠近一点点,就让你领取~");
                 txtMsgVis();
