@@ -7,11 +7,12 @@
 
     <LinearLayout
         style="@style/PopParent"
+        android:layout_height="250dp"
         android:background="@mipmap/login_phone_bg">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/pop_title_height">
+            android:layout_height="55dp">
 
             <ImageView
                 android:id="@+id/img_back"
@@ -43,15 +44,15 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="35dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
                 <EditText
                     android:id="@+id/edt_phone"
-                    android:layout_width="150dp"
-                    android:layout_height="40dp"
+                    android:layout_width="180dp"
+                    android:layout_height="35dp"
                     android:layout_weight="1"
                     android:background="@drawable/setting_pop_box_bg"
                     android:gravity="center_vertical"
@@ -62,8 +63,7 @@
 
                 <Button
                     android:id="@+id/btn_get_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/PwdBtn"
                     android:layout_marginLeft="20dp"
                     android:background="@mipmap/btn_forget_pwd" />
 
@@ -81,9 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:visibility="invisible"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txt_pay_money"
@@ -104,8 +104,8 @@
             <Button
                 android:id="@+id/btn_login"
                 style="@style/settingContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="120dp"
+                android:layout_height="41dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
                 android:background="@mipmap/btn_send_confirm"

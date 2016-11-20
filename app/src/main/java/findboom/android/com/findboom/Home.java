@@ -91,6 +91,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import findboom.android.com.findboom.activity.FriendMessage;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.activity.PutCommenBoom;
+import findboom.android.com.findboom.activity.PutGoldBoom;
 import findboom.android.com.findboom.activity.PutRedBoom;
 import findboom.android.com.findboom.activity.SystemMessage;
 import findboom.android.com.findboom.alipay.AliPayHelper;
@@ -99,6 +100,7 @@ import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.BaseBean;
 import findboom.android.com.findboom.bean.Bean_AllConfig;
 import findboom.android.com.findboom.bean.Bean_BoomBoom;
+import findboom.android.com.findboom.bean.Bean_GoldBoom;
 import findboom.android.com.findboom.bean.Bean_MapBoom;
 import findboom.android.com.findboom.bean.Bean_RedBoom;
 import findboom.android.com.findboom.bean.Bean_UserArm;
@@ -1298,13 +1300,48 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 28:
                 if (bundle == null)
                     return;
-                if (bundle.getInt("type", -1) == 0) {
-                    startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString), 0);
-                    isPutBoom = false;
-                } else if (bundle.getInt("type", -1) == 1) {
-                    startActivityForResult(new Intent(context, PutRedBoom.class).putExtra("config", configString), 1);
-                    isPutBoom = false;
+                int typeBoom = bundle.getInt("type");
+                switch (typeBoom) {
+                    case 0:
+                        //寻宝雷
+                        mineType = "4";
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString("pro", provice);
+                        bundle1.putString("city", city);
+                        bundle1.putString("lat", latItude);
+                        bundle1.putString("lng", longItude);
+                        bundle1.putString("street", street);
+                        bundle1.putString("area", area);
+                        bundle1.putString("config", configString);
+                        startActivityForResult(new Intent(context, PutGoldBoom.class).putExtra("data", bundle1), 2);
+                        isPutBoom = false;
+                        break;
+                    case 1:
+                        //图片雷
+                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", typeBoom), 0);
+                        mineType = "2";
+                        isPutBoom = false;
+                        break;
+                    case 2:
+                        //普通雷
+                        mineType = "0";
+                        putCommentBoom();
+                        isPutBoom = false;
+                        break;
+                    case 3:
+                        //文字雷
+                        mineType = "1";
+                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", typeBoom), 0);
+                        isPutBoom = false;
+                        break;
+                    case 4:
+                        //红包雷
+                        mineType = "3";
+                        startActivityForResult(new Intent(context, PutRedBoom.class).putExtra("config", configString), 1);
+                        isPutBoom = false;
+                        break;
                 }
+
                 break;
             case 30:
                 isScan = true;
@@ -2244,7 +2281,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         bitmap = BitmapDescriptorFactory
                 .fromResource(R.mipmap.icon_gold_boom);
         OverlayOptions options = new MarkerOptions()
-                .position(latLng)  //设置marker的位置
+                .position(latLng).animateType(MarkerOptions.MarkerAnimateType.grow)  //设置marker的位置
                 .icon(bitmap).extraInfo(bundle)  //设置marker图标
                 .zIndex(9)  //设置marker所在层级
                 .draggable(false);  //设置手势拖拽
@@ -2266,7 +2303,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         bitmap = BitmapDescriptorFactory
                 .fromResource(R.mipmap.icon_red_boom);
         OverlayOptions options = new MarkerOptions()
-                .position(latLng)  //设置marker的位置
+                .position(latLng).animateType(MarkerOptions.MarkerAnimateType.grow)  //设置marker的位置
                 .icon(bitmap).extraInfo(bundle)  //设置marker图标
                 .zIndex(9)  //设置marker所在层级
                 .draggable(false);  //设置手势拖拽
@@ -2549,7 +2586,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     .fromResource(R.mipmap.icon_map_boom);
         OverlayOptions options = new MarkerOptions()
                 .position(latLng)  //设置marker的位置
-                .icon(bitmap)  //设置marker图标
+                .icon(bitmap).animateType(MarkerOptions.MarkerAnimateType.grow)   //设置marker图标
                 .zIndex(9)  //设置marker所在层级
                 .draggable(false);  //设置手势拖拽
         mBaiduMap.addOverlay(options);
@@ -2558,6 +2595,20 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     @Override
     public boolean onMarkerClick(Marker marker) {
         Bundle bundle = marker.getExtraInfo();
+        if (bundle != null && bundle.getInt("type") == 4) {
+            if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
+                //大于可领取距离,提示不能领取
+                txtMsg.setText("再靠近一点点,就让你领取~");
+                txtMsgVis();
+                Tools.debug("boomRange" + redGetRange);
+                return false;
+            }
+            String id = bundle.getString("id");
+            int type = bundle.getInt("type");
+            if (!TextUtils.isEmpty(id)) {
+                boomGold(id);
+            }
+        }
         if (bundle != null && bundle.getInt("type") == 3) {
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
                 //大于可领取距离,提示不能领取
@@ -2573,6 +2624,31 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             }
         }
         return false;
+    }
+
+    /**
+     * 触发红包雷
+     *
+     * @param id
+     */
+    private void boomGold(String id) {
+        Map<String, String> params = new HashMap<>();
+        params.put("MineRecordId", id);
+        PostTools.postData(context, CommonUntilities.MINE_URL + "BombGoldMine", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response)) {
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "网络错误", "请稍后重试").showPop();
+                    return;
+                }
+                Bean_GoldBoom goldBoom = new Gson().fromJson(response, Bean_GoldBoom.class);
+                if (goldBoom != null && goldBoom.Success) {
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, goldBoom.Data.PicTitle, "恭喜!获得宝藏").showPop();
+                } else
+                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", goldBoom.Msg).showPop();
+            }
+        });
     }
 
     /**
@@ -2755,6 +2831,32 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             boomRang = bundle.getInt("rang", 50);
             pwdString = bundle.getString("pwd", "");
             putRedBoom();
+        }
+        if (resultCode == RESULT_OK && requestCode == 2) {
+            if (data.getBooleanExtra("success", false)) {
+
+                addGoldMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), new Bundle());
+                boomCount -= 1;
+                if (boomList.get(0).ArmType == 1) {
+                    if (boomList.get(0).Count > 0) {
+                        boomList.get(0).Count -= 1;
+                    } else if (boomList.get(1).Count > 0) {
+                        boomList.get(1).Count -= 1;
+                    }
+                } else {
+                    if (boomList.get(1).Count > 0) {
+                        boomList.get(1).Count -= 1;
+                    } else if (boomList.get(0).Count > 0) {
+                        boomList.get(0).Count -= 1;
+                    }
+                }
+                if (boomCount <= 0) {
+                    imgArsenal.setEnabled(false);
+                    boomCount = 0;
+                    txtArsenal.setVisibility(View.INVISIBLE);
+                }
+                txtArsenal.setText(boomCount + "");
+            }
         }
     }
 

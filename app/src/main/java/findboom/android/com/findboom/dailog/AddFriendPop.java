@@ -1,4 +1,5 @@
-package findboom.android.com.findboom.dailog;/**
+package findboom.android.com.findboom.dailog;
+/**
  * Created by Administrator on 2016/10/30.
  */
 

@@ -18,6 +18,8 @@ public class Bean_AllConfig extends BaseBean {
         public RedBoom RedPackMineConfig;
         public GoldBoom GoldMineConfig;
         public Scan MineCleanerConfig;
+        public int VisibleRange;
+        public int CanRecRange;
     }
 
     public static class Scan {
@@ -30,6 +32,8 @@ public class Bean_AllConfig extends BaseBean {
         public String ValidDays;
         public String MineType;
         public int BombRange;
+        public int VisibleRange;
+        public int CanRecRange;
     }
 
     public static class RedBoom {
