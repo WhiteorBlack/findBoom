@@ -20,64 +20,64 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:orientation="horizontal"
-            android:padding="25dp">
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:paddingTop="15dp">
 
-            <FrameLayout
+            <RelativeLayout
                 android:id="@+id/rel_defense"
-                android:layout_width="70dp"
+                android:layout_width="@dimen/home_icon_parent_wide"
                 android:layout_height="wrap_content"
                 android:onClick="boomClick">
 
                 <ImageView
                     android:id="@+id/img_defense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/home_defense"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
+                    android:background="@mipmap/icon_defense"
                     android:clickable="false" />
 
 
                 <TextView
                     android:id="@+id/txt_defense_count"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="top|right"
-                    android:layout_marginRight="@dimen/home_scan_right"
-                    android:layout_marginTop="@dimen/home_scan_top"
+                    android:layout_width="@dimen/home_text_size"
+                    android:layout_height="@dimen/home_text_size"
+                    android:layout_alignParentRight="true"
+                    android:background="@mipmap/icon_text_bg"
                     android:gravity="center"
                     android:text="10"
                     android:textColor="@color/pop_bg"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
-            </FrameLayout>
+            </RelativeLayout>
 
-            <FrameLayout
+            <RelativeLayout
                 android:id="@+id/rel_scan"
-                android:layout_width="70dp"
+                android:layout_width="@dimen/home_icon_parent_wide"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="boomClick">
 
                 <ImageView
                     android:id="@+id/img_scan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/home_scan"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
+                    android:background="@mipmap/icon_home_scan"
                     android:clickable="false" />
 
 
                 <TextView
                     android:id="@+id/txt_scan_count"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="top|right"
-                    android:layout_marginRight="@dimen/home_scan_right"
-                    android:layout_marginTop="@dimen/home_scan_top"
+                    android:layout_width="@dimen/home_text_size"
+                    android:layout_height="@dimen/home_text_size"
+                    android:layout_alignParentRight="true"
+                    android:background="@mipmap/icon_text_bg"
                     android:gravity="center"
                     android:text="10"
                     android:textColor="@color/pop_bg"
-                    android:textSize="12sp"
+                    android:textSize="10sp"
                     android:textStyle="bold" />
-            </FrameLayout>
+            </RelativeLayout>
         </FrameLayout>
 
         <RelativeLayout
@@ -85,78 +85,76 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:gravity="center|right"
-            android:paddingBottom="100dp">
+            android:paddingBottom="90dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <FrameLayout
+                <RelativeLayout
                     android:id="@+id/rel_arsenal"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/home_icon_parent_wide"
                     android:layout_height="wrap_content"
                     android:onClick="boomClick">
 
                     <ImageView
                         android:id="@+id/img_arsenal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/home_arsenal" />
+                        android:layout_width="@dimen/home_icon_wide"
+                        android:layout_height="@dimen/home_icon_height"
+                        android:background="@mipmap/icon_home_arsenal" />
 
 
                     <TextView
                         android:id="@+id/txt_arsenal_count"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/home_text_size"
+                        android:layout_height="@dimen/home_text_size"
+                        android:layout_alignParentRight="true"
                         android:layout_gravity="top|right"
-                        android:layout_marginRight="@dimen/home_scan_right"
-                        android:layout_marginTop="@dimen/home_scan_top"
+                        android:background="@mipmap/icon_text_bg"
                         android:gravity="center"
                         android:text="10"
                         android:textColor="@color/pop_bg"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
-                </FrameLayout>
+                </RelativeLayout>
 
-                <FrameLayout
+                <RelativeLayout
                     android:id="@+id/rel_record"
-                    android:layout_width="70dp"
+                    android:layout_width="@dimen/home_icon_parent_wide"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:onClick="boomClick">
 
                     <ImageView
                         android:id="@+id/img_record"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/home_record" />
+                        android:layout_width="@dimen/home_icon_wide"
+                        android:layout_height="@dimen/home_icon_height"
+                        android:background="@mipmap/icon_home_record" />
 
 
                     <TextView
                         android:id="@+id/txt_record_count"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/home_text_size"
+                        android:layout_height="@dimen/home_text_size"
+                        android:layout_alignParentRight="true"
                         android:layout_gravity="top|right"
-                        android:layout_marginRight="7dp"
-                        android:layout_marginTop="5dp"
+                        android:background="@mipmap/icon_text_bg"
                         android:gravity="center"
                         android:text="10"
                         android:textColor="@color/pop_bg"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold" />
-                </FrameLayout>
+                </RelativeLayout>
 
                 <CheckBox
                     android:id="@+id/chb_set_red_packet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="50dp"
                     android:button="@drawable/checkbox_boom" />
 
@@ -164,9 +162,7 @@
                     android:id="@+id/chb_set_treasure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:button="@drawable/checkbox_money" />
             </LinearLayout>
 
@@ -176,9 +172,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:paddingRight="25dp"
                 android:gravity="right|center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="25dp">
 
                 <TextView
                     android:id="@+id/txt_home_msg"
@@ -205,11 +201,11 @@
             </LinearLayout>
 
             <FrameLayout
-                android:layout_alignParentRight="true"
-                android:layout_above="@id/ll_msg"
                 android:layout_width="wrap_content"
-                android:paddingRight="15dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_above="@id/ll_msg"
+                android:layout_alignParentRight="true"
+                android:paddingRight="15dp">
 
                 <findboom.android.com.findboom.widget.expandableselector.ExpandableSelector
                     android:id="@+id/img_expand"
@@ -227,9 +223,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="25dp"
-                android:onClick="boomClick"
                 android:background="@mipmap/icon_location"
-                />
+                android:onClick="boomClick" />
 
         </RelativeLayout>
 
@@ -238,7 +233,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
             <FrameLayout
@@ -250,8 +246,8 @@
 
                 <ImageView
                     android:id="@+id/img_shop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
                     android:layout_gravity="center"
                     android:background="@mipmap/icon_home_shop" />
 
@@ -266,8 +262,8 @@
 
                 <ImageView
                     android:id="@+id/img_friend_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
                     android:layout_gravity="center"
                     android:background="@mipmap/icon_home_friend" />
 
@@ -282,8 +278,8 @@
 
                 <ImageView
                     android:id="@+id/img_personal_center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
                     android:layout_gravity="center"
                     android:background="@mipmap/icon_home_personal" />
 
@@ -298,8 +294,8 @@
 
                 <ImageView
                     android:id="@+id/img_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_height="@dimen/home_icon_height"
                     android:layout_gravity="center"
                     android:background="@mipmap/icon_home_setting" />
 
