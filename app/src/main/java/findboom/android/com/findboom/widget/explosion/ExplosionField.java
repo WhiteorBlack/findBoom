@@ -14,6 +14,8 @@ import android.view.Window;
 
 import java.util.ArrayList;
 
+import findboom.android.com.findboom.utils.Tools;
+
 
 /**
  * Created by azz on 15/11/19.
@@ -73,7 +75,7 @@ public class ExplosionField extends View {
 
                 //动画结束时从动画集中移除
                 explosionAnimators.remove(animation);
-                if (explosionListener!=null)
+                if (explosionListener != null)
                     explosionListener.onEnd();
                 animation = null;
             }
@@ -82,11 +84,12 @@ public class ExplosionField extends View {
     }
 
     ExplosionListener explosionListener;
-    public void setOnExplosionListener(ExplosionListener l){
-        this.explosionListener=l;
+
+    public void setOnExplosionListener(ExplosionListener l) {
+        this.explosionListener = l;
     }
 
-    public interface ExplosionListener{
+    public interface ExplosionListener {
         void onEnd();
     }
 
@@ -105,6 +108,7 @@ public class ExplosionField extends View {
         //view.clearFocus(); //不同焦点状态显示的可能不同——（azz:不同就不同有什么关系？）
 
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Tools.debug("bitmap" + view.getWidth() + "--" + view.getHeight());
 
         if (bitmap != null) {
             synchronized (mCanvas) {

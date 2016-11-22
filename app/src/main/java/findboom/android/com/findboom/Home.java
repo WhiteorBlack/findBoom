@@ -22,6 +22,7 @@ import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -33,6 +34,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
@@ -65,6 +67,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
@@ -129,6 +132,7 @@ import findboom.android.com.findboom.dailog.GetRecordPop;
 import findboom.android.com.findboom.dailog.MessageDialog;
 import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.NotifyPop;
+import findboom.android.com.findboom.dailog.OpenRedPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
 import findboom.android.com.findboom.dailog.PickerDialog;
 import findboom.android.com.findboom.dailog.PostResultPop;
@@ -167,6 +171,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg, imgLocation;
+    private ImageView imgRedPoint;
     private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg;
     private CheckBox chbMoney, chbBoom;
 
@@ -199,6 +204,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ChatPop chatPop;
     private BoomDefensePop boomDefensePop;
     private ScanBoomPop scanBoomPop;
+    private OpenRedPop openRedPop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -349,8 +355,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (bean_allConfig.Success) {
                         redGetRange = bean_allConfig.Data.RedPackMineConfig.CanRecRange;
                         redVisRange = bean_allConfig.Data.RedPackMineConfig.VisibleRange;
-                        goldGetRange=bean_allConfig.Data.GoldMineConfig.CanRecRange;
-                        goldVisRange=bean_allConfig.Data.GoldMineConfig.VisibleRange;
+                        goldGetRange = bean_allConfig.Data.GoldMineConfig.CanRecRange;
+                        goldVisRange = bean_allConfig.Data.GoldMineConfig.VisibleRange;
                     }
                 }
             }
@@ -652,6 +658,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         txtMsg.setVisibility(View.GONE);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) txtMsg.getLayoutParams();
         params.width = (int) (Tools.getScreenWide(context) * 0.6);
+        txtMsg.setLayoutParams(params);
+        imgRedPoint = (ImageView) findViewById(R.id.img_red_point);
+        imgRedPoint.setVisibility(View.GONE);
     }
 
     /**
@@ -926,6 +935,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 33:
                 scanBoomPop = null;
+                break;
+            case 34:
+                openRedPop = null;
                 break;
         }
     }
@@ -1361,6 +1373,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     String alipayName = "", alipayNo = "";
 
+    /**
+     * 提现
+     *
+     * @param pwd
+     */
     private void convertRed(String pwd) {
         Map<String, String> params = new HashMap<>();
         params.put("AlipayName", alipayName);
@@ -1502,7 +1519,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
+//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
+                    if (confirmPwdPop != null)
+                        confirmPwdPop.dismiss();
+                    toastSuccess();
+                    FindBoomApplication.getInstance().playMoneySound();
                     String balance = "";
                     recharMoney = "";
                     float moneyF = 0.00f;
@@ -1599,6 +1620,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         }
                     }
                 } else {
+                    toastSuccess();
+                    FindBoomApplication.getInstance().playMoneySound();
                     if (user != null)
                         balance = user.UserBalance;
                     if (!TextUtils.isEmpty(balance))
@@ -1736,7 +1759,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     user.UserBalance = decentFloat(balance) + "";
                     BoomDBManager.getInstance().updateUserData(user);
                     money = 0.00f;
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "购买成功", "").showPop();
+//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "购买成功", "").showPop();
+                    toastSuccess();
                     confirmPwdPop.dismiss();
                     shopBuyPop.dismiss();
                     defenseList.clear();
@@ -1771,6 +1795,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
             }
         });
+    }
+
+    private void toastSuccess() {
+        Toast toast = new Toast(this);
+        ImageView imageView = new ImageView(this);
+        imageView.setBackgroundResource(R.mipmap.buy_success);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setView(imageView);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     private void countData() {
@@ -1907,6 +1941,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     }
                 }
             } else {
+                toastSuccess();
+                FindBoomApplication.getInstance().playMoneySound();
                 if (user != null)
                     balance = user.UserBalance;
                 if (!TextUtils.isEmpty(balance))
@@ -1923,6 +1959,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (!AppPrefrence.getIsBack(this))
             startService(backIntent);
         addMsgListener();
+
+        refreshUI(EMClient.getInstance().chatManager().getUnreadMsgsCount());
     }
 
     private void addMsgListener() {
@@ -2041,7 +2079,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     };
 
     private void refreshUI(int count) {
-
+        if (count > 0)
+            imgRedPoint.setVisibility(View.VISIBLE);
+        else imgRedPoint.setVisibility(View.GONE);
     }
 
     @Override
@@ -2632,7 +2672,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     /**
-     * 触发红包雷
+     * 触发寻宝雷
      *
      * @param id
      */
@@ -2661,7 +2701,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      *
      * @param id
      */
-    private void boomRed(String id) {
+    private void boomRed(final String id) {
         Map<String, String> params = new HashMap<>();
         params.put("MineRecordId", id);
         PostTools.postData(context, CommonUntilities.MINE_URL + "BombRedPackMine", params, new PostCallBack() {
@@ -2681,7 +2721,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     money = decentFloat(moneyF);
                     user.RedPackBalance = money;
                     BoomDBManager.getInstance().setUserData(user);
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, redBoom.Data.RedPackText, "恭喜!获得" + redBoom.Data.Amount + "元红包").showPop();
+                    if (openRedPop == null)
+                        openRedPop = new OpenRedPop(context);
+                    openRedPop.setMoney(redBoom.Data.Amount + "");
+                    openRedPop.setId(id);
+                    openRedPop.showPop(txtArsenal);
+//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, redBoom.Data.RedPackText, "恭喜!获得" + redBoom.Data.Amount + "元红包").showPop();
                 } else
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", redBoom.Msg).showPop();
             }

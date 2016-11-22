@@ -40,6 +40,9 @@ public class FindBoomApplication extends Application {
     private SoundPool clickSound;
     private int clickMic;
     private int boomMic;
+    private int openRed;
+    private int moneySound;
+    private int breakSound;
 
     public static FindBoomApplication getInstance() {
         return instance;
@@ -58,16 +61,50 @@ public class FindBoomApplication extends Application {
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         init(this);
+
+        openRed = clickSound.load(this, R.raw.open_red, 1);
+        moneySound = clickSound.load(this, R.raw.money_sound, 1);
+        breakSound = clickSound.load(this, R.raw.break_sound, 1);
     }
 
+    /**
+     * 点击音效
+     */
     public void playClickSound() {
         if (!AppPrefrence.getIsBoom(this))
             clickSound.play(clickMic, 1, 1, 0, 0, 1);
     }
 
+    /**
+     * 爆炸声
+     */
     public void playBoomSound() {
         if (!AppPrefrence.getIsBoom(this))
             clickSound.play(boomMic, 1, 1, 0, 0, 1);
+    }
+
+    /**
+     * 拆红包声音
+     */
+    public void playOpenRed() {
+        if (!AppPrefrence.getIsBoom(this))
+            clickSound.play(openRed, 1, 1, 0, 0, 1);
+    }
+
+    /**
+     * 碎屏声音
+     */
+    public void playBreakSound() {
+        if (!AppPrefrence.getIsBoom(this))
+            clickSound.play(breakSound, 1, 1, 0, 0, 1);
+    }
+
+    /**
+     * 钱币掉落声音
+     */
+    public void playMoneySound() {
+        if (!AppPrefrence.getIsBoom(this))
+            clickSound.play(moneySound, 1, 1, 0, 0, 1);
     }
     
     /*

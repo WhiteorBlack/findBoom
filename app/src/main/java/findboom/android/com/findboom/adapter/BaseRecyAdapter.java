@@ -55,6 +55,7 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(getLayout(), parent, false));
@@ -110,6 +111,10 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
             ((TextView) itemView.findViewById(id)).setText(text);
         }
 
+        public void setText(int id, int text) {
+            ((TextView) itemView.findViewById(id)).setText(itemView.getContext().getResources().getString(text));
+        }
+
         public View getView(int id) {
             return itemView.findViewById(id);
         }
@@ -123,7 +128,65 @@ public abstract class BaseRecyAdapter extends RecyclerView.Adapter<RecyclerView.
         }
 
         public void setImage(int id, int url) {
+            Glide.with(itemView.getContext()).load(url).fitCenter().into((ImageView) itemView.findViewById(id));
+        }
+
+        public void setRadiusImage(int id, String url) {
+            Glide.with(itemView.getContext()).load(url).error(R.mipmap.ic_logo).into((CircleImageView) itemView.findViewById(id));
+        }
+
+        public void setOnClick(int id, final int position) {
+            itemView.findViewById(id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickInterface != null)
+                        onClickInterface.onClick(v, position);
+                }
+            });
+        }
+
+        public void setOnClick(int id, final int position, int type) {
+            itemView.findViewById(id).setTag(type);
+            itemView.findViewById(id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickInterface != null)
+                        onClickInterface.onClick(v, position);
+                }
+            });
+        }
+    }
+
+    public class ViewHolderNew extends RecyclerView.ViewHolder {
+        public View itemView;
+
+        public ViewHolderNew(View itemView) {
+            super(itemView);
+            this.itemView = itemView;
+        }
+
+        public void setText(int id, String text) {
+            ((TextView) itemView.findViewById(id)).setText(text);
+        }
+
+        public void setText(int id, int text) {
+            ((TextView) itemView.findViewById(id)).setText(itemView.getContext().getResources().getString(text));
+        }
+
+        public View getView(int id) {
+            return itemView.findViewById(id);
+        }
+
+        public void setStrokeText(int id, String text) {
+            ((StrokeTextView) itemView.findViewById(id)).setText(text);
+        }
+
+        public void setImage(int id, String url) {
             Glide.with(itemView.getContext()).load(url).into((ImageView) itemView.findViewById(id));
+        }
+
+        public void setImage(int id, int url) {
+            Glide.with(itemView.getContext()).load(url).fitCenter().into((ImageView) itemView.findViewById(id));
         }
 
         public void setRadiusImage(int id, String url) {

@@ -190,14 +190,28 @@
                     android:singleLine="true"
                     android:textSize="14sp" />
 
-                <ImageView
-                    android:id="@+id/img_msg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@mipmap/home_msg"
-                    android:onClick="boomClick" />
+                    android:layout_centerHorizontal="true">
+
+                    <ImageView
+                        android:id="@+id/img_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@mipmap/home_msg"
+                        android:onClick="boomClick" />
+
+                    <ImageView
+                        android:id="@+id/img_red_point"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@mipmap/red_point" />
+                </RelativeLayout>
             </LinearLayout>
 
             <FrameLayout

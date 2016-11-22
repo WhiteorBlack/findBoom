@@ -8,7 +8,9 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,6 +34,19 @@ public class ArsenalAdapter extends BaseRecyAdapter {
 
     private boolean isArsenal = false;
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == dataList.size()-1)
+            return new ViewHolderNew(LayoutInflater.from(parent.getContext()).inflate(R.layout.textview, null));
+        else
+            return super.onCreateViewHolder(parent, viewType);
+    }
+
     public void setArsenal(boolean isArsenal) {
         this.isArsenal = isArsenal;
     }
@@ -39,20 +54,27 @@ public class ArsenalAdapter extends BaseRecyAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ViewHolder mHolder = (ViewHolder) holder;
-        Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
-        mHolder.setText(R.id.txt_name, "地雷" + userArm.Count + "个");
-        if (userArm.ArmType == 0) {
-            mHolder.setText(R.id.txt_intro, "(永久期限)");
-            mHolder.setImage(R.id.img_photo, R.mipmap.boom_normal);
+
+        if (position == dataList.size() - 1) {
+            ViewHolderNew mHolder= (ViewHolderNew) holder;
+            mHolder.setText(R.id.txt_info,R.string.arsenalInfo);
         } else {
-            mHolder.setText(R.id.txt_intro, "(当天使用)");
-            mHolder.setImage(R.id.img_photo, R.mipmap.boom_temp);
+            ViewHolder mHolder = (ViewHolder) holder;
+            Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
+            mHolder.setText(R.id.txt_name, "地雷" + userArm.Count + "个");
+            if (userArm.ArmType == 0) {
+                mHolder.setText(R.id.txt_intro, "(永久期限)");
+                mHolder.setImage(R.id.img_photo, R.mipmap.boom_normal);
+            } else {
+                mHolder.setText(R.id.txt_intro, "(当天使用)");
+                mHolder.setImage(R.id.img_photo, R.mipmap.boom_temp);
+            }
+            if (isArsenal)
+                mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.VISIBLE);
+            else mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.GONE);
+            mHolder.setOnClick(R.id.btn_use, position);
         }
-        if (isArsenal)
-            mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.VISIBLE);
-        else mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.GONE);
-        mHolder.setOnClick(R.id.btn_use, position);
+
     }
 
     @Override

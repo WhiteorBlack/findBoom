@@ -41,6 +41,7 @@ public class ArsenalPop extends BasePopupwind {
     public void setData(List<Bean_UserArm.UserArm> dataList) {
         defenseList.clear();
         defenseList.addAll(dataList);
+        defenseList.add(new Bean_UserArm.UserArm());
         defenseAdapter.notifyItemChanged(0, defenseList.size() - 1);
     }
 
@@ -78,7 +79,7 @@ public class ArsenalPop extends BasePopupwind {
                 Bundle bundle = new Bundle();
                 bundle.putInt("pos", position);
                 if (popInterfacer != null)
-                    popInterfacer.OnConfirm(flag,bundle);
+                    popInterfacer.OnConfirm(flag, bundle);
                 dismiss();
             }
         });

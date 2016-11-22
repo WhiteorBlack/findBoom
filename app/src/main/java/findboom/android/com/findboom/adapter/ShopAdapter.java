@@ -34,7 +34,7 @@ public class ShopAdapter extends BaseRecyAdapter {
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_ShopList.GoodsInfo goodsInfo = (Bean_ShopList.GoodsInfo) dataList.get(position);
         mHolder.setText(R.id.txt_name, goodsInfo.ArmTypeTxt);
-        mHolder.setStrokeText(R.id.txt_price, (int)goodsInfo.Price + " 金币");
+        mHolder.setStrokeText(R.id.txt_price, (int) goodsInfo.Price + " 金币");
         int id = 0;
         switch (goodsInfo.ArmType) {
             case 0:
@@ -47,7 +47,7 @@ public class ShopAdapter extends BaseRecyAdapter {
                 id = R.mipmap.icon_scan;
                 break;
             case 4:
-                id = R.mipmap.icon_defense;
+                id = R.mipmap.defense_boom;
                 break;
         }
         mHolder.setImage(R.id.img_photo, id);

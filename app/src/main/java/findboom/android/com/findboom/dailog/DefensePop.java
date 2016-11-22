@@ -61,7 +61,8 @@ public class DefensePop extends BasePopupwind {
     public void setData(List<Bean_UserArm.UserArm> dataList) {
         defenseList.clear();
         defenseList.addAll(dataList);
-        defenseAdapter.notifyItemChanged(0,defenseList.size()-1);
+        defenseList.add(new Bean_UserArm.UserArm());
+        defenseAdapter.notifyItemChanged(0, defenseList.size() - 1);
     }
 
     @Override

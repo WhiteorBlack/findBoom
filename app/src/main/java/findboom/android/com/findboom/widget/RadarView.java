@@ -31,6 +31,7 @@ public class RadarView extends View {
 	private boolean isSearching = false;// 标识是否处于扫描状态,默认为不在扫描状态
 	private Paint mPaint;// 画笔
 	private Bitmap mScanBmp;// 执行扫描运动的图片
+	private Bitmap scanBg;
 	private int mOffsetArgs = 0;// 扫描运动偏移量参数
 	private Bitmap mDefaultPointBmp;// 标识设备的圆点-默认
 	private Bitmap mLightPointBmp;// 标识设备的圆点-高亮
@@ -73,6 +74,7 @@ public class RadarView extends View {
 						R.drawable.radar_default_point_ico));
 		this.mLightPointBmp = Bitmap.createBitmap(BitmapFactory.decodeResource(
 				mContext.getResources(), R.drawable.radar_light_point_ico));
+		this.scanBg=Bitmap.createBitmap(BitmapFactory.decodeResource(mContext.getResources(),R.drawable.scan_bg));
 	}
 
 	/**
@@ -166,10 +168,11 @@ public class RadarView extends View {
 		endX = (int) (mCx + mInsideRadius * 4 * Math.cos(radian));
 		endY = (int) (mCy + mInsideRadius * 4 * Math.sin(radian));
 		canvas.drawLine(startX, startY, endX, endY, mPaint);
+		canvas.drawBitmap(scanBg, mCx - scanBg.getWidth() / 2, mCy
+				- scanBg.getHeight() / 2, null);
 
 		// 3.绘制扫描扇形图
 		canvas.save();// 用来保存Canvas的状态.save之后，可以调用Canvas的平移、放缩、旋转、错切、裁剪等操作.
-
 		if (isSearching) {// 判断是否处于扫描
 			canvas.rotate(mOffsetArgs, mCx, mCy);// 绘制旋转角度,参数一：角度;参数二：x中心;参数三：y中心.
 			canvas.drawBitmap(mScanBmp, mCx - mScanBmp.getWidth() / 2, mCy

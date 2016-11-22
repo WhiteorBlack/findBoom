@@ -14,6 +14,7 @@ import com.zys.brokenview.BrokenTouchListener;
 import com.zys.brokenview.BrokenView;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.utils.Tools;
 
 /**
@@ -55,6 +56,7 @@ public class BoomPop extends BasePopupwind {
     }
 
     private boolean isShow = false;
+    private boolean isBoom = false;
 
     @Override
     public void showPop(View parent) {
@@ -65,6 +67,11 @@ public class BoomPop extends BasePopupwind {
             public void onTick(long millisUntilFinished) {
                 if (!isShow)
                     broken();
+                if (millisUntilFinished < 1000 && !isBoom) {
+                    FindBoomApplication.getInstance().playBreakSound();
+                    isBoom = true;
+                }
+
             }
 
             @Override
