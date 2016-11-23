@@ -67,7 +67,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
 
     public void setChoice(int type) {
         switch (type) {
-            case 3:
+            case 1:
                 rang = textBoom.BombRange;
                 txtIntro.setVisibility(View.GONE);
                 txtInfo.setText(textBoom.ArmDesc);
@@ -83,7 +83,7 @@ public class PutCommenBoom extends Activity implements PopInterfacer, View.OnCli
                     Glide.with(context).load(R.mipmap.boom_detial).into(imgBoom);
                 }
                 break;
-            case 1:
+            case 2:
                 rang = picBoom.BombRange;
                 edtText.setVisibility(View.GONE);
                 txtIntro.setVisibility(View.VISIBLE);

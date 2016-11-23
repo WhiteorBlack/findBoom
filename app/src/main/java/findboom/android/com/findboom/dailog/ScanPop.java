@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ScanPop extends BasePopupwind {
     private RecyclerView recyDefense;
     private List<Bean_UserArm.UserArm> defenseList;
     private ScanAdapter defenseAdapter;
+    private LinearLayout llParent;
 
     public ScanPop(Context context) {
         super(context);
@@ -58,12 +61,17 @@ public class ScanPop extends BasePopupwind {
                 dismiss();
             }
         });
+        llParent=(LinearLayout)view.findViewById(R.id.ll_parent);
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) llParent.getLayoutParams();
+        params.height= (int) (Tools.getScreenHeight(context)*0.6);
+        llParent.setLayoutParams(params);
         this.setContentView(view);
     }
 
     public void setData(List<Bean_UserArm.UserArm> dataList) {
         defenseList.clear();
         defenseList.addAll(dataList);
+        defenseList.add(new Bean_UserArm.UserArm());
         defenseAdapter.notifyItemChanged(0, defenseList.size() - 1);
     }
 

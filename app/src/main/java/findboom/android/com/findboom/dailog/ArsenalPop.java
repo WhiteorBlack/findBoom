@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class ArsenalPop extends BasePopupwind {
     private RecyclerView recyDefense;
     private List<Bean_UserArm.UserArm> defenseList;
     private ArsenalAdapter defenseAdapter;
+    private LinearLayout llParent;
 
     public ArsenalPop(Context context) {
         super(context);
@@ -52,6 +55,11 @@ public class ArsenalPop extends BasePopupwind {
         recyDefense = (RecyclerView) view.findViewById(R.id.recy_defense);
         recyDefense.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         recyDefense.setItemAnimator(new DefaultItemAnimator());
+
+        llParent=(LinearLayout)view.findViewById(R.id.ll_parent);
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) llParent.getLayoutParams();
+        params.height= (int) (Tools.getScreenHeight(context)*0.6);
+        llParent.setLayoutParams(params);
         this.setContentView(view);
         defenseList = new ArrayList();
         defenseAdapter = new ArsenalAdapter(defenseList);

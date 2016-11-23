@@ -23,10 +23,12 @@ import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -820,6 +822,18 @@ public class Tools {
         return (int) (pxValue / scale + 0.5f);
     }
 
+    public static void toastMsgCenter(Context context, String msg) {
+        Toast toast = new Toast(context);
+        TextView textView = new TextView(context);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(16);
+        textView.setText(msg);
+        textView.setTextColor(Color.WHITE);
+        textView.setBackgroundResource(R.drawable.bg_msg_pop);
+        toast.setView(textView);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
     public static void toastMsg(Activity context, String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();

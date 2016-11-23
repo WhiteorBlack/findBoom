@@ -111,7 +111,24 @@ public class PutBoomTypePop extends BasePopupwind {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                type = position;
+//              switch (position){
+//                  case 0:
+//                      type=4;
+//                      break;
+//                  case 1:
+//                        type=2;
+//                      break;
+//                  case 2:
+//                        type=0;
+//                      break;
+//                  case 3:
+//                        type=1;
+//                      break;
+//                  case 4:
+//                        type=3;
+//                      break;
+//              }
+                type=position;
             }
         });
         LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) viewPager.getLayoutParams();

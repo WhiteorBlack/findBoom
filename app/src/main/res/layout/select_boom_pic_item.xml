@@ -24,7 +24,7 @@
                 style="@style/settingContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="60dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"

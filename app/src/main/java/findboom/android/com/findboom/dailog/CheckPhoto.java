@@ -35,12 +35,15 @@ public class CheckPhoto extends BasePopupwind {
             }
         });
         this.setContentView(view);
+        this.getBackground().setAlpha(255);
     }
 
     public void setPhoto(String picPath) {
         Glide.with(context).load(picPath).into(imgPhoto);
     }
-
+    public void setDeleteInvis(){
+        view.findViewById(R.id.img_delete).setVisibility(View.INVISIBLE);
+    }
     @Override
     public void onClick(View v) {
         super.onClick(v);

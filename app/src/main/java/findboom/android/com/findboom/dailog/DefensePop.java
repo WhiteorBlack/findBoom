@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.adapter.BaseRecyAdapter;
 import findboom.android.com.findboom.adapter.DefenseAdapter;
 import findboom.android.com.findboom.bean.Bean_UserArm;
+import findboom.android.com.findboom.utils.Tools;
 
 /**
  * author:${白曌勇} on 2016/9/10
@@ -27,6 +30,7 @@ public class DefensePop extends BasePopupwind {
     private RecyclerView recyDefense;
     private List<Bean_UserArm.UserArm> defenseList;
     private DefenseAdapter defenseAdapter;
+    private LinearLayout llParent;
 
     public DefensePop(Context context) {
         super(context);
@@ -55,6 +59,10 @@ public class DefensePop extends BasePopupwind {
             }
         });
         recyDefense.setAdapter(defenseAdapter);
+        llParent=(LinearLayout)view.findViewById(R.id.ll_parent);
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) llParent.getLayoutParams();
+        params.height= (int) (Tools.getScreenHeight(context)*0.6);
+        llParent.setLayoutParams(params);
         this.setContentView(view);
     }
 

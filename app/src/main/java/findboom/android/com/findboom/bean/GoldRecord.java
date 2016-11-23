@@ -15,5 +15,7 @@ public class GoldRecord {
     public String PicTitle;
     public String ReceiveTime;
     public String ReceiveNick;
+    public String ReceiveUserNickName;
+    public String ReceiveUserAvatar;
     public String Avatar;
 }

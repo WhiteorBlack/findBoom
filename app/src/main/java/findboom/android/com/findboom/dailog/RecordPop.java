@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tencent.mm.sdk.modelmsg.SendMessageToWX;
@@ -32,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.activity.MyGoldRecordDetial;
 import findboom.android.com.findboom.activity.MyRecordDetial;
 import findboom.android.com.findboom.activity.MyRedRecordDetial;
 import findboom.android.com.findboom.adapter.BaseRecyAdapter;
@@ -47,7 +46,6 @@ import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
-import findboom.android.com.findboom.widget.CircleImageView;
 import findboom.android.com.findboom.widget.xrecycleview.XRecyclerView;
 import findboom.android.com.findboom.wxpay.Constants;
 
@@ -170,22 +168,22 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
     }
 
     private String getPreDate() {
-        String monthString,dayString;
+        String monthString, dayString;
         int month;
         int day;
 
-        Calendar calendar=Calendar.getInstance();
-        month=calendar.get(Calendar.MONTH)+1;
-        if (month<10)
-            monthString="0"+month;
+        Calendar calendar = Calendar.getInstance();
+        month = calendar.get(Calendar.MONTH) + 1;
+        if (month < 10)
+            monthString = "0" + month;
         else
-        monthString=month+"";
-        day=calendar.get(Calendar.DAY_OF_MONTH);
-        day-=1;
-        if (day<10)
-            dayString="0"+day;
-        else dayString=day+"";
-        return calendar.get(Calendar.YEAR)+"-"+monthString+"-"+dayString;
+            monthString = month + "";
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        day -= 1;
+        if (day < 10)
+            dayString = "0" + day;
+        else dayString = day + "";
+        return calendar.get(Calendar.YEAR) + "-" + monthString + "-" + dayString;
     }
 
     private void initData() {
@@ -209,6 +207,8 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 Bean_MyBoomRecord.BoomInfo boomInfo = myBoomList.get(position);
                 if (boomInfo.MineType == 3)
                     context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
+                else if (boomInfo.MineType == 4)
+                    context.startActivity(new Intent(context, MyGoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
                 else
                     context.startActivity(new Intent(context, MyRecordDetial.class).
                             putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
@@ -241,6 +241,8 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 Bean_MyBoomRecord.BoomInfo boomInfo = getBoomList.get(position - 1);
                 if (boomInfo.MineType == 3)
                     context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
+                else if (boomInfo.MineType == 4)
+                    context.startActivity(new Intent(context, MyGoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
                 else
                     context.startActivity(new Intent(context, MyRecordDetial.class).
                             putExtra("id", boomInfo.MineRecordId).putExtra("isMine", false));

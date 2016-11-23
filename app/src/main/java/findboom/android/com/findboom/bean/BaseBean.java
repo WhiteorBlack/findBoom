@@ -10,4 +10,5 @@ public class BaseBean {
     public String Msg;
     public boolean Success;
     public String ExceptionMsg;
+//    public int Data;
 }

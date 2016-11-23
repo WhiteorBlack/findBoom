@@ -106,6 +106,7 @@ import findboom.android.com.findboom.bean.Bean_BoomBoom;
 import findboom.android.com.findboom.bean.Bean_GoldBoom;
 import findboom.android.com.findboom.bean.Bean_MapBoom;
 import findboom.android.com.findboom.bean.Bean_RedBoom;
+import findboom.android.com.findboom.bean.Bean_UseScan;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.bean.Bean_WXpay;
@@ -287,8 +288,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             }
         });
         registerMessageReceiver();
-        new AliPayHelper(this, payHandler).debugSign("123456");
-
         inviteMessgeDao = new InviteMessgeDao(this);
         userDao = new UserDao(this);
         //注册联系人变动监听
@@ -586,6 +585,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                                 bundle.putString("id", boom.MineRecordId);
                                 bundle.putInt("type", boom.MineType);
                                 bundle.putInt("boomRange", boom.BombRange);
+                                bundle.putString("userId", boom.UserId);
                                 addRedMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
                             }
                         }
@@ -1335,9 +1335,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         break;
                     case 1:
                         //图片雷
-                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", typeBoom), 0);
                         mineType = "2";
                         isPutBoom = false;
+                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", 2), 0);
                         break;
                     case 2:
                         //普通雷
@@ -1348,7 +1348,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     case 3:
                         //文字雷
                         mineType = "1";
-                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", typeBoom), 0);
+                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", 1), 0);
                         isPutBoom = false;
                         break;
                     case 4:
@@ -1924,6 +1924,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             String balance = "";
             recharMoney = "";
             float moneyF = 0.00f;
+
             Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
             if (!isBuyGold) {
                 if (user != null)
@@ -1959,8 +1960,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (!AppPrefrence.getIsBack(this))
             startService(backIntent);
         addMsgListener();
+        try {
+            refreshUI(EMClient.getInstance().chatManager().getUnreadMsgsCount());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Tools.debug(e.toString());
+        }
 
-        refreshUI(EMClient.getInstance().chatManager().getUnreadMsgsCount());
     }
 
     private void addMsgListener() {
@@ -2291,6 +2297,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                                 bundle.putString("id", boom.MineRecordId);
                                 bundle.putInt("type", boom.MineType);
                                 bundle.putInt("boomRange", boom.BombRange);
+                                bundle.putString("userId", boom.UserId);
                                 if (boom.MineType == 4) {
                                     goldBooms.add(boom);
                                     if (chbMoney.isChecked())
@@ -2370,7 +2377,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             putBoomTypePop.setPopInterfacer(this, 28);
         }
         if (isScan) {
-            scanBoom(latLng);
+//            scanBoom(latLng);
+            useScan(latLng);
         }
     }
 
@@ -2399,15 +2407,15 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     }
 
-    private void scanBoom(LatLng location) {
+    private void scanBoom(final LatLng location) {
         if (scanBoomPop == null)
             scanBoomPop = new ScanBoomPop(context);
         scanBoomPop.showPop(txtArsenal);
         scanBoomPop.setPopInterfacer(this, 33);
         final int scanRange = 50;
         Map<String, String> params = new HashMap<>();
-        params.put("IsContainRedPack", chbMoney.isChecked() ? "1" : "0");
-        params.put("IsContainGold", chbBoom.isChecked() ? "1" : "0");
+        params.put("IsContainRedPack", "0");
+        params.put("IsContainGold", "0");
         params.put("Longitude", location.longitude + "");
         params.put("Latitude", location.latitude + "");
         params.put("Range", scanRange + "");
@@ -2422,31 +2430,28 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                             scanBoomPop.dismiss();
                         if (TextUtils.isEmpty(response))
                             return;
-
                         isScan = false;
                         Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
                         if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
                             for (int i = 0; i < bean_MapBoom.Data.size(); i++) {
                                 Bean_MapBoom.MapBoom mapBoom = bean_MapBoom.Data.get(i);
-                                if (!TextUtils.equals(mapBoom.UserId, AppPrefrence.getUserName(context)) && mapBoom.MineType != 3 && mapBoom.MineType != 4) {
-                                    countData();
-                                    addMarker(new LatLng(mapBoom.Latitude, mapBoom.Longitude), 2);
-                                    useScan(mapBoom.MineRecordId, "1");
-                                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "WOW!成功排除一颗雷", "您将获得一颗永久雷").showPop();
+                                if (!TextUtils.equals(mapBoom.UserId, AppPrefrence.getUserName(context))) {
+//                                    useScan(mapBoom.MineRecordId, "1", location);
+                                    toastScan(true);
                                     for (int j = 0; j < boomList.size(); j++) {
                                         if (boomList.get(j).ArmType == 0) {
                                             boomList.get(j).Count += 1;
-                                            countData();
                                             break;
                                         }
                                     }
+                                    countData();
                                     break;
                                 }
                             }
 
                         } else {
-                            useScan("0", "0");
-                            new PostResultPop(context, txtArsenal, R.drawable.icon_right, "很遗憾", "什么都没有,继续努力吧!").showPop();
+                            toastScan(false);
+//                            useScan("0", "0", location);
                         }
                     }
                 }, 800);
@@ -2465,32 +2470,70 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         });
     }
 
-    private void useScan(String id, String type) {
+    private void toastScan(boolean hasBoom) {
+        Toast toast = new Toast(this);
+        ImageView imageView = new ImageView(this);
+//        imageView.setBackgroundResource(R.mipmap.scan_success);
+        if (hasBoom)
+            imageView.setBackgroundResource(R.mipmap.scan_success);
+        else imageView.setBackgroundResource(R.mipmap.scan_fail);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setView(imageView);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void useScan(LatLng location) {
+        if (scanBoomPop == null)
+            scanBoomPop = new ScanBoomPop(context);
+        scanBoomPop.showPop(txtArsenal);
+        scanBoomPop.setPopInterfacer(this, 33);
         Map<String, String> params = new HashMap<>();
-        params.put("MineRecordId", id);
-        params.put("IsCleanMine", type);
+        params.put("Longitude", location.longitude + "");
+        params.put("Latitude", location.latitude + "");
         PostTools.postData(context, CommonUntilities.MINE_URL + "UseMineCleaner", params, new PostCallBack() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(final String response) {
                 super.onResponse(response);
-                Tools.debug("scan" + response);
-                if (TextUtils.isEmpty(response))
-                    return;
-                BaseBean baseBean = new Gson().fromJson(response, BaseBean.class);
-                if (baseBean != null && baseBean.Success) {
-                    scanCount -= 1;
-                    if (scanList.get(0).ArmType == 3) {
-                        if (scanList.get(0).Count > 0) {
-                            scanList.get(0).Count -= 1;
-                        } else scanList.get(1).Count -= 1;
-                    } else {
-                        if (scanList.get(1).Count > 0) {
-                            scanList.get(1).Count -= 1;
-                        } else scanList.get(0).Count -= 1;
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (scanBoomPop != null)
+                            scanBoomPop.dismiss();
+                        if (TextUtils.isEmpty(response))
+                            return;
+                        isScan = false;
+                        Bean_UseScan baseBean = new Gson().fromJson(response, Bean_UseScan.class);
+                        if (baseBean != null && baseBean.Success) {
+                            if (baseBean.Data > 0) {
+                                toastScan(true);
+                                for (int j = 0; j < boomList.size(); j++) {
+                                    if (boomList.get(j).ArmType == 0) {
+                                        boomList.get(j).Count += 1;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                toastScan(false);
+                            }
+                            if (scanList.get(0).ArmType == 3) {
+                                if (scanList.get(0).Count > 0) {
+                                    scanList.get(0).Count -= 1;
+                                } else scanList.get(1).Count -= 1;
+                            } else {
+                                if (scanList.get(1).Count > 0) {
+                                    scanList.get(1).Count -= 1;
+                                } else scanList.get(0).Count -= 1;
+                            }
+                            countData();
+                        } else {
+                            Tools.toastMsgCenter(context, baseBean.Msg);
+                        }
+
                     }
-                }
-                countData();
+                }, 800);
             }
+
         });
     }
 
@@ -2641,6 +2684,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     public boolean onMarkerClick(Marker marker) {
         Bundle bundle = marker.getExtraInfo();
         if (bundle != null && bundle.getInt("type") == 4) {
+            if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
+                Tools.toastMsgCenter(context, "不能领取自己的寻宝雷");
+                return false;
+            }
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > goldGetRange) {
                 //大于可领取距离,提示不能领取
                 txtMsg.setText("再靠近一点点,就让你领取~");
@@ -2655,6 +2702,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             }
         }
         if (bundle != null && bundle.getInt("type") == 3) {
+            if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
+                Tools.toastMsgCenter(context, "不能领取自己的红包雷");
+                return false;
+            }
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
                 //大于可领取距离,提示不能领取
                 txtMsg.setText("再靠近一点点,就让你领取~");
@@ -3053,6 +3104,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             // 参考同意，被邀请实现此功能,demo未实现
 //            Log.d(username, username + "拒绝了你的好友请求");
         }
+
     }
 
 
