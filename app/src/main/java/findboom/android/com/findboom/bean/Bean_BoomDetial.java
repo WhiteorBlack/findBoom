@@ -41,8 +41,8 @@ public class Bean_BoomDetial extends BaseBean {
         public String UserNickName;
         public String BombUserNickName;
         public String RedPackText;
-        public String Count;
-        public String LeftCount;
+        public int Count;
+        public int LeftCount;
         public String TotalAmount;
         public List<RedRecord> RedPackReciveRecords;
         public List<GoldRecord> GoldReciveRecords;

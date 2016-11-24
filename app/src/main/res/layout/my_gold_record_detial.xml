@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/bg_boom_detial"
     android:orientation="vertical">
 
@@ -50,13 +51,15 @@
                 android:layout_weight="1"
                 android:gravity="right" />
 
-            <ImageView
+            <findboom.android.com.findboom.widget.CircleImageView
                 android:id="@+id/img_pic"
                 android:layout_width="@dimen/image_thumbnail_size"
                 android:layout_height="@dimen/image_thumbnail_size"
+                app:border_color="@color/content_yellow"
+                app:border_width="2dp"
                 android:layout_gravity="center"
                 android:onClick="boomClick"
-                android:scaleType="centerInside" />
+                />
 
             <TextView
                 android:id="@+id/txt_boom_state"

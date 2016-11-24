@@ -744,6 +744,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         switch (v.getId()) {
             case R.id.rel_defense:
                 //防爆衣
+//                new OpenRedPop(context).showPop(txtArsenal);
                 if (defensePop == null)
                     defensePop = new DefensePop(context);
                 defensePop.showPop(imgArsenal);
@@ -757,6 +758,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 arsenalPop.showPop(imgArsenal);
                 arsenalPop.setData(boomList);
                 arsenalPop.setPopInterfacer(this, 5);
+                isScan=false;
                 break;
             case R.id.rel_friend_center:
                 //好友中心
@@ -787,6 +789,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 scanPop.showPop(imgArsenal);
                 scanPop.setData(scanList);
                 scanPop.setPopInterfacer(this, 4);
+                isPutBoom=false;
                 break;
             case R.id.rel_settings:
                 //设置中心
@@ -919,6 +922,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 28:
                 putBoomTypePop = null;
+                isPutBoom = false;
                 break;
             case 29:
                 chatPop = null;
@@ -935,6 +939,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 33:
                 scanBoomPop = null;
+                isScan = false;
                 break;
             case 34:
                 openRedPop = null;
@@ -2145,8 +2150,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .direction(0).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
         // 设置定位数据
-//        if (!isScan && !isPutBoom && (endLat == null || walkLat == null || (startLat != null && DistanceUtil.getDistance(startLat, endLat) > 5)))
-        if (!isDrag)
+        if (!isDrag && !isScan && !isPutBoom)
             mBaiduMap.setMyLocationData(locData);
         if (startLat == null) {
             startLat = new LatLng(location.getLatitude(), location.getLongitude());
@@ -2392,6 +2396,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         longItude = latLng.longitude + "";
         latItude = latLng.latitude + "";
         initGeoCoder(latLng);
+        isPutBoom=true;
         if (boomCount > 0) {
             if (putBoomTypePop == null)
                 putBoomTypePop = new PutBoomTypePop(context);
@@ -2786,7 +2791,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     @Override
     public void onMapStatusChangeStart(MapStatus mapStatus) {
-        isDrag = true;
+
     }
 
     @Override
@@ -2794,15 +2799,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (mapStatus.bound.contains(walkLat)) {
             invisLocation();
         } else visLocation();
-//        if (DistanceUtil.getDistance(walkLat, mapStatus.target) > radius * (22 - mapStatus.zoom)/3) {
-//            imgLocation.setVisibility(View.VISIBLE);
-//        } else imgLocation.setVisibility(View.GONE);
     }
 
     private void visLocation() {
+        isDrag = true;
         imgLocation.setVisibility(View.VISIBLE);
-//        Animation anim= AnimationUtils.loadAnimation(context,R.anim.locationshake);
-//        imgLocation.startAnimation(anim);
         ViewTreeObserver vto = imgLocation.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -2815,6 +2816,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     private void invisLocation() {
+        isDrag = false;
+        isPutBoom = false;
+        isScan = false;
         imgLocation.setVisibility(View.GONE);
         imgLocation.clearAnimation();
     }

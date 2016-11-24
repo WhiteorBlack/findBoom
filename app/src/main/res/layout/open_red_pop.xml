@@ -27,8 +27,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
                 android:orientation="vertical">
 
 
@@ -40,7 +40,7 @@
                     android:layout_marginTop="5dp"
                     android:text="RMB"
                     android:textColor="@color/price_red"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/txt_money"
@@ -50,7 +50,7 @@
                     android:layout_centerHorizontal="true"
                     android:text="18.3"
                     android:textColor="@color/price_red"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -62,7 +62,7 @@
                     android:layout_gravity="bottom"
                     android:text="红包已放入你的账户中"
                     android:textColor="@color/price_red"
-                    android:textSize="8sp" />
+                    android:textSize="10sp" />
             </RelativeLayout>
         </LinearLayout>
 

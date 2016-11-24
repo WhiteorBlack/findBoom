@@ -20,8 +20,8 @@
     <dimen name="home_icon_parent_wide">56dp</dimen>
     <dimen name="home_icon_height">62dp</dimen>
     <dimen name="home_text_size">20dp</dimen>
-    <dimen name="red_width">250dp</dimen>
-    <dimen name="red_height">200dp</dimen>
+    <dimen name="red_width">300dp</dimen>
+    <dimen name="red_height">240dp</dimen>
 
     <!-- 时间选择器 -->
     <!-- 顶部按钮栏高度 -->

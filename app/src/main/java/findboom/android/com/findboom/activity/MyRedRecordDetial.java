@@ -137,7 +137,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         txtBoomType.append("元");
         txtRemark.setText(bean_BoomDetial.Data.RedPackText);
         txtUserName.setText(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家" : bean_BoomDetial.Data.UserNickName + " 的红包雷");
-        txtCount.setText("剩余个数:" + bean_BoomDetial.Data.LeftCount + "/" + bean_BoomDetial.Data.Count);
+        txtCount.setText("已领取:" + (bean_BoomDetial.Data.Count-bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
 
         if (bean_BoomDetial.Data.RedPackReciveRecords != null) {
             redRecords.addAll(bean_BoomDetial.Data.RedPackReciveRecords);

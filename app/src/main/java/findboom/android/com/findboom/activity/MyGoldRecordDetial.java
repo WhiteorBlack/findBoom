@@ -33,6 +33,7 @@ import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
+import findboom.android.com.findboom.widget.CircleImageView;
 
 /**
  * Created by Administrator on 2016/9/29.
@@ -44,7 +45,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
     private TextView txtRemark;
     private TextView txtUserName;
     private TextView txtCount;
-    private ImageView imgPic;
+    private CircleImageView imgPic;
     private String boomId;
     private int type = 0;
     private boolean isMine = false; //标示是不是我埋的雷
@@ -68,7 +69,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
         type = getIntent().getIntExtra("type", 0);
         isMine = getIntent().getBooleanExtra("isMine", false);
         imgType = (TextView) findViewById(R.id.txt_type);
-        imgPic = (ImageView) findViewById(R.id.img_pic);
+        imgPic = (CircleImageView) findViewById(R.id.img_pic);
 
         txtRemark = (TextView) findViewById(R.id.txt_red_text);
         txtUserName = (TextView) findViewById(R.id.txt_user_name);
@@ -157,7 +158,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
 //        txtBoomType.append("元");
         txtRemark.setText(bean_BoomDetial.Data.PicTitle);
         txtUserName.setText(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家" : bean_BoomDetial.Data.UserNickName + " 的寻宝雷");
-        txtCount.setText("剩余个数:" + bean_BoomDetial.Data.LeftCount + "/" + bean_BoomDetial.Data.Count);
+        txtCount.setText("已领取:" + (bean_BoomDetial.Data.Count-bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
 
         if (bean_BoomDetial.Data.GoldReciveRecords != null) {
             redRecords.addAll(bean_BoomDetial.Data.GoldReciveRecords);
