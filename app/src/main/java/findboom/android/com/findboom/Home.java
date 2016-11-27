@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
@@ -122,6 +123,7 @@ import findboom.android.com.findboom.dailog.AdvicePop;
 import findboom.android.com.findboom.dailog.ArsenalPop;
 import findboom.android.com.findboom.dailog.BandPhonePop;
 import findboom.android.com.findboom.dailog.BoomDefensePop;
+import findboom.android.com.findboom.dailog.BoomPic;
 import findboom.android.com.findboom.dailog.BoomPop;
 import findboom.android.com.findboom.dailog.ChangePayPwdPop;
 import findboom.android.com.findboom.dailog.ChatPop;
@@ -207,6 +209,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BoomDefensePop boomDefensePop;
     private ScanBoomPop scanBoomPop;
     private OpenRedPop openRedPop;
+    private BoomPic boomPic;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -247,6 +250,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private int goldGetRange = 100; //红包雷可以领取距离
     private int goldVisRange = 1000; //红包雷可以显示距离
+    private float mapZoom = 17f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -531,7 +535,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setMyLocationEnabled(true);
-        MapStatusUpdate status = MapStatusUpdateFactory.zoomTo(20f);
+        MapStatusUpdate status = MapStatusUpdateFactory.zoomTo(mapZoom);
         mBaiduMap.setMapStatus(status);
         // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
 
@@ -745,7 +749,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         switch (v.getId()) {
             case R.id.rel_defense:
                 //防爆衣
-//                new OpenRedPop(context).showPop(txtArsenal);
+//                new BoomPic(context).showPop(txtArsenal);
                 if (defensePop == null)
                     defensePop = new DefensePop(context);
                 defensePop.showPop(imgArsenal);
@@ -759,7 +763,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 arsenalPop.showPop(imgArsenal);
                 arsenalPop.setData(boomList);
                 arsenalPop.setPopInterfacer(this, 5);
-                isScan=false;
+                isScan = false;
                 break;
             case R.id.rel_friend_center:
                 //好友中心
@@ -790,7 +794,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 scanPop.showPop(imgArsenal);
                 scanPop.setData(scanList);
                 scanPop.setPopInterfacer(this, 4);
-                isPutBoom=false;
+                isPutBoom = false;
                 break;
             case R.id.rel_settings:
                 //设置中心
@@ -820,7 +824,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         // 此处设置开发者获取到的方向信息，顺时针0-360
                         .direction(0).latitude(walkLat.latitude)
                         .longitude(walkLat.longitude).build();
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(walkLat, 20f);
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(walkLat, mapZoom);
                 mBaiduMap.animateMapStatus(update);
                 imgLocation.setVisibility(View.GONE);
                 isDrag = false;
@@ -944,6 +948,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 34:
                 openRedPop = null;
+                break;
+            case 35:
+                boomPic = null;
                 break;
         }
     }
@@ -2172,25 +2179,63 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
     }
 
+    private Handler mHandler;
+    HandlerThread thread;
+    private boolean isRuning = false;
+
     /**
      * 处理地图地雷数据,判断是否引爆
      *
      * @param endLat
      */
-    synchronized private void dealBoomData(LatLng endLat) {
-        for (int i = 0; i < mapBoomList.size(); i++) {
-            Bean_MapBoom.MapBoom mapBoom = mapBoomList.get(i);
+    private void dealBoomData(LatLng endLat) {
+        Tools.debug("dealBoom run---------");
+        if (thread == null) {
 
-            if (!TextUtils.equals(AppPrefrence.getUserName(context), mapBoom.UserId) && DistanceUtil.getDistance(endLat, new LatLng(mapBoom.Latitude, mapBoom.Longitude)) < mapBoom.BombRange) {
-                try {
-                    Thread.currentThread().sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                boomBoom(mapBoom);
-            }
         }
+        thread = new HandlerThread("MyHandlerThread");
+        thread.start();//创建一个HandlerThread并启动它
+        if (mHandler == null) {
+            mHandler = new Handler(thread.getLooper());//使用HandlerThread的looper对象创建Handler，如果使用默认的构造方法，很有可能阻塞UI线程
+        }
+        mHandler.post(mBackgroundRunnable);//将线程post到Handler中
+//        for (int i = 0; i < mapBoomList.size(); i++) {
+//            Bean_MapBoom.MapBoom mapBoom = mapBoomList.get(i);
+//
+//            if (!TextUtils.equals(AppPrefrence.getUserName(context), mapBoom.UserId) && DistanceUtil.getDistance(endLat, new LatLng(mapBoom.Latitude, mapBoom.Longitude)) < mapBoom.BombRange) {
+//                try {
+//                    Thread.currentThread().sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                boomBoom(mapBoom);
+//            }
+//        }
     }
+
+
+    Runnable mBackgroundRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+
+            if (isRuning) return;
+            isRuning = true;
+            for (int i = 0; i < mapBoomList.size(); i++) {
+                Bean_MapBoom.MapBoom mapBoom = mapBoomList.get(i);
+                if (!TextUtils.equals(AppPrefrence.getUserName(context), mapBoom.UserId) && DistanceUtil.getDistance(walkLat, new LatLng(mapBoom.Latitude, mapBoom.Longitude)) < mapBoom.BombRange) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    boomBoom(mapBoom);
+                }
+            }
+            Tools.debug("thread run---------");
+            isRuning = false;
+        }
+    };
 
     synchronized private void boomBoom(final Bean_MapBoom.MapBoom mapBoom) {
 
@@ -2232,18 +2277,41 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                             } else defenseList.get(0).Count -= 1;
                         }
                         countData();
-                    } else noDefense();
+                    } else noDefense(bean_boomBoom.Data, mapBoom.MineType);
                 }
             }
         });
 
     }
 
-    private void noDefense() {
-        if (boomPop == null)
-            boomPop = new BoomPop(context);
-        boomPop.showPop(txtArsenal);
-        boomPop.setPopInterfacer(Home.this, 18);
+    private void noDefense(Bean_BoomBoom.BoomData boomData, int type) {
+        if (type == 2) {
+            if (boomPic != null && boomPic.isShowing())
+                return;
+            if (boomPic == null)
+                boomPic = new BoomPic(context);
+            boomPic.setText(boomData.PicTitle);
+            boomPic.setPic(boomData.PicUrl);
+            boomPic.showPop(txtArsenal);
+            boomPic.setPopInterfacer(this, 35);
+        } else if (type == 1) {
+            if (boomPic != null && boomPic.isShowing())
+                return;
+            if (boomPic == null)
+                boomPic = new BoomPic(context);
+            boomPic.setText(boomData.Text);
+            boomPic.setPic(boomData.PicUrl);
+            boomPic.showPop(txtArsenal);
+            boomPic.setPopInterfacer(this, 35);
+        } else {
+            if (boomPop != null && boomPop.isShowing())
+                return;
+            if (boomPop == null)
+                boomPop = new BoomPop(context);
+            boomPop.showPop(txtArsenal);
+            boomPop.setPopInterfacer(Home.this, 18);
+        }
+
     }
 
     private void defenseBoom() {
@@ -2290,7 +2358,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_MapBoom bean_MapBoom = new Gson().fromJson(response, Bean_MapBoom.class);
                 if (bean_MapBoom.Success && bean_MapBoom.Data != null && bean_MapBoom.Data.size() > 0) {
                     mapBoomList.addAll(bean_MapBoom.Data);
-                    dealBoomData(walkLat);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -2315,6 +2382,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                                 }
                             }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dealBoomData(walkLat);
+                                }
+                            });
+
                         }
                     }).start();
                 }
@@ -2397,7 +2471,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         longItude = latLng.longitude + "";
         latItude = latLng.latitude + "";
         initGeoCoder(latLng);
-        isPutBoom=true;
+        isPutBoom = true;
         if (boomCount > 0) {
             if (putBoomTypePop == null)
                 putBoomTypePop = new PutBoomTypePop(context);

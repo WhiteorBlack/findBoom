@@ -10,6 +10,9 @@ public class Bean_BoomBoom extends BaseBean {
     public BoomData Data;
 
     public static class BoomData {
-
+        public boolean isHaveBombSuit;
+        public String Text;
+        public String PicTitle;
+        public String PicUrl;
     }
 }
