@@ -95,6 +95,7 @@ import findboom.android.com.findboom.activity.FriendMessage;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.activity.PutCommenBoom;
 import findboom.android.com.findboom.activity.PutGoldBoom;
+import findboom.android.com.findboom.activity.PutPicBoom;
 import findboom.android.com.findboom.activity.PutRedBoom;
 import findboom.android.com.findboom.activity.SystemMessage;
 import findboom.android.com.findboom.alipay.AliPayHelper;
@@ -1342,7 +1343,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         //图片雷
                         mineType = "2";
                         isPutBoom = false;
-                        startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", 2), 0);
+                        startActivityForResult(new Intent(context, PutPicBoom.class).putExtra("config", configString).putExtra("type", 2), 0);
                         break;
                     case 2:
                         //普通雷
