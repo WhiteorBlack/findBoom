@@ -30,9 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.activity.GoldRecordDetial;
 import findboom.android.com.findboom.activity.MyGoldRecordDetial;
 import findboom.android.com.findboom.activity.MyRecordDetial;
 import findboom.android.com.findboom.activity.MyRedRecordDetial;
+import findboom.android.com.findboom.activity.PicRecordDetial;
 import findboom.android.com.findboom.adapter.BaseRecyAdapter;
 import findboom.android.com.findboom.adapter.MyBoomRecordAdapter;
 import findboom.android.com.findboom.adapter.MyGetBoomAdapter;
@@ -208,7 +210,9 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 if (boomInfo.MineType == 3)
                     context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
                 else if (boomInfo.MineType == 4)
-                    context.startActivity(new Intent(context, MyGoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
+                    context.startActivity(new Intent(context, GoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
+                else if (boomInfo.MineType == 2)
+                    context.startActivity(new Intent(context, PicRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
                 else
                     context.startActivity(new Intent(context, MyRecordDetial.class).
                             putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
@@ -242,7 +246,9 @@ public class RecordPop extends BasePopupwind implements ViewPager.OnPageChangeLi
                 if (boomInfo.MineType == 3)
                     context.startActivity(new Intent(context, MyRedRecordDetial.class).putExtra("id", boomInfo.MineRecordId));
                 else if (boomInfo.MineType == 4)
-                    context.startActivity(new Intent(context, MyGoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", true));
+                    context.startActivity(new Intent(context, GoldRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", false));
+                else if (boomInfo.MineType == 2)
+                    context.startActivity(new Intent(context, PicRecordDetial.class).putExtra("id", boomInfo.MineRecordId).putExtra("isMine", false));
                 else
                     context.startActivity(new Intent(context, MyRecordDetial.class).
                             putExtra("id", boomInfo.MineRecordId).putExtra("isMine", false));

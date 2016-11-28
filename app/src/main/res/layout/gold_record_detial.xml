@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_weight="1"
         android:gravity="bottom|center_horizontal"
         android:orientation="vertical">
@@ -17,30 +18,37 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/txt_user_name"
-                style="@style/PopTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:onClick="boomClick" />
-
             <ImageView
                 style="@style/PopClose"
                 android:layout_gravity="top|right"
                 android:layout_margin="10dp"
                 android:onClick="boomClick" />
 
-
+            <ImageView
+                android:id="@+id/img_detial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:layout_margin="10dp"
+                android:onClick="boomClick"
+                android:background="@mipmap/check_gold_boom_detial"
+              />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="bottom"
             android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/txt_boom_type"
+                style="@style/settingContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="right" />
 
             <ImageView
                 android:id="@+id/img_photo"
@@ -49,6 +57,13 @@
                 android:layout_gravity="center"
                 android:background="@mipmap/boom_detial" />
 
+            <TextView
+                android:id="@+id/txt_boom_state"
+                style="@style/settingContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <TextView
@@ -66,19 +81,31 @@
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
         android:layout_weight="1.6">
 
-
-        <ImageView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/line_record" />
+            android:layout_gravity="center"
+            android:gravity="center"
+           >
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recy_record"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <findboom.android.com.findboom.widget.RadiusImageView
+                android:id="@+id/img_pic"
+                android:layout_width="wrap_content"
+                android:scaleType="centerCrop"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/txt_info"
+        style="@style/settingContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/pop_margin"
+        android:padding="10dp"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

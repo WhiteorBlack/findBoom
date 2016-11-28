@@ -40,12 +40,6 @@ import findboom.android.com.findboom.widget.CircleImageView;
  * 寻宝雷记录详情
  */
 public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInterfacer {
-    private TextView imgType;
-    private TextView txtBoomType, txtBoomState;
-    private TextView txtRemark;
-    private TextView txtUserName;
-    private TextView txtCount;
-    private CircleImageView imgPic;
     private String boomId;
     private int type = 0;
     private boolean isMine = false; //标示是不是我埋的雷
@@ -68,14 +62,6 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
         boomId = getIntent().getStringExtra("id");
         type = getIntent().getIntExtra("type", 0);
         isMine = getIntent().getBooleanExtra("isMine", false);
-        imgType = (TextView) findViewById(R.id.txt_type);
-        imgPic = (CircleImageView) findViewById(R.id.img_pic);
-
-        txtRemark = (TextView) findViewById(R.id.txt_red_text);
-        txtUserName = (TextView) findViewById(R.id.txt_user_name);
-        txtBoomState = (TextView) findViewById(R.id.txt_boom_state);
-        txtBoomType = (TextView) findViewById(R.id.txt_boom_type);
-        txtCount = (TextView) findViewById(R.id.txt_count);
 
         if (redRecordAdapter == null)
             redRecordAdapter = new GoldRecordAdapter(redRecords);
@@ -111,7 +97,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
                         checkPhoto = new CheckPhoto(context);
                     checkPhoto.setPhoto(picUrl);
                     checkPhoto.setDeleteInvis();
-                    checkPhoto.showPop(imgPic);
+                    checkPhoto.showPop(recyclerView);
                 }
                 break;
         }
@@ -122,7 +108,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
             return;
         if (addFriendPop == null)
             addFriendPop = new AddFriendPop(this);
-        addFriendPop.showPop(txtBoomState);
+        addFriendPop.showPop(recyclerView);
         addFriendPop.setId(id);
         addFriendPop.setPopInterfacer(this, 0);
     }
@@ -149,18 +135,8 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
     private String picUrl = "";
 
     private void setData() {
-        picUrl = bean_BoomDetial.Data.PicUrl;
-        Glide.with(context).load(picUrl).into(imgPic);
-        imgType.setText(bean_BoomDetial.Data.MineTypeTxt);
-        txtBoomState.setText(bean_BoomDetial.Data.StatusTxt);
-//        txtBoomType.append("总金额:");
-//        txtBoomType.append(Tools.getSpanString(this, bean_BoomDetial.Data.TotalAmount, Color.rgb(255, 255, 255)));
-//        txtBoomType.append("元");
-        txtRemark.setText(bean_BoomDetial.Data.PicTitle);
-        txtUserName.setText(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家" : bean_BoomDetial.Data.UserNickName + " 的寻宝雷");
-        txtCount.setText("已领取:" + (bean_BoomDetial.Data.Count-bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
-
         if (bean_BoomDetial.Data.GoldReciveRecords != null) {
+            redRecordAdapter.setAddress(bean_BoomDetial.Data.City+bean_BoomDetial.Data.Area+bean_BoomDetial.Data.Street);
             redRecords.addAll(bean_BoomDetial.Data.GoldReciveRecords);
             redRecordAdapter.notifyDataSetChanged();
         }

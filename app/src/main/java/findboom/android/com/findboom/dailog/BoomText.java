@@ -7,12 +7,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.CountDownTimer;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,37 +19,43 @@ import com.zys.brokenview.BrokenTouchListener;
 import com.zys.brokenview.BrokenView;
 
 import findboom.android.com.findboom.R;
-import findboom.android.com.findboom.activity.GoldRecordDetial;
-import findboom.android.com.findboom.activity.PicRecordDetial;
-import findboom.android.com.findboom.application.FindBoomApplication;
+import findboom.android.com.findboom.activity.MyRecordDetial;
 import findboom.android.com.findboom.utils.Tools;
 
 /**
  * Created by Administrator on 2016/10/18.
  */
 
-public class BoomPic extends BasePopupwind {
+public class BoomText extends BasePopupwind {
     private View view;
-    //    private BrokenView brokenView;
+//    private BrokenView brokenView;
 //    private BrokenTouchListener brokenTouchListener;
-    private ImageView imgPic;
+    private FrameLayout flParent;
+    private TextView txtInfo;
     private String id;
 
-    public BoomPic(Context context) {
+    public BoomText(Context context) {
         super(context);
         initView();
     }
 
     private void initView() {
         if (view == null)
-            view = LayoutInflater.from(context).inflate(R.layout.boom_pic, null);
-//        brokenView = BrokenView.add2Window((Activity) context);
+            view = LayoutInflater.from(context).inflate(R.layout.boom_text, null);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
+        txtInfo=(TextView)view.findViewById(R.id.txt_info);
+        view.findViewById(R.id.btn_detial).setOnClickListener(this);
+        flParent=(FrameLayout)view.findViewById(R.id.fl_parent);
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) flParent.getLayoutParams();
+        params.width= (int) (Tools.getScreenWide(context)*0.7);
+        params.height= (int) (Tools.getScreenWide(context)*0.7/1.2);
+        flParent.setLayoutParams(params);
+//        brokenView = BrokenView.add2Window((Activity) context);
 //        Paint paint = new Paint();
 //        paint.setColor(Color.BLACK);
 //        brokenTouchListener = new BrokenTouchListener.Builder(brokenView).
@@ -59,27 +64,23 @@ public class BoomPic extends BasePopupwind {
 //                setFallDuration(1000).setPaint(paint).
 //                setCircleRiftsRadius(80).setEnableArea(view).
 //                build();
-        imgPic = (ImageView) view.findViewById(R.id.img_pic);
-        view.findViewById(R.id.btn_detial).setOnClickListener(this);
         this.setContentView(view);
     }
 
     public void setText(String text) {
+        txtInfo.setText(text);
     }
 
-    public void setPic(String url) {
-        Glide.with(context).load(url).error(R.mipmap.boom_icon).into(imgPic);
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String id){
+        this.id=id;
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        if (v.getId() == R.id.btn_detial) {
-            context.startActivity(new Intent(context, PicRecordDetial.class).putExtra("id", id).putExtra("isMine", false));
+        if (v.getId()==R.id.btn_detial){
+            context.startActivity(new Intent(context, MyRecordDetial.class).
+                    putExtra("id", id).putExtra("isMine", false));
         }
     }
 
@@ -93,12 +94,12 @@ public class BoomPic extends BasePopupwind {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                if (!isShow)
-                    broken();
-                if (millisUntilFinished < 1000 && !isBoom) {
-                    FindBoomApplication.getInstance().playBreakSound();
-                    isBoom = true;
-                }
+//                if (!isShow)
+//                    broken();
+//                if (millisUntilFinished < 1000 && !isBoom) {
+//                    FindBoomApplication.getInstance().playBreakSound();
+//                    isBoom = true;
+//                }
 
             }
 

@@ -11,10 +11,10 @@ import java.util.List;
 public class Bean_MsgList extends BaseBean {
     public List<MsgList> Data;
     public static class MsgList{
-        public String UserMsgId;
         public String UserId;
-        public String MsgContent;
-        public String HasRead;
         public String SendTime;
+        public String SystemMsgRecordId;
+        public String MsgTitle;
+        public String MsgContent;
     }
 }

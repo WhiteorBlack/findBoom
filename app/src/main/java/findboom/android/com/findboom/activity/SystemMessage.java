@@ -48,7 +48,7 @@ public class SystemMessage extends Activity implements XRecyclerView.LoadingList
         Map<String, String> params = new HashMap<>();
         params.put("pageIndex", "" + pageIndex);
         params.put("pageSize", "" + pageSize);
-        PostTools.getData(this, CommonUntilities.MSG_URL + "GetRecord", params, new PostCallBack() {
+        PostTools.getData(this, CommonUntilities.MSG_URL + "GetSystemMsg", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);

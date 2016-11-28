@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -65,6 +66,8 @@ public class PutPicBoom extends Activity implements PopInterfacer {
     }
 
     private void initData() {
+        int wide= (int) (Tools.getScreenWide(this)*0.3);
+        int height= (int) (wide*2.1);
         views = new ArrayList<>();
         configString = getIntent().getStringExtra("config");
         if (!TextUtils.isEmpty(configString)) {
@@ -73,13 +76,19 @@ public class PutPicBoom extends Activity implements PopInterfacer {
             if (picBoom != null && picBoom.MinePics != null && picBoom.MinePics.size() > 0) {
                 for (int i = 0; i < picBoom.MinePics.size(); i++) {
                     range=picBoom.BombRange;
-                    View view = LayoutInflater.from(this).inflate(R.layout.put_pic_boom_pop, null);
+                    View view = LayoutInflater.from(this).inflate(R.layout.imageview, null);
                     ImageView imgPic = (ImageView) view.findViewById(R.id.imageview);
+                    LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) imgPic.getLayoutParams();
+                    params.width=wide;
+                    params.height=height;
+                    params.setMargins((int)(wide*0.2),(int)(wide*0.1),(int)(wide*0.1),(int)(wide*0.1));
+                    imgPic.setLayoutParams(params);
                     Glide.with(this).load(picBoom.MinePics.get(i).PicUrl).into(imgPic);
                     views.add(view);
                 }
                 viewPager.setAdapter(new ViewPaperAdapter(views));
             }
+            viewPager.setCurrentItem(2);
         } else getAllConfig();
 
     }
@@ -105,11 +114,10 @@ public class PutPicBoom extends Activity implements PopInterfacer {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-
                 picUrl=picBoom.MinePics.get(position).PicUrl;
             }
         });
-        viewPager.setPageMargin(-Tools.dip2px(this, 100));
+        viewPager.setPageMargin((int) (-Tools.getScreenWide(this)*0.5));
     }
 
 
@@ -120,7 +128,7 @@ public class PutPicBoom extends Activity implements PopInterfacer {
                 break;
             case R.id.btn_confirm:
                 Bundle bundle = new Bundle();
-                bundle.putString("type", type + "");
+                bundle.putString("type",  "2");
                 bundle.putString("imgUrl", picUrl);
                 bundle.putString("imgInfo", "");
                 bundle.putString("text", "");

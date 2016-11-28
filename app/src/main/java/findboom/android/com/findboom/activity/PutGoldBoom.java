@@ -206,9 +206,9 @@ public class PutGoldBoom extends TakePhotoActivity implements PopInterfacer {
         params.put("Latitude", bundle.getString("lat"));
         params.put("MineType", "4");
         params.put("Remark", remark);
-        params.put("PicUrl", Tools.convertIconToString(picPath));
+        params.put("PicBase64Code", Tools.convertIconToString(picPath));
         params.put("Count", count);
-        params.put("PicTitle", "寻宝雷");
+        params.put("PicTitle", remark);
         PostTools.postData(context, CommonUntilities.MINE_URL + "AddGoldMine", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {

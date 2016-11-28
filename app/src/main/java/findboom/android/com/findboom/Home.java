@@ -26,9 +26,14 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -123,8 +128,10 @@ import findboom.android.com.findboom.dailog.AdvicePop;
 import findboom.android.com.findboom.dailog.ArsenalPop;
 import findboom.android.com.findboom.dailog.BandPhonePop;
 import findboom.android.com.findboom.dailog.BoomDefensePop;
+import findboom.android.com.findboom.dailog.BoomGold;
 import findboom.android.com.findboom.dailog.BoomPic;
 import findboom.android.com.findboom.dailog.BoomPop;
+import findboom.android.com.findboom.dailog.BoomText;
 import findboom.android.com.findboom.dailog.ChangePayPwdPop;
 import findboom.android.com.findboom.dailog.ChatPop;
 import findboom.android.com.findboom.dailog.ConfrimPwdPop;
@@ -164,6 +171,7 @@ import findboom.android.com.findboom.widget.expandableselector.ExpandableItem;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelector;
 import findboom.android.com.findboom.widget.expandableselector.ExpandableSelectorListener;
 import findboom.android.com.findboom.widget.expandableselector.OnExpandableItemClickListener;
+import findboom.android.com.findboom.widget.explosion.ExplosionField;
 import findboom.android.com.findboom.wxpay.WxPayHelper;
 import okhttp3.Call;
 
@@ -210,6 +218,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ScanBoomPop scanBoomPop;
     private OpenRedPop openRedPop;
     private BoomPic boomPic;
+    private BoomText boomText;
+    private BoomGold boomGold;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -633,6 +643,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                                 bundle.putString("id", boom.MineRecordId);
                                 bundle.putInt("type", boom.MineType);
                                 bundle.putInt("boomRange", boom.BombRange);
+                                bundle.putString("userId", boom.UserId);
                                 addGoldMarker(new LatLng(boom.Latitude, boom.Longitude), bundle);
                             }
                         }
@@ -749,7 +760,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         switch (v.getId()) {
             case R.id.rel_defense:
                 //防爆衣
-//                new BoomPic(context).showPop(txtArsenal);
                 if (defensePop == null)
                     defensePop = new DefensePop(context);
                 defensePop.showPop(imgArsenal);
@@ -951,6 +961,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 35:
                 boomPic = null;
+                break;
+            case 36:
+                boomText = null;
+                break;
+            case 37:
+                boomGold = null;
                 break;
         }
     }
@@ -2123,6 +2139,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (geoCoder != null)
             geoCoder.destroy();
 //        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
+        bitmap.recycle();
+        mCurrentMarker.recycle();
         super.onDestroy();
     }
 
@@ -2159,7 +2177,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 .longitude(location.getLongitude()).build();
         // 设置定位数据
         if (!isDrag && !isScan && !isPutBoom)
+//            setLocation(locData);
             mBaiduMap.setMyLocationData(locData);
+
         if (startLat == null) {
             startLat = new LatLng(location.getLatitude(), location.getLongitude());
             getBoom(location);
@@ -2177,6 +2197,37 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             walkLat = endLat;
             dealBoomData(walkLat);
         }
+    }
+
+    private List<BitmapDescriptor> mCurrentList;
+    private Marker currentMarker;
+
+    private void setLocation(MyLocationData locData) {
+        if (currentMarker != null) {
+            currentMarker.remove();
+        }
+        if (mCurrentList == null) {
+            mCurrentList = new ArrayList<>();
+            bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.man_one);
+            mCurrentList.add(bitmap);
+            bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.man_two);
+            mCurrentList.add(bitmap);
+            bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.man_three);
+            mCurrentList.add(bitmap);
+            bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.man_four);
+            mCurrentList.add(bitmap);
+            bitmap = BitmapDescriptorFactory.fromResource(R.mipmap.man_five);
+            mCurrentList.add(bitmap);
+        }
+
+
+        mBaiduMap.setMyLocationData(locData);
+        OverlayOptions options = new MarkerOptions()
+                .position(new LatLng(locData.latitude, locData.longitude))  //设置marker的位置
+                .icons((ArrayList<BitmapDescriptor>) mCurrentList)   //设置marker图标
+                .zIndex(15)  //设置marker所在层级
+                .draggable(false);  //设置手势拖拽
+        currentMarker = (Marker) mBaiduMap.addOverlay(options);
     }
 
     private Handler mHandler;
@@ -2263,7 +2314,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         vibrator.vibrate(300);
                     } else if (!isForeground)
                         vibrator.vibrate(300);
-
+                    noDefense(bean_boomBoom.Data, mapBoom.MineType, mapBoom.MineRecordId);
                     if (defenseCount > 0) {
                         defenseBoom();
                         defenseCount -= 1;
@@ -2277,32 +2328,34 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                             } else defenseList.get(0).Count -= 1;
                         }
                         countData();
-                    } else noDefense(bean_boomBoom.Data, mapBoom.MineType);
+                    }
+//                    else noDefense(bean_boomBoom.Data, mapBoom.MineType);
                 }
             }
         });
 
     }
 
-    private void noDefense(Bean_BoomBoom.BoomData boomData, int type) {
+    private void noDefense(Bean_BoomBoom.BoomData boomData, int type, String id) {
         if (type == 2) {
             if (boomPic != null && boomPic.isShowing())
                 return;
             if (boomPic == null)
                 boomPic = new BoomPic(context);
-            boomPic.setText(boomData.PicTitle);
+//            boomPic.setText(boomData.PicTitle);
             boomPic.setPic(boomData.PicUrl);
             boomPic.showPop(txtArsenal);
+            boomPic.setId(id);
             boomPic.setPopInterfacer(this, 35);
         } else if (type == 1) {
-            if (boomPic != null && boomPic.isShowing())
+            if (boomText != null && boomText.isShowing())
                 return;
-            if (boomPic == null)
-                boomPic = new BoomPic(context);
-            boomPic.setText(boomData.Text);
-            boomPic.setPic(boomData.PicUrl);
-            boomPic.showPop(txtArsenal);
-            boomPic.setPopInterfacer(this, 35);
+            if (boomText == null)
+                boomText = new BoomText(context);
+            boomText.setText(boomData.Text);
+            boomText.setId(id);
+            boomText.showPop(txtArsenal);
+            boomText.setPopInterfacer(this, 36);
         } else {
             if (boomPop != null && boomPop.isShowing())
                 return;
@@ -2317,13 +2370,136 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private void defenseBoom() {
         int[] start_location = new int[2];
         imgDefense.getLocationInWindow(start_location);
-        if (boomDefensePop == null)
-            boomDefensePop = new BoomDefensePop(context);
-        boomDefensePop.setPopInterfacer(this, 32);
-        if (!boomDefensePop.isShowing()) {
-            boomDefensePop.setStartLoc(start_location);
-            boomDefensePop.showPop(imgDefense);
-        }
+//        if (boomDefensePop == null)
+//            boomDefensePop = new BoomDefensePop(context);
+//        boomDefensePop.setPopInterfacer(this, 32);
+//        if (!boomDefensePop.isShowing()) {
+//            boomDefensePop.setStartLoc(start_location);
+//            boomDefensePop.showPop(imgDefense);
+//        }
+
+        setAnim(start_location);
+
+    }
+
+    private ViewGroup viewGroup;
+
+    /**
+     * 创建动画层
+     */
+    private ViewGroup createAnimLayout() {
+        ViewGroup rootView = (ViewGroup) this.getWindow().getDecorView();
+        LinearLayout animLayout = new LinearLayout(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        animLayout.setLayoutParams(lp);
+        animLayout.setId(Integer.MAX_VALUE - 1);
+        animLayout.setBackgroundResource(android.R.color.transparent);
+        rootView.addView(animLayout);
+        return animLayout;
+    }
+
+    private void addViewToAnimLayout(final View view,
+                                     int[] location) {
+        int x = location[0];
+        int y = location[1];
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.leftMargin = x;
+        lp.topMargin = y;
+        view.setLayoutParams(lp);
+    }
+
+    private void setAnim(final int[] start_location) {
+        if (viewGroup == null)
+            viewGroup = createAnimLayout();
+        final ImageView imgDefense = new ImageView(this);
+        imgDefense.setLayoutParams(new LinearLayout.LayoutParams(Tools.dip2px(this, 45), Tools.dip2px(this, 45)));
+        imgDefense.setBackgroundResource(R.mipmap.defense_boom);
+        viewGroup.addView(imgDefense);
+        imgDefense.setX(start_location[0] / 2);
+        imgDefense.setY(start_location[1] / 2 - Tools.dip2px(context, 30));
+        final int[] end_location = new int[2];// 这是用来存储动画结束位置的X、Y坐标
+        end_location[0] = (int) (Tools.getScreenWide(context) / 2);
+        end_location[1] = (int) (Tools.getScreenHeight(context) / 2);
+
+        // 计算位移
+        int endX = end_location[0] - start_location[0];// 动画位移的X坐标
+        int endY = end_location[1] - start_location[1];// 动画位移的y坐标
+        TranslateAnimation translateAnimationX = new TranslateAnimation(start_location[0],
+                endX, 0, 0);
+        translateAnimationX.setInterpolator(new LinearInterpolator());
+        translateAnimationX.setRepeatCount(0);// 动画重复执行的次数
+        translateAnimationX.setFillAfter(true);
+
+        TranslateAnimation translateAnimationY = new TranslateAnimation(0, 0,
+                start_location[1], endY);
+        translateAnimationY.setInterpolator(new AccelerateInterpolator());
+        translateAnimationY.setRepeatCount(0);// 动画重复执行的次数
+        translateAnimationX.setFillAfter(true);
+
+        final ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
+                Animation.RELATIVE_TO_PARENT, 0.5f, Animation.RELATIVE_TO_PARENT, 0.5f);
+        scaleAnimation.setFillAfter(true);
+        scaleAnimation.setDuration(300);
+
+        AnimationSet set = new AnimationSet(false);
+        set.setFillAfter(false);
+        set.addAnimation(translateAnimationY);
+        set.addAnimation(translateAnimationX);
+        set.setDuration(600);// 动画的执行时间
+
+        imgDefense.startAnimation(set);
+
+        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                imgDefense.setVisibility(View.GONE);
+                imgDefense.clearAnimation();
+                ExplosionField explosionField = new ExplosionField(context);
+                explosionField.explode(imgDefense);
+                explosionField.setOnExplosionListener(new ExplosionField.ExplosionListener() {
+                    @Override
+                    public void onEnd() {
+                        imgDefense.clearAnimation();
+                    }
+                });
+                viewGroup.removeView(imgDefense);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        // 动画监听事件
+        set.setAnimationListener(new Animation.AnimationListener() {
+            // 动画的开始
+            @Override
+            public void onAnimationStart(Animation animation) {
+                imgDefense.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+                // TODO Auto-generated method stub
+            }
+
+            // 动画的结束
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                imgDefense.setY(end_location[1]);
+                imgDefense.setX(end_location[0] - start_location[0]);
+                imgDefense.clearAnimation();
+                imgDefense.startAnimation(scaleAnimation);
+            }
+        });
 
     }
 
@@ -2765,7 +2941,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         Bundle bundle = marker.getExtraInfo();
         if (bundle != null && bundle.getInt("type") == 4) {
             if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
-                Tools.toastMsgCenter(context, "不能领取自己的寻宝雷");
+//                Tools.toastMsgCenter(context, "不能领取自己的寻宝雷");
+                txtMsg.setText("不能领取自己的寻宝雷~");
+                txtMsgVis();
                 return false;
             }
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > goldGetRange) {
@@ -2783,7 +2961,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
         if (bundle != null && bundle.getInt("type") == 3) {
             if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
-                Tools.toastMsgCenter(context, "不能领取自己的红包雷");
+//                Tools.toastMsgCenter(context, "不能领取自己的红包雷");
+                txtMsg.setText("不能领取自己的红包雷~");
+                txtMsgVis();
                 return false;
             }
             if (DistanceUtil.getDistance(marker.getPosition(), walkLat) > redGetRange) {
@@ -2807,7 +2987,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      *
      * @param id
      */
-    private void boomGold(String id) {
+    private void boomGold(final String id) {
         Map<String, String> params = new HashMap<>();
         params.put("MineRecordId", id);
         PostTools.postData(context, CommonUntilities.MINE_URL + "BombGoldMine", params, new PostCallBack() {
@@ -2820,9 +3000,18 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_GoldBoom goldBoom = new Gson().fromJson(response, Bean_GoldBoom.class);
                 if (goldBoom != null && goldBoom.Success) {
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, goldBoom.Data.PicTitle, "恭喜!获得宝藏").showPop();
+//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, goldBoom.Data.PicTitle, "恭喜!获得宝藏").showPop();
+                    if (boomGold != null && boomGold.isShowing())
+                        return;
+                    if (boomGold == null)
+                        boomGold = new BoomGold(context);
+                    boomGold.setText(goldBoom.Data.PicTitle);
+                    boomGold.setPic(goldBoom.Data.PicUrl);
+                    boomGold.setId(id);
+                    boomGold.showPop(txtArsenal);
                 } else
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", goldBoom.Msg).showPop();
+//                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", goldBoom.Msg).showPop();
+                    Tools.toastMsgCenter(context, goldBoom.Msg);
             }
         });
     }
@@ -2993,12 +3182,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (data == null)
             return;
         if (resultCode == RESULT_OK && requestCode == 0) {
-            //普通雷
+            //普通雷/图片雷
             Bundle bundle = data.getBundleExtra("data");
             mineType = bundle.getString("type", "6");
             text = bundle.getString("text", "");
-            picTitle = bundle.getString("imgUrl", "");
-            picUrl = bundle.getString("imgInfo", "");
+            picTitle = bundle.getString("imgInfo", "");
+            picUrl = bundle.getString("imgUrl", "");
             boomRang = bundle.getInt("rang", 50);
             putCommentBoom();
         }
@@ -3014,8 +3203,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
         if (resultCode == RESULT_OK && requestCode == 2) {
             if (data.getBooleanExtra("success", false)) {
-
-                addGoldMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), new Bundle());
+                Bundle bundle = new Bundle();
+                bundle.putString("userId", AppPrefrence.getUserName(this));
+                addGoldMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), bundle);
                 boomCount -= 1;
                 if (boomList.get(0).ArmType == 1) {
                     if (boomList.get(0).Count > 0) {
