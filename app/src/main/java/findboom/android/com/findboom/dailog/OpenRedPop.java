@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.activity.MyRedRecordDetial;
+import findboom.android.com.findboom.application.FindBoomApplication;
 
 /**
  * Created by Administrator on 2016/11/22.
@@ -54,5 +55,11 @@ public class OpenRedPop extends BasePopupwind {
                 break;
         }
         dismiss();
+    }
+
+    @Override
+    public void showPop(View parent) {
+        super.showPop(parent);
+        FindBoomApplication.getInstance().playMoneySound();
     }
 }

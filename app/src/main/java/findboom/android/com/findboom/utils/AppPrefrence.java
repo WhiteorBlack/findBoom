@@ -25,7 +25,18 @@ public class AppPrefrence {
     private static final String BACKSOUND = "backSound";
     private static final String CLICKSOUND = "clickSound";
     private static final String BOOMSOUND = "boomSound";
-    private static final String EASEID="easeId";
+    private static final String EASEID = "easeId";
+    private static final String ISFIRST = "isFirst";
+
+    public static void setIsFirst(Context context, boolean isFirst) {
+        setting = getSp(context.getApplicationContext());
+        setting.edit().putBoolean(ISFIRST, isFirst).apply();
+    }
+
+    public static boolean getIsFirst(Context context) {
+        setting = getSp(context.getApplicationContext());
+        return setting.getBoolean(ISFIRST, true);
+    }
 
     public static void setEaseId(Context context, String phone) {
         setting = getSp(context.getApplicationContext());

@@ -36,6 +36,7 @@ import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.widget.gallery.ViewPaperAdapter;
+import findboom.android.com.findboom.widget.gallery.ZoomOutPageTransformer;
 
 import static android.R.attr.type;
 
@@ -118,6 +119,7 @@ public class PutPicBoom extends Activity implements PopInterfacer {
             }
         });
         viewPager.setPageMargin((int) (-Tools.getScreenWide(this)*0.5));
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
     }
 
 

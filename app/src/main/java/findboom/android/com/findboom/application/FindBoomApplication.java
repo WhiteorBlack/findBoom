@@ -1,4 +1,5 @@
-package findboom.android.com.findboom.application;/**
+package findboom.android.com.findboom.application;
+/**
  * Created by Administrator on 2016/9/1.
  */
 

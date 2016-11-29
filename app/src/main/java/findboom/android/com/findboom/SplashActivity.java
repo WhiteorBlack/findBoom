@@ -16,8 +16,10 @@ import com.hyphenate.chat.EMClient;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import cn.jpush.android.api.JPushInterface;
+import findboom.android.com.findboom.activity.GuideActivity;
 import findboom.android.com.findboom.activity.LoginActivity;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
@@ -34,21 +36,25 @@ import okhttp3.Call;
  * TODO:
  */
 public class SplashActivity extends BaseActivity {
+
+    private int[] splashRes = new int[]{R.mipmap.splash_day, R.mipmap.splash_night, R.mipmap.splash_rose};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
-        ImageView imgSplash=(ImageView)findViewById(R.id.img_splash);
-        Calendar calendar=Calendar.getInstance();
-        Tools.debug(calendar.get(Calendar.HOUR_OF_DAY)+"");
-        if (calendar.get(Calendar.HOUR_OF_DAY)<17)
-            Glide.with(this).load(R.mipmap.splash_day).into(imgSplash);
-        else Glide.with(this).load(R.mipmap.splash_night).into(imgSplash);
+        if (AppPrefrence.getIsFirst(this)) {
+            startActivity(new Intent(this, GuideActivity.class));
+            finish();
+        }
+        ImageView imgSplash = (ImageView) findViewById(R.id.img_splash);
+        Glide.with(this).load(splashRes[new Random().nextInt(2)]).into(imgSplash);
         if (AppPrefrence.getIsLogin(this)) {
             getUserData();
         }
         JPushInterface.init(getApplicationContext());
-        countDown();
+        if (!AppPrefrence.getIsLogin(this))
+            countDown();
     }
 
     Bean_UserInfo bean_UserInfo;
@@ -70,7 +76,7 @@ public class SplashActivity extends BaseActivity {
                     AppPrefrence.setToken(context, bean_UserInfo.Data.Token);
                     AppPrefrence.setUserName(context, bean_UserInfo.Data.GameUserId);
                     AppPrefrence.setUserPhone(context, bean_UserInfo.Data.PhoneNumber);
-                    AppPrefrence.setEaseId(context,bean_UserInfo.Data.EasemobId);
+                    AppPrefrence.setEaseId(context, bean_UserInfo.Data.EasemobId);
                     EMClient.getInstance().login(bean_UserInfo.Data.EasemobId, bean_UserInfo.Data.EasemobPwd, new EMCallBack() {
                         @Override
                         public void onSuccess() {
