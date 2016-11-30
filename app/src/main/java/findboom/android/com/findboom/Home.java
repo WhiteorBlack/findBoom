@@ -487,50 +487,50 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     BitmapDescriptor mCurrentMarker;
-    private ExpandableSelector expandableSelector;
+//    private ExpandableSelector expandableSelector;
 
     private void initView() {
         vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
-        expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
-        expandableSelector.setVisibility(View.INVISIBLE);
-        List<ExpandableItem> expandableItems = new ArrayList<>();
-        expandableItems.add(new ExpandableItem(R.mipmap.friend_msg));
-        expandableItems.add(new ExpandableItem(R.mipmap.system_msg));
-        expandableSelector.showExpandableItems(expandableItems);
-        expandableSelector.setOnExpandableItemClickListener(new OnExpandableItemClickListener() {
-            @Override
-            public void onExpandableItemClickListener(int index, View view) {
-                if (index == 1) {
-                    //系统消息
-                    startActivity(new Intent(context, SystemMessage.class));
-                } else {
-                    //好友消息
-                    startActivityForResult(new Intent(context, FriendMessage.class), 10);
-                }
-                expandableSelector.collapse();
-            }
-        });
-        expandableSelector.setExpandableSelectorListener(new ExpandableSelectorListener() {
-            @Override
-            public void onCollapse() {
-
-            }
-
-            @Override
-            public void onExpand() {
-
-            }
-
-            @Override
-            public void onCollapsed() {
-                expandableSelector.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onExpanded() {
-                expandableSelector.setVisibility(View.VISIBLE);
-            }
-        });
+//        expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
+//        expandableSelector.setVisibility(View.INVISIBLE);
+//        List<ExpandableItem> expandableItems = new ArrayList<>();
+//        expandableItems.add(new ExpandableItem(R.mipmap.friend_msg));
+//        expandableItems.add(new ExpandableItem(R.mipmap.system_msg));
+//        expandableSelector.showExpandableItems(expandableItems);
+//        expandableSelector.setOnExpandableItemClickListener(new OnExpandableItemClickListener() {
+//            @Override
+//            public void onExpandableItemClickListener(int index, View view) {
+//                if (index == 1) {
+//                    //系统消息
+//                    startActivity(new Intent(context, SystemMessage.class));
+//                } else {
+//                    //好友消息
+//                    startActivityForResult(new Intent(context, FriendMessage.class), 10);
+//                }
+//                expandableSelector.collapse();
+//            }
+//        });
+//        expandableSelector.setExpandableSelectorListener(new ExpandableSelectorListener() {
+//            @Override
+//            public void onCollapse() {
+//
+//            }
+//
+//            @Override
+//            public void onExpand() {
+//
+//            }
+//
+//            @Override
+//            public void onCollapsed() {
+//                expandableSelector.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onExpanded() {
+//                expandableSelector.setVisibility(View.VISIBLE);
+//            }
+//        });
         mapBoomList = new ArrayList<>();
         boomList = new ArrayList<>();
         defenseList = new ArrayList<>();
@@ -821,13 +821,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 shopPop.showPop(imgArsenal);
                 break;
             case R.id.img_msg:
-                if (!expandableSelector.isExpanded()) {
-                    expandableSelector.setVisibility(View.VISIBLE);
-                    expandableSelector.expand();
-                } else {
-                    expandableSelector.setVisibility(View.INVISIBLE);
-                    expandableSelector.collapse();
-                }
+//                if (!expandableSelector.isExpanded()) {
+//                    expandableSelector.setVisibility(View.VISIBLE);
+//                    expandableSelector.expand();
+//                } else {
+//                    expandableSelector.setVisibility(View.INVISIBLE);
+//                    expandableSelector.collapse();
+//                }
+                startActivity(new Intent(this, FriendMessage.class));
                 break;
             case R.id.img_location:
                 MyLocationData locData = new MyLocationData.Builder()

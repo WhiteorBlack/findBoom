@@ -15,6 +15,7 @@ import findboom.android.com.findboom.adapter.FragmentWithTitleAdapter;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.chat.activity.ConversationFragment;
 import findboom.android.com.findboom.fragment.InviteFragment;
+import findboom.android.com.findboom.fragment.SystemMessageFragment;
 
 /**
  * Created by Administrator on 2016/10/28.
@@ -28,6 +29,7 @@ public class FriendMessage extends BaseFragmentActivity {
     private InviteFragment inviteFragment;
     private FragmentWithTitleAdapter fragmentWithTitleAdapter;
     private ConversationFragment conversationFragment;
+    private SystemMessageFragment systemMessageFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class FriendMessage extends BaseFragmentActivity {
         fragments.add(conversationFragment);
         inviteFragment = new InviteFragment();
         fragments.add(inviteFragment);
+        systemMessageFragment = new SystemMessageFragment();
+        fragments.add(systemMessageFragment);
         fragmentWithTitleAdapter.notifyDataSetChanged();
     }
 
@@ -49,6 +53,7 @@ public class FriendMessage extends BaseFragmentActivity {
         titles = new ArrayList<>();
         titles.add("好友消息");
         titles.add("好友申请");
+        titles.add("系统消息");
         fragments = new ArrayList<>();
         fragmentWithTitleAdapter = new FragmentWithTitleAdapter(getSupportFragmentManager(), fragments, titles);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);

@@ -2,6 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_friend_list_item"
+    android:padding="0dp"
+    android:layout_marginBottom="1dp"
     android:orientation="vertical">
 
     <TextView
@@ -24,6 +27,7 @@
         android:background="@drawable/bg_msg_item"
         android:gravity="center_vertical"
         android:paddingLeft="5dp"
+        android:layout_marginBottom="5dp"
         android:paddingRight="5dp"
         android:text="埋雷成功获取10积分试试事实上事实上事实上事实上"
         android:textColor="@color/deep_yellow"

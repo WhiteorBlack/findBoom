@@ -15,12 +15,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:orientation="horizontal"
-            android:paddingLeft="25dp"
+            android:paddingLeft="15dp"
             android:paddingRight="25dp"
             android:paddingTop="15dp">
 
@@ -56,6 +56,7 @@
                 android:layout_width="@dimen/home_icon_parent_wide"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:onClick="boomClick">
 
                 <ImageView
@@ -78,23 +79,25 @@
                     android:textSize="10sp"
                     android:textStyle="bold" />
             </RelativeLayout>
-        </FrameLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:gravity="center|right"
-            android:paddingBottom="90dp">
+            android:paddingBottom="110dp">
 
             <LinearLayout
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="50dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:gravity="bottom|right"
+                android:orientation="vertical"
+                android:paddingRight="5dp">
 
                 <RelativeLayout
                     android:id="@+id/rel_arsenal"
@@ -152,18 +155,21 @@
                 </RelativeLayout>
 
                 <CheckBox
-                    android:id="@+id/chb_set_red_packet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="50dp"
-                    android:button="@drawable/checkbox_boom" />
-
-                <CheckBox
                     android:id="@+id/chb_set_treasure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginRight="12dp"
                     android:button="@drawable/checkbox_money" />
+
+                <CheckBox
+                    android:id="@+id/chb_set_red_packet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="12dp"
+                    android:button="@drawable/checkbox_boom" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -219,7 +225,8 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@id/ll_msg"
                 android:layout_alignParentRight="true"
-                android:paddingRight="15dp">
+                android:paddingRight="15dp"
+                android:visibility="gone">
 
                 <findboom.android.com.findboom.widget.expandableselector.ExpandableSelector
                     android:id="@+id/img_expand"

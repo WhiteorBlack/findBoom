@@ -46,15 +46,16 @@ public class SplashActivity extends BaseActivity {
         if (AppPrefrence.getIsFirst(this)) {
             startActivity(new Intent(this, GuideActivity.class));
             finish();
-        }
-        ImageView imgSplash = (ImageView) findViewById(R.id.img_splash);
-        Glide.with(this).load(splashRes[new Random().nextInt(2)]).into(imgSplash);
-        if (AppPrefrence.getIsLogin(this)) {
-            getUserData();
-        }
-        JPushInterface.init(getApplicationContext());
-        if (!AppPrefrence.getIsLogin(this))
+        } else {
+            ImageView imgSplash = (ImageView) findViewById(R.id.img_splash);
+            Glide.with(this).load(splashRes[new Random().nextInt(2)]).into(imgSplash);
+            if (AppPrefrence.getIsLogin(this)) {
+                getUserData();
+            }
+            JPushInterface.init(getApplicationContext());
             countDown();
+        }
+
     }
 
     Bean_UserInfo bean_UserInfo;
@@ -106,6 +107,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void countDown() {
+        Tools.debug("countDown");
         new CountDownTimer(3 * 1000, 1000) {
 
             @Override
