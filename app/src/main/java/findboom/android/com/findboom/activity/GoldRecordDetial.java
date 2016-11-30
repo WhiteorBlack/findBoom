@@ -44,6 +44,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
     private String boomId;
     private boolean isMine = false; //标示是不是我埋的雷
     private ImageView imgClose, imgDetial;
+    private TextView txtCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
             imgDetial.setVisibility(View.GONE);
         }
         int wide = (int) (Tools.getScreenWide(this) * 0.5);
+        txtCount=(TextView)findViewById(R.id.txt_count);
         txtInfo = (TextView) findViewById(R.id.txt_info);
         imgPhoto = (RadiusImageView) findViewById(R.id.img_pic);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imgPhoto.getLayoutParams();
@@ -119,6 +121,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
         if (!TextUtils.isEmpty(bean_BoomDetial.Data.PicUrl)) {
             Glide.with(this).load(bean_BoomDetial.Data.PicUrl).into(imgPhoto);
         }
+        txtCount.setText("已领取 " + (bean_BoomDetial.Data.Count - bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
         txtInfo.setText("");
         if (isMine) {
             if (bean_BoomDetial.Data.Status > 0) {

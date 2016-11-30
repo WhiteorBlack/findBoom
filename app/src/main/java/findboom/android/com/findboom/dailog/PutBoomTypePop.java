@@ -29,11 +29,12 @@ public class PutBoomTypePop extends BasePopupwind {
     private View view;
     private ViewPager viewPager;
     private int type = 0;
+    private String[] typs=new String[]{"普通雷","文字雷","图片雷","红包雷","寻宝雷"};
+    private int[] boomRes=new int[]{R.mipmap.boom,R.mipmap.boom,R.mipmap.boom,R.mipmap.boom,R.mipmap.boom};
 
     public PutBoomTypePop(Context context) {
         super(context);
         initView();
-
     }
 
     private void initData() {
@@ -105,9 +106,10 @@ public class PutBoomTypePop extends BasePopupwind {
     private void initView() {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.put_boom_type_pop, null);
+        view.findViewById(R.id.btn_confirm).setOnClickListener(this);
         view.findViewById(R.id.img_close).setOnClickListener(this);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -140,7 +142,33 @@ public class PutBoomTypePop extends BasePopupwind {
     @Override
     public void showPop(View parent) {
         super.showPop(parent);
-        initData();
+//        initData();
+        setData();
+    }
+
+    private void setData() {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        List<View> views = new ArrayList<>();
+
+        for (int i = 0; i < boomRes.length; i++) {
+            final int pos=i;
+            View goldView = inflater.inflate(R.layout.put_boom_type_item, null);
+            ((ImageView) goldView.findViewById(R.id.img_boom)).setBackgroundResource(boomRes[i]);
+            ((TextView) goldView.findViewById(R.id.txt_info)).setText(typs[i]);
+            goldView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewPager.setCurrentItem(pos);
+                }
+            });
+            views.add(goldView);
+        }
+
+        viewPager.setOffscreenPageLimit(views.size());
+        viewPager.setPageMargin(-Tools.dip2px(context, 135));
+        viewPager.setAdapter(new ViewPaperAdapter(views));
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        viewPager.setCurrentItem(0);
     }
 
     @Override

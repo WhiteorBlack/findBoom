@@ -52,8 +52,8 @@ public class GoldRecordAdapter extends BaseRecyAdapter {
         TextView txtInfo= (TextView) mHolder.getView(R.id.txt_info);
         txtInfo.setText("");
         txtInfo.append(Tools.getSpanString(txtInfo.getContext(),redRecord.ReceiveTime, Color.rgb(240, 165, 9)));
-        txtInfo.append(" 在 ");
-        txtInfo.append(Tools.getSpanString(txtInfo.getContext(),address, Color.rgb(240, 165, 9)));
+//        txtInfo.append(" 在 ");
+//        txtInfo.append(Tools.getSpanString(txtInfo.getContext(),address, Color.rgb(240, 165, 9)));
     }
 
     @Override

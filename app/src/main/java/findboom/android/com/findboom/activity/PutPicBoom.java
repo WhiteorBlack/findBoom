@@ -89,7 +89,7 @@ public class PutPicBoom extends Activity implements PopInterfacer {
                 }
                 viewPager.setAdapter(new ViewPaperAdapter(views));
             }
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(0);
         } else getAllConfig();
 
     }

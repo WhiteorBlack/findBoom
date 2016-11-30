@@ -4,14 +4,17 @@ package findboom.android.com.findboom.dailog;/**
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import findboom.android.com.findboom.R;
+import findboom.android.com.findboom.utils.Tools;
 import findboom.android.com.findboom.widget.StrokeTextView;
 
 /**
@@ -22,7 +25,7 @@ public class ShopBuyPop extends BasePopupwind {
     private Context context;
     private View view;
     private ImageView imgGoods;
-    private TextView txtCount;
+    private EditText txtCount;
     private TextView txtTitle;
     private StrokeTextView txtPrice;
     private int count = 1;
@@ -46,9 +49,9 @@ public class ShopBuyPop extends BasePopupwind {
         view.findViewById(R.id.fl_minute).setOnClickListener(this);
         view.findViewById(R.id.btn_buy).setOnClickListener(this);
         imgGoods = (ImageView) view.findViewById(R.id.img_goods_pic);
-        txtCount = (TextView) view.findViewById(R.id.txt_count);
+        txtCount = (EditText) view.findViewById(R.id.txt_count);
         txtCount.setText(count + "");
-        txtTitle=(TextView)view.findViewById(R.id.txt_name);
+        txtTitle = (TextView) view.findViewById(R.id.txt_name);
         txtPrice = (StrokeTextView) view.findViewById(R.id.txt_price);
         this.setContentView(view);
     }
@@ -66,22 +69,22 @@ public class ShopBuyPop extends BasePopupwind {
 
     public void setGoodPic(int ur) {
         int id = 0;
-        String name="";
+        String name = "";
         switch (ur) {
             case 0:
                 id = R.mipmap.icon_boom;
-                name="地雷";
+                name = "地雷";
                 break;
             case 1:
 
                 break;
             case 2:
                 id = R.mipmap.icon_scan;
-                name="扫雷器";
+                name = "扫雷器";
                 break;
             case 4:
-                id = R.mipmap.icon_defense;
-                name="防爆衣";
+                id = R.mipmap.defense_boom;
+                name = "防爆衣";
                 break;
         }
         txtTitle.setText(name);
@@ -105,6 +108,16 @@ public class ShopBuyPop extends BasePopupwind {
                 txtPrice.setText("￥ " + price * count);
                 break;
             case R.id.btn_buy:
+                String countString = txtCount.getText().toString();
+                if (TextUtils.isEmpty(countString)) {
+                    Tools.toastMsgCenter(context, "请输入要购买的个数");
+                    return;
+                }
+                count = Integer.parseInt(countString);
+                if (count < 1) {
+                    Tools.toastMsgCenter(context, "购买个数最少为1");
+                    return;
+                }
                 Bundle bundle = new Bundle();
                 bundle.putInt("count", count);
                 bundle.putFloat("money", price * count);

@@ -48,6 +48,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
     private RecyclerView recyclerView;
     private AddFriendPop addFriendPop;
     private CheckPhoto checkPhoto;
+    private TextView txtCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
         boomId = getIntent().getStringExtra("id");
         type = getIntent().getIntExtra("type", 0);
         isMine = getIntent().getBooleanExtra("isMine", false);
+        txtCount = (TextView) findViewById(R.id.txt_count);
 
         if (redRecordAdapter == null)
             redRecordAdapter = new GoldRecordAdapter(redRecords);
@@ -135,8 +137,9 @@ public class MyGoldRecordDetial extends BaseFragmentActivity implements PopInter
     private String picUrl = "";
 
     private void setData() {
+        txtCount.setText("已领取 " + (bean_BoomDetial.Data.Count - bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
         if (bean_BoomDetial.Data.GoldReciveRecords != null) {
-            redRecordAdapter.setAddress(bean_BoomDetial.Data.City+bean_BoomDetial.Data.Area+bean_BoomDetial.Data.Street);
+            redRecordAdapter.setAddress(bean_BoomDetial.Data.City + bean_BoomDetial.Data.Area + bean_BoomDetial.Data.Street);
             redRecords.addAll(bean_BoomDetial.Data.GoldReciveRecords);
             redRecordAdapter.notifyDataSetChanged();
         }

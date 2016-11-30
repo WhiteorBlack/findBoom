@@ -1348,10 +1348,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (bundle == null)
                     return;
                 int typeBoom = bundle.getInt("type");
+                mineType = typeBoom + "";
                 switch (typeBoom) {
-                    case 0:
+                    case 4:
                         //寻宝雷
-                        mineType = "4";
+//                        mineType = "4";
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("pro", provice);
                         bundle1.putString("city", city);
@@ -1363,27 +1364,27 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         startActivityForResult(new Intent(context, PutGoldBoom.class).putExtra("data", bundle1), 2);
                         isPutBoom = false;
                         break;
-                    case 1:
+                    case 2:
                         //图片雷
-                        mineType = "2";
+//                        mineType = "2";
                         isPutBoom = false;
                         startActivityForResult(new Intent(context, PutPicBoom.class).putExtra("config", configString).putExtra("type", 2), 0);
                         break;
-                    case 2:
+                    case 0:
                         //普通雷
-                        mineType = "0";
+//                        mineType = "0";
                         putCommentBoom();
                         isPutBoom = false;
                         break;
-                    case 3:
+                    case 1:
                         //文字雷
-                        mineType = "1";
+//                        mineType = "1";
                         startActivityForResult(new Intent(context, PutCommenBoom.class).putExtra("config", configString).putExtra("type", 1), 0);
                         isPutBoom = false;
                         break;
-                    case 4:
+                    case 3:
                         //红包雷
-                        mineType = "3";
+//                        mineType = "3";
                         startActivityForResult(new Intent(context, PutRedBoom.class).putExtra("config", configString), 1);
                         isPutBoom = false;
                         break;
@@ -2940,6 +2941,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     @Override
     public boolean onMarkerClick(Marker marker) {
         Bundle bundle = marker.getExtraInfo();
+        if (bundle != null && bundle.getBoolean("isget", false)) {
+            txtMsg.setText("不能重复领取~");
+            txtMsgVis();
+            return false;
+        }
         if (bundle != null && bundle.getInt("type") == 4) {
             if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
 //                Tools.toastMsgCenter(context, "不能领取自己的寻宝雷");
@@ -2957,7 +2963,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             String id = bundle.getString("id");
             int type = bundle.getInt("type");
             if (!TextUtils.isEmpty(id)) {
-                boomGold(id);
+                boomGold(id, marker);
             }
         }
         if (bundle != null && bundle.getInt("type") == 3) {
@@ -2977,7 +2983,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             String id = bundle.getString("id");
             int type = bundle.getInt("type");
             if (!TextUtils.isEmpty(id)) {
-                boomRed(id);
+                boomRed(id, marker);
             }
         }
         return false;
@@ -2988,7 +2994,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      *
      * @param id
      */
-    private void boomGold(final String id) {
+    private void boomGold(final String id, final Marker marker) {
         Map<String, String> params = new HashMap<>();
         params.put("MineRecordId", id);
         PostTools.postData(context, CommonUntilities.MINE_URL + "BombGoldMine", params, new PostCallBack() {
@@ -3010,6 +3016,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     boomGold.setPic(goldBoom.Data.PicUrl);
                     boomGold.setId(id);
                     boomGold.showPop(txtArsenal);
+                    Bundle bundle = marker.getExtraInfo();
+                    bundle.putBoolean("isget", true);
+                    marker.setExtraInfo(bundle);
                 } else
 //                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", goldBoom.Msg).showPop();
                     Tools.toastMsgCenter(context, goldBoom.Msg);
@@ -3022,7 +3031,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      *
      * @param id
      */
-    private void boomRed(final String id) {
+    private void boomRed(final String id, final Marker marker) {
         Map<String, String> params = new HashMap<>();
         params.put("MineRecordId", id);
         PostTools.postData(context, CommonUntilities.MINE_URL + "BombRedPackMine", params, new PostCallBack() {
@@ -3047,7 +3056,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     openRedPop.setMoney(redBoom.Data.Amount + "");
                     openRedPop.setId(id);
                     openRedPop.showPop(txtArsenal);
-//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, redBoom.Data.RedPackText, "恭喜!获得" + redBoom.Data.Amount + "元红包").showPop();
+                    Bundle bundle = marker.getExtraInfo();
+                    bundle.putBoolean("isget", true);
+                    marker.setExtraInfo(bundle);
                 } else
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", redBoom.Msg).showPop();
             }

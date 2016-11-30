@@ -18,6 +18,35 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_type"
+                    style="@style/settingContent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:text="寻宝雷"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
             <ImageView
                 style="@style/PopClose"
                 android:layout_gravity="top|right"
@@ -30,9 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|right"
                 android:layout_margin="10dp"
-                android:onClick="boomClick"
                 android:background="@mipmap/check_gold_boom_detial"
-              />
+                android:onClick="boomClick" />
         </FrameLayout>
 
         <LinearLayout
@@ -66,35 +94,26 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_type"
-            style="@style/settingContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="寻宝雷"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/fl_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.6">
+        android:layout_weight="1.8">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-           >
+            android:gravity="center">
 
             <findboom.android.com.findboom.widget.RadiusImageView
                 android:id="@+id/img_pic"
                 android:layout_width="wrap_content"
-                android:scaleType="centerCrop"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop" />
         </LinearLayout>
 
     </FrameLayout>
@@ -105,6 +124,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/pop_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:padding="10dp"
         android:textColor="@android:color/white" />
 

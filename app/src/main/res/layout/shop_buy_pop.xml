@@ -20,7 +20,7 @@
 
             <ImageView
                 android:id="@+id/img_goods_pic"
-                android:layout_width="60dp"
+                android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:scaleType="centerInside" />
 
@@ -52,7 +52,7 @@
                         android:background="@mipmap/icon_minute" />
                 </FrameLayout>
 
-                <TextView
+                <EditText
                     android:id="@+id/txt_count"
                     style="@style/PopTitle"
                     android:layout_width="wrap_content"
@@ -60,6 +60,7 @@
                     android:background="@mipmap/shop_buy_count_bg"
                     android:gravity="center"
                     android:text="10"
+                    android:inputType="number"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
 

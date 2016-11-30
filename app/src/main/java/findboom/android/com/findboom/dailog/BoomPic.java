@@ -44,22 +44,19 @@ public class BoomPic extends BasePopupwind {
     private void initView() {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.boom_pic, null);
-//        brokenView = BrokenView.add2Window((Activity) context);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
-//        Paint paint = new Paint();
-//        paint.setColor(Color.BLACK);
-//        brokenTouchListener = new BrokenTouchListener.Builder(brokenView).
-//                setComplexity(18).
-//                setBreakDuration(500).
-//                setFallDuration(1000).setPaint(paint).
-//                setCircleRiftsRadius(80).setEnableArea(view).
-//                build();
-        imgPic = (ImageView) view.findViewById(R.id.img_pic);
+        imgPic = (ImageView) view.findViewById(R.id.img_boom);
+        int wide = (int) (Tools.getScreenWide(context) * 0.35);
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imgPic.getLayoutParams();
+        params.width = wide;
+        params.height = (int) (wide * 2.1);
+        params.setMargins((int) (wide * 0.2), (int) (wide * 0.2), (int) (wide * 0.2), (int) (wide * 0.2));
+        imgPic.setLayoutParams(params);
         view.findViewById(R.id.btn_detial).setOnClickListener(this);
         this.setContentView(view);
     }

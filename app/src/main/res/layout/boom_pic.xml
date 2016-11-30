@@ -5,19 +5,27 @@
     android:gravity="center"
     android:orientation="vertical">
 
-
-    <ImageView
-        android:id="@+id/img_boom"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/activity_horizontal_margin" />
+        android:layout_gravity="center"
+        android:background="@mipmap/boom_pic_bg"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_boom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+             />
+    </LinearLayout>
+
 
     <Button
-        android:layout_width="@dimen/pop_btn_wide"
-        android:layout_marginTop="10dp"
         android:id="@+id/btn_detial"
+        android:layout_width="@dimen/pop_btn_wide"
         android:layout_height="@dimen/pop_btn_height"
-        android:background="@mipmap/red_check_detial"/>
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/red_check_detial" />
 
 </LinearLayout>
