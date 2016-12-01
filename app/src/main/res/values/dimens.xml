@@ -23,7 +23,8 @@
     <dimen name="red_width">300dp</dimen>
     <dimen name="red_height">240dp</dimen>
     <dimen name="system_msg_text">18sp</dimen>
-
+    <dimen name="home_location_width">60dp</dimen>
+    <dimen name="home_locatioin_height">80dp</dimen>
     <!-- 时间选择器 -->
     <!-- 顶部按钮栏高度 -->
     <dimen name="pickerview_topbar_height">44dp</dimen>

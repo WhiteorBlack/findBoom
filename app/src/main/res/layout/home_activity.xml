@@ -158,16 +158,16 @@
                     android:id="@+id/chb_set_treasure"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginRight="12dp"
+                    android:layout_marginTop="20dp"
                     android:button="@drawable/checkbox_money" />
 
                 <CheckBox
                     android:id="@+id/chb_set_red_packet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:layout_marginRight="12dp"
+                    android:layout_marginTop="20dp"
                     android:button="@drawable/checkbox_boom" />
 
             </LinearLayout>
@@ -240,8 +240,8 @@
 
             <ImageView
                 android:id="@+id/img_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/home_icon_wide"
+                android:layout_height="@dimen/home_icon_height"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="25dp"
                 android:background="@mipmap/icon_location"
