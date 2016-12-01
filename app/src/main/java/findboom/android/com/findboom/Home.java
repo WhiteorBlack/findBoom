@@ -2968,7 +2968,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
         if (bundle != null && bundle.getInt("type") == 3) {
             if (TextUtils.equals(bundle.getString("userId"), AppPrefrence.getUserName(context))) {
-//                Tools.toastMsgCenter(context, "不能领取自己的红包雷");
                 txtMsg.setText("不能领取自己的红包雷~");
                 txtMsgVis();
                 return false;
@@ -2977,7 +2976,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 //大于可领取距离,提示不能领取
                 txtMsg.setText("再靠近一点点,就让你领取~");
                 txtMsgVis();
-                Tools.debug("boomRange" + redGetRange);
                 return false;
             }
             String id = bundle.getString("id");
@@ -3019,9 +3017,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     Bundle bundle = marker.getExtraInfo();
                     bundle.putBoolean("isget", true);
                     marker.setExtraInfo(bundle);
-                } else
-//                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", goldBoom.Msg).showPop();
-                    Tools.toastMsgCenter(context, goldBoom.Msg);
+                } else {
+                    txtMsg.setText(goldBoom.Msg);
+                    txtMsgVis();
+                }
             }
         });
     }
@@ -3059,8 +3058,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     Bundle bundle = marker.getExtraInfo();
                     bundle.putBoolean("isget", true);
                     marker.setExtraInfo(bundle);
-                } else
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "很遗憾", redBoom.Msg).showPop();
+                } else {
+                    txtMsg.setText(redBoom.Msg);
+                    txtMsgVis();
+                }
             }
         });
     }

@@ -44,7 +44,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
     private String boomId;
     private boolean isMine = false; //标示是不是我埋的雷
     private ImageView imgClose, imgDetial;
-    private TextView txtCount;
+    private TextView txtCount, txtContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,13 +66,14 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
             imgClose.setVisibility(View.VISIBLE);
             imgDetial.setVisibility(View.GONE);
         }
+        txtContent = (TextView) findViewById(R.id.txt_content);
         int wide = (int) (Tools.getScreenWide(this) * 0.5);
-        txtCount=(TextView)findViewById(R.id.txt_count);
+        txtCount = (TextView) findViewById(R.id.txt_count);
         txtInfo = (TextView) findViewById(R.id.txt_info);
         imgPhoto = (RadiusImageView) findViewById(R.id.img_pic);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) imgPhoto.getLayoutParams();
         params.width = wide;
-        params.height = (int) (wide * 4/3);
+        params.height = (int) (wide * 4 / 3);
         imgPhoto.setLayoutParams(params);
         imgPhoto.setType(RadiusImageView.TYPE_ROUND);
         imgPhoto.setBorderRadius(20);
@@ -86,7 +87,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
                 finish();
                 break;
             case R.id.img_detial:
-                startActivity(new Intent(this,MyGoldRecordDetial.class).putExtra("id",boomId));
+                startActivity(new Intent(this, MyGoldRecordDetial.class).putExtra("id", boomId));
                 break;
         }
     }
@@ -109,7 +110,6 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
                         setData();
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Tools.debug("sssssssss" + e.toString());
                     }
 
                 }
@@ -123,6 +123,7 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
         }
         txtCount.setText("已领取 " + (bean_BoomDetial.Data.Count - bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
         txtInfo.setText("");
+        txtContent.setText(bean_BoomDetial.Data.PicTitle);
         if (isMine) {
             if (bean_BoomDetial.Data.Status > 0) {
                 if (bean_BoomDetial.Data.BombType == 0) {

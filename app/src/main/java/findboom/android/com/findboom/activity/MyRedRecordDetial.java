@@ -77,7 +77,7 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         redRecordAdapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
-                createPop(redRecords.get(position ).ReceiveUserId);
+                createPop(redRecords.get(position).ReceiveUserId);
             }
 
             @Override
@@ -136,8 +136,11 @@ public class MyRedRecordDetial extends BaseFragmentActivity implements PopInterf
         txtBoomType.append(Tools.getSpanString(this, bean_BoomDetial.Data.TotalAmount, Color.rgb(255, 255, 255)));
         txtBoomType.append("元");
         txtRemark.setText(bean_BoomDetial.Data.RedPackText);
-        txtUserName.setText(TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家" : bean_BoomDetial.Data.UserNickName + " 的红包雷");
-        txtCount.setText("已领取:" + (bean_BoomDetial.Data.Count-bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
+        if (isMine)
+            txtUserName.setText("我的红包雷");
+        else
+            txtUserName.setText((TextUtils.isEmpty(bean_BoomDetial.Data.UserNickName) ? "玩儿家 " + bean_BoomDetial.Data.UserId : bean_BoomDetial.Data.UserNickName) + " 的红包雷");
+        txtCount.setText("已领取:" + (bean_BoomDetial.Data.Count - bean_BoomDetial.Data.LeftCount) + "/" + bean_BoomDetial.Data.Count);
 
         if (bean_BoomDetial.Data.RedPackReciveRecords != null) {
             redRecords.addAll(bean_BoomDetial.Data.RedPackReciveRecords);

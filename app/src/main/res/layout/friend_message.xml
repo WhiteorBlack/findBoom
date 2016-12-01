@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="好友消息" />
+            android:text="消息中心" />
 
         <ImageView
             style="@style/PopClose"
@@ -26,8 +26,8 @@
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_marginLeft="@dimen/pop_margin"
+        android:layout_marginRight="@dimen/pop_margin"
         android:layout_marginTop="40dp"
         app:tabIndicatorColor="@color/content_yellow"
         app:tabSelectedTextColor="@color/content_yellow"
