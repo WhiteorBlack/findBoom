@@ -37,6 +37,9 @@ public class FriendMessage extends BaseFragmentActivity {
         setContentView(R.layout.friend_message);
         initView();
         initFragment();
+        if (getIntent().getBooleanExtra("isPush",false)){
+            viewPager.setCurrentItem(2);
+        }
     }
 
     private void initFragment() {

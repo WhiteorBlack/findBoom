@@ -13,6 +13,7 @@ import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
 import findboom.android.com.findboom.Home;
+import findboom.android.com.findboom.activity.FriendMessage;
 import findboom.android.com.findboom.activity.SystemMessage;
 import findboom.android.com.findboom.utils.Tools;
 
@@ -48,7 +49,7 @@ public class MyReceiver extends BroadcastReceiver {
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
             //打开自定义的Activity
-            context.startActivity(new Intent(context, SystemMessage.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("data", bundle));
+            context.startActivity(new Intent(context, FriendMessage.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK).putExtra("data", bundle).putExtra("isPush", true));
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
