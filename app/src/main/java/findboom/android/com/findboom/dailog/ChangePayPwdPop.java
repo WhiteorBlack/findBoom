@@ -56,6 +56,7 @@ public class ChangePayPwdPop extends BasePopupwind {
         view.findViewById(R.id.img_close).setOnClickListener(this);
         edtPhone = (EditText) view.findViewById(R.id.edt_phone);
         btnGetCode = (Button) view.findViewById(R.id.btn_get_code);
+        btnGetCode.setText("获取验证码");
         btnGetCode.setOnClickListener(this);
         this.setContentView(view);
     }
@@ -116,7 +117,7 @@ public class ChangePayPwdPop extends BasePopupwind {
             @Override
             public void onTick(long millisUntilFinished) {
                 btnGetCode.setClickable(false);
-                btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
+//                btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
                 btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
                 btnGetCode.setTextColor(Color.WHITE);
                 btnGetCode.setTextSize(14);
@@ -125,8 +126,8 @@ public class ChangePayPwdPop extends BasePopupwind {
             @Override
             public void onFinish() {
                 btnGetCode.setClickable(true);
-                btnGetCode.setText("");
-                btnGetCode.setBackgroundResource(R.mipmap.btn_get_code);
+                btnGetCode.setText("重新获取");
+//                btnGetCode.setBackgroundResource(R.mipmap.btn_get_code);
             }
         }.start();
     }

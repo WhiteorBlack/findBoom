@@ -63,6 +63,7 @@ public class InputCodePop extends BasePopupwind {
 
         btnGetCode = (Button) view.findViewById(R.id.btn_get_code);
         btnGetCode.setOnClickListener(this);
+        btnGetCode.setText("获取验证码");
         view.findViewById(R.id.btn_login).setOnClickListener(this);
         this.setContentView(view);
     }
@@ -104,7 +105,7 @@ public class InputCodePop extends BasePopupwind {
             public void onTick(long millisUntilFinished) {
                 btnGetCode.setClickable(false);
                 btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
-                btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
+//                btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
                 btnGetCode.setTextColor(Color.WHITE);
                 btnGetCode.setTextSize(14);
             }
@@ -112,8 +113,8 @@ public class InputCodePop extends BasePopupwind {
             @Override
             public void onFinish() {
                 btnGetCode.setClickable(true);
-                btnGetCode.setText("");
-                btnGetCode.setBackgroundResource(R.mipmap.btn_get_code);
+                btnGetCode.setText("重新获取");
+//                btnGetCode.setBackgroundResource(R.mipmap.btn_get_code);
             }
         }.start();
     }

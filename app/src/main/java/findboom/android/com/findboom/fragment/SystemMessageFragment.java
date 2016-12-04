@@ -24,6 +24,8 @@ import findboom.android.com.findboom.adapter.MsgListAdapter;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_MsgList;
+import findboom.android.com.findboom.dailog.SystemMSgDetialPop;
+import findboom.android.com.findboom.interfacer.OnClickInterface;
 import findboom.android.com.findboom.interfacer.PostCallBack;
 import findboom.android.com.findboom.utils.CommonUntilities;
 import findboom.android.com.findboom.utils.Tools;
@@ -40,12 +42,14 @@ public class SystemMessageFragment extends Fragment implements XRecyclerView.Loa
     private int pageIndex = 1, pageSize = 20;
     private View view;
 
+    private SystemMSgDetialPop systemMSgDetialPop;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view==null)
-            view=inflater.inflate(R.layout.xrecycleview,null);
+        if (view == null)
+            view = inflater.inflate(R.layout.xrecycleview, null);
         return view;
     }
 
@@ -97,6 +101,16 @@ public class SystemMessageFragment extends Fragment implements XRecyclerView.Loa
         xRecyclerView.setLoadingMoreEnabled(true);
         msgAdapter = new MsgListAdapter(msgList);
         xRecyclerView.setAdapter(msgAdapter);
+        msgAdapter.setOnclick(new OnClickInterface() {
+            @Override
+            public void onClick(View view, int position) {
+                Bean_MsgList.MsgList msgListBean = (Bean_MsgList.MsgList) msgList.get(position);
+                if (systemMSgDetialPop == null)
+                    systemMSgDetialPop = new SystemMSgDetialPop(getContext());
+                systemMSgDetialPop.setContent(msgListBean.MsgContent);
+                systemMSgDetialPop.showPop(xRecyclerView);
+            }
+        });
     }
 
 

@@ -24,6 +24,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -824,13 +825,11 @@ public class Tools {
 
     public static void toastMsgCenter(Context context, String msg) {
         Toast toast = new Toast(context);
-        TextView textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(16);
+        View view = LayoutInflater.from(context).inflate(R.layout.toast_textview, null);
+        TextView textView = (TextView) view.findViewById(R.id.txt_toast);
         textView.setText(msg);
-        textView.setTextColor(Color.WHITE);
-        textView.setBackgroundResource(R.drawable.bg_msg_pop);
-        toast.setView(textView);
+        toast.setView(view);
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.show();
     }

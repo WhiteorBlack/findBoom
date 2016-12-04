@@ -242,7 +242,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private List<Bean_MapBoom.MapBoom> mapBoomList;
 
     //购买商品相关
-    private String goodsId, goodsCount;
+    private String goodsId = "", goodsCount;
 
     private int boomCount = 0, scanCount = 0, defenseCount = 0;
     private PickerDialog ageDialog, workDialog;
@@ -1758,7 +1758,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                     if (personalCenterPop != null)
                         personalCenterPop.setUserData(userInfo.Data);
-                }
+                    Tools.toastMsgCenter(context, "修改成功");
+                } else Tools.toastMsgCenter(context, userInfo.Msg);
             }
         });
     }

@@ -19,5 +19,6 @@ public class Bean_InviteList extends BaseBean {
         public String DealTime;
         public String DealResult;
         public String DealResultTxt;
+        public String Avatar;
     }
 }

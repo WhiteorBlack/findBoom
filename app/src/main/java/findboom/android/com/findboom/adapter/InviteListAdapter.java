@@ -42,7 +42,8 @@ public class InviteListAdapter extends BaseRecyAdapter {
         Bean_InviteList.InviteList msgList = (Bean_InviteList.InviteList) dataList.get(position);
         mHolder.setText(R.id.txt_date, msgList.SendTime);
         mHolder.setText(R.id.txt_name, msgList.FromUserINickName);
-        mHolder.setText(R.id.txt_content, TextUtils.isEmpty(msgList.ApplyMsg) ? "请求加你为好友" : msgList.ApplyMsg);
+//        mHolder.setText(R.id.txt_content, TextUtils.isEmpty(msgList.ApplyMsg) ? "请求加你为好友" : msgList.ApplyMsg);
+        mHolder.setImage(R.id.avatar,msgList.Avatar);
     }
 
 

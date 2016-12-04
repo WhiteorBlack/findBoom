@@ -157,7 +157,7 @@ public class NewShopPop extends BasePopupwind implements ViewPager.OnPageChangeL
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 1);
                 bundle.putFloat("money", goodsInfo.Price );
-                bundle.putString("id", goodsInfo.Id);
+                bundle.putString("id", goodsInfo.ConfigId);
                 bundle.putInt("amount",goodsInfo.GoldAmount);
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundle);

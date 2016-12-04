@@ -10,6 +10,7 @@ public class Bean_GoldList extends BaseBean {
     public List<GoldList> Data;
     public static class GoldList{
         public String Id;
+        public String ConfigId;
         public int GoldAmount;
         public float Price;
         public String Status;

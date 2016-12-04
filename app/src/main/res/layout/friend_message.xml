@@ -3,24 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_detial_new"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@mipmap/bg_msg"
+    android:padding="0dp">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <TextView
-            style="@style/PopTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="消息中心" />
 
         <ImageView
             style="@style/PopClose"
             android:onClick="boomClick" />
     </FrameLayout>
+
+    <ImageView
+        style="@style/PopTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/home_icon_wide"
+        android:background="@mipmap/title_msg_center" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tablayout"
@@ -32,12 +35,12 @@
         app:tabIndicatorColor="@color/content_yellow"
         app:tabSelectedTextColor="@color/content_yellow"
         app:tabTextAppearance="@style/tabLayoutStyle"
-        app:tabTextColor="#89241B" />
+        app:tabTextColor="#7c88c4" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
-        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

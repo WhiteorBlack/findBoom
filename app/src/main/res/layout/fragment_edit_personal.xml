@@ -19,10 +19,10 @@
     <EditText
         android:id="@+id/edt_user_name"
         style="@style/settingContent"
-        android:layout_width="match_parent"
+        android:layout_width="150dp"
         android:layout_height="30dp"
         android:layout_marginTop="12dp"
-        android:background="@null"
+        android:background="@drawable/advice_edit_bg"
         android:gravity="center"
         android:visibility="gone"
         android:text="用户名"

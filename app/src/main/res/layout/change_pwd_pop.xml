@@ -53,7 +53,7 @@
                 android:layout_width="@dimen/pop_btn_wide"
                 android:layout_height="@dimen/pop_btn_height"
                 android:layout_marginLeft="20dp"
-                android:background="@mipmap/btn_get_code" />
+                android:background="@mipmap/bg_count_down" />
 
         </LinearLayout>
 

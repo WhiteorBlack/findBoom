@@ -4,10 +4,10 @@
     android:id="@+id/list_itease_layout"
     android:layout_width="match_parent"
     android:layout_height="59dp"
-    android:padding="0dp"
     android:layout_marginBottom="1dp"
     android:background="@drawable/bg_friend_list_item"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:padding="0dp">
 
     <RelativeLayout
         android:id="@+id/avatar_container"
@@ -32,7 +32,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="2dp"
             android:layout_marginTop="3dp"
-            android:background="@drawable/circle_red"
+            android:background="@mipmap/red_point"
             android:gravity="center"
             android:maxHeight="30dp"
             android:maxWidth="30dp"
@@ -55,7 +55,8 @@
         android:singleLine="true"
         android:text="testdata"
         android:textColor="@color/content_yellow"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/time"
@@ -64,8 +65,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="6dp"
-        android:textColor="@color/content_yellow"
-        android:textSize="13sp" />
+        android:textColor="#7c88c4"
+        android:textSize="14sp" />
 
     <ImageView
         android:id="@+id/msg_state"
@@ -88,7 +89,7 @@
         android:ellipsize="end"
         android:padding="7dp"
         android:singleLine="true"
-        android:textColor="#999999"
+        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
 </RelativeLayout>
