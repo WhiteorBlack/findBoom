@@ -72,6 +72,7 @@ public class DealInviteInfo extends BasePopupwind {
         switch (v.getId()) {
             case R.id.btn_cancle:
                 type = "3";
+                dismiss();
                 break;
             case R.id.btn_confirm:
                 type = "1";
@@ -101,8 +102,14 @@ public class DealInviteInfo extends BasePopupwind {
                     if (TextUtils.equals(type, "1"))
                         Tools.toastMsg(context, "已通过对方好友申请");
                     else Tools.toastMsg(context, "已拒绝对方好友申请");
-                    dismiss();
+
                 } else Tools.toastMsg(context, baseBean.Msg);
+            }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+                dismiss();
             }
         });
     }

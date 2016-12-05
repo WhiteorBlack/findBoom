@@ -12,10 +12,19 @@
         android:background="@mipmap/system_msg_detial_bg"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/txt_title"
+            style="@style/PopTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:text="标题" />
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1">
 
             <LinearLayout
@@ -28,9 +37,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:textSize="16sp"
+                    android:layout_marginRight="15dp"
                     android:textColor="@android:color/white"
-                    android:layout_marginRight="15dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </ScrollView>
 

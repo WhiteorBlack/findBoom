@@ -21,6 +21,7 @@ public class SystemMSgDetialPop extends BasePopupwind {
     private View view;
     private LinearLayout llParent;
     private TextView txtContent;
+    private TextView txtTitle;
 
     public SystemMSgDetialPop(Context context) {
         super(context);
@@ -37,11 +38,15 @@ public class SystemMSgDetialPop extends BasePopupwind {
         param.width = (int) (Tools.getScreenWide(context) * 0.8);
         param.height = (int) (Tools.getScreenHeight(context) * 0.7);
         llParent.setLayoutParams(param);
+        txtTitle=(TextView)view.findViewById(R.id.txt_title);
         this.setContentView(view);
         this.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     public void setContent(String msg){
         txtContent.setText(msg);
+    }
+    public void setTitle(String title){
+        txtTitle.setText(title);
     }
 }

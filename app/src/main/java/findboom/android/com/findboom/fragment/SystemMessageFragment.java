@@ -108,6 +108,7 @@ public class SystemMessageFragment extends Fragment implements XRecyclerView.Loa
                 if (systemMSgDetialPop == null)
                     systemMSgDetialPop = new SystemMSgDetialPop(getContext());
                 systemMSgDetialPop.setContent(msgListBean.MsgContent);
+                systemMSgDetialPop.setTitle(msgListBean.MsgTitle);
                 systemMSgDetialPop.showPop(xRecyclerView);
             }
         });

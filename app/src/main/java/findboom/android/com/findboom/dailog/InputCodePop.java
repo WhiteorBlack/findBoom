@@ -104,8 +104,8 @@ public class InputCodePop extends BasePopupwind {
             @Override
             public void onTick(long millisUntilFinished) {
                 btnGetCode.setClickable(false);
-                btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
-//                btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
+//                btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
+                btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
                 btnGetCode.setTextColor(Color.WHITE);
                 btnGetCode.setTextSize(14);
             }
