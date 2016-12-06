@@ -59,13 +59,11 @@ public class GoldRecordDetial extends BaseFragmentActivity implements PopInterfa
         isMine = getIntent().getBooleanExtra("isMine", false);
         imgClose = (ImageView) findViewById(R.id.img_close);
         imgDetial = (ImageView) findViewById(R.id.img_detial);
-        if (isMine) {
-            imgClose.setVisibility(View.GONE);
-            imgDetial.setVisibility(View.VISIBLE);
-        } else {
-            imgClose.setVisibility(View.VISIBLE);
-            imgDetial.setVisibility(View.GONE);
-        }
+//        if (isMine) {
+//            imgDetial.setVisibility(View.VISIBLE);
+//        } else {
+//            imgDetial.setVisibility(View.GONE);
+//        }
         txtContent = (TextView) findViewById(R.id.txt_content);
         int wide = (int) (Tools.getScreenWide(this) * 0.5);
         txtCount = (TextView) findViewById(R.id.txt_count);

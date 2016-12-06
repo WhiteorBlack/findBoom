@@ -18,11 +18,17 @@
     </FrameLayout>
 
     <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/icon_msg_top"
+        android:layout_gravity="center_horizontal"/>
+
+    <ImageView
         style="@style/PopTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/home_icon_wide"
+        android:layout_marginTop="10dp"
         android:background="@mipmap/title_msg_center" />
 
     <android.support.design.widget.TabLayout
