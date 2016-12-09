@@ -14,22 +14,25 @@
             android:layout_height="match_parent" />
 
         <Button
+            android:id="@+id/btn_get_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_get_in"
-            android:text="立即体验"
-            android:onClick="boomClick"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/pop_pic_wide"
-            />
+            android:background="@mipmap/bg_count_down"
+            android:onClick="boomClick"
+            android:text="立即体验"
+            android:textColor="#BB5445"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/ll_point_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/pop_btn_height"
             android:gravity="center"
-            android:layout_gravity="bottom"
             android:orientation="horizontal"></LinearLayout>
     </FrameLayout>
 

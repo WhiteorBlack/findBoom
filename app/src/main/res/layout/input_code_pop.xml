@@ -65,6 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
+                    android:textColor="#BB5445"
                     android:background="@mipmap/bg_count_down" />
 
             </LinearLayout>

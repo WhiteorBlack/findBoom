@@ -38,6 +38,7 @@
                 android:layout_width="@dimen/pop_btn_wide"
                 android:layout_height="@dimen/pop_btn_height"
                 android:layout_marginLeft="20dp"
+                android:textColor="#BB5445"
                 android:background="@mipmap/bg_count_down" />
 
         </LinearLayout>
