@@ -230,7 +230,6 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
             public void onResponse(String response) {
                 super.onResponse(response);
                 Tools.debug(response);
-
             }
         });
     }

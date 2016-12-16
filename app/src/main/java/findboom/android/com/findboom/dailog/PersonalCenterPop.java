@@ -336,17 +336,19 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             imgAccount.setEnabled(true);
             imgPersonal.setEnabled(false);
             btnBottom.setBackgroundResource(R.mipmap.btn_edit_info);
+            btnBottom.setVisibility(View.VISIBLE);
             btnBottom.setTag(1);
         } else {
             imgAccount.setEnabled(false);
             imgPersonal.setEnabled(true);
-            if (AppPrefrence.getIsPayPwd(context)) {
-                btnBottom.setBackgroundResource(R.mipmap.btn_change_pwd);
-                btnBottom.setTag(3);
-            } else {
-                btnBottom.setTag(2);
-                btnBottom.setBackgroundResource(R.mipmap.btn_create_pwd);
-            }
+            btnBottom.setVisibility(View.INVISIBLE);
+//            if (AppPrefrence.getIsPayPwd(context)) {
+//                btnBottom.setBackgroundResource(R.mipmap.btn_change_pwd);
+//                btnBottom.setTag(3);
+//            } else {
+//                btnBottom.setTag(2);
+//                btnBottom.setBackgroundResource(R.mipmap.btn_create_pwd);
+//            }
         }
     }
 

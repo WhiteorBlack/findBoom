@@ -51,9 +51,9 @@ public class PutRedBoom extends Activity implements PopInterfacer {
     private String remark;
     private EditText edtMoney, edtCount, edtRemark;
     private int rang = 50;
-    private ConfrimPwdPop confrimPwdPop;
-    private BandPhonePop bandPhonePop;
-    private ChangePayPwdPop changePayPwd;
+//    private ConfrimPwdPop confrimPwdPop;
+//    private BandPhonePop bandPhonePop;
+//    private ChangePayPwdPop changePayPwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,11 +146,19 @@ public class PutRedBoom extends Activity implements PopInterfacer {
                 if (TextUtils.isEmpty(remark))
                     remark = edtRemark.getHint().toString();
 
-                if (confrimPwdPop == null)
-                    confrimPwdPop = new ConfrimPwdPop(context);
-                confrimPwdPop.showPop(edtCount);
-                confrimPwdPop.setPopInterfacer(PutRedBoom.this, 0);
-
+//                if (confrimPwdPop == null)
+//                    confrimPwdPop = new ConfrimPwdPop(context);
+//                confrimPwdPop.showPop(edtCount);
+//                confrimPwdPop.setPopInterfacer(PutRedBoom.this, 0);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", type + "");
+                bundle.putString("count", count + "");
+                bundle.putString("money", money + "");
+                bundle.putString("remark", remark);
+                bundle.putInt("rang", rang);
+                bundle.putString("pwd", pwd);
+                setResult(RESULT_OK, new Intent().putExtra("data", bundle));
+                finish();
                 break;
 
         }
@@ -182,18 +190,18 @@ public class PutRedBoom extends Activity implements PopInterfacer {
     public void OnCancle(int flag) {
         if (flag == 0) {
             //忘记密码
-            if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
-                //忘记密码-->绑定手机号码
-                if (bandPhonePop == null)
-                    bandPhonePop = new BandPhonePop(context);
-                bandPhonePop.showPop(txtAddRecord);
-                bandPhonePop.setPopInterfacer(this, 22);
-            } else {
-                if (changePayPwd == null)
-                    changePayPwd = new ChangePayPwdPop(context);
-                changePayPwd.showPop(txtAddRecord);
-                changePayPwd.setPopInterfacer(this, 13);
-            }
+//            if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+//                //忘记密码-->绑定手机号码
+//                if (bandPhonePop == null)
+//                    bandPhonePop = new BandPhonePop(context);
+//                bandPhonePop.showPop(txtAddRecord);
+//                bandPhonePop.setPopInterfacer(this, 22);
+//            } else {
+//                if (changePayPwd == null)
+//                    changePayPwd = new ChangePayPwdPop(context);
+//                changePayPwd.showPop(txtAddRecord);
+//                changePayPwd.setPopInterfacer(this, 13);
+//            }
         }
     }
 

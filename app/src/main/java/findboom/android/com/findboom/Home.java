@@ -199,9 +199,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ReportPop reportPop;
     private GetRecordPop getRecordPop;
     private RecordListPop recordListPop;
-    private CreatePayPwdPop createPayPwd;
-    private ChangePayPwdPop changePayPwd;
-    private ConfrimPwdPop confirmPwdPop;
+    //    private CreatePayPwdPop createPayPwd;
+//    private ChangePayPwdPop changePayPwd;
+//    private ConfrimPwdPop confirmPwdPop;
     private ShopBuyPop shopBuyPop;
     private SelectPayTypePop selectPayPop;
     //    private PersonalInfo personalInfo;
@@ -889,13 +889,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 recordListPop = null;
                 break;
             case 12:
-                createPayPwd = null;
+//                createPayPwd = null;
                 break;
             case 13:
-                changePayPwd = null;
+//                changePayPwd = null;
                 break;
             case 14:
-                confirmPwdPop = null;
+//                confirmPwdPop = null;
                 break;
             case 15:
                 shopBuyPop = null;
@@ -928,7 +928,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 convertRedPop = null;
                 break;
             case 25:
-                confirmPwdPop = null;
+//                confirmPwdPop = null;
                 break;
             case 26:
                 addFriendPop = null;
@@ -1076,30 +1076,30 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         return;
                     saveUserInfo(bundle);
                 }
-                if (bundle != null && bundle.getInt("type", -1) == 2) {
-                    //2创建,3修改
-                    if (createPayPwd == null)
-                        createPayPwd = new CreatePayPwdPop(context);
-                    createPayPwd.showPop(imgArsenal);
-                    createPayPwd.setPopInterfacer(this, 12);
-                }
-                if (bundle != null && bundle.getInt("type", -1) == 3) {
-                    if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
-                        //提示绑定手机号码
-                        dissAllPop();
-                        if (bandPhonePop == null)
-                            bandPhonePop = new BandPhonePop(context);
-                        bandPhonePop.showPop(txtArsenal);
-                        bandPhonePop.setPopInterfacer(this, 22);
-
-                    } else {
-                        if (changePayPwd == null)
-                            changePayPwd = new ChangePayPwdPop(context);
-                        changePayPwd.showPop(imgArsenal);
-                        changePayPwd.setPopInterfacer(this, 13);
-                    }
-
-                }
+//                if (bundle != null && bundle.getInt("type", -1) == 2) {
+//                    //2创建,3修改
+//                    if (createPayPwd == null)
+//                        createPayPwd = new CreatePayPwdPop(context);
+//                    createPayPwd.showPop(imgArsenal);
+//                    createPayPwd.setPopInterfacer(this, 12);
+//                }
+//                if (bundle != null && bundle.getInt("type", -1) == 3) {
+//                    if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+//                        //提示绑定手机号码
+//                        dissAllPop();
+//                        if (bandPhonePop == null)
+//                            bandPhonePop = new BandPhonePop(context);
+//                        bandPhonePop.showPop(txtArsenal);
+//                        bandPhonePop.setPopInterfacer(this, 22);
+//
+//                    } else {
+//                        if (changePayPwd == null)
+//                            changePayPwd = new ChangePayPwdPop(context);
+//                        changePayPwd.showPop(imgArsenal);
+//                        changePayPwd.setPopInterfacer(this, 13);
+//                    }
+//
+//                }
                 if (bundle != null && bundle.getInt("type", -1) == 5 || bundle.getInt("type", -1) == 4) {
                     if (selectPayPop == null)
                         selectPayPop = new SelectPayTypePop(context);
@@ -1255,9 +1255,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 }
                 if (isBuyGold)
-                    redBuyGold(bundle.getString("pwd"));
+                    redBuyGold();
                 else
-                    accountBuy(bundle.getString("pwd"));
+                    accountBuy();
                 break;
             case 15:
                 //余额支付,确认支付密码
@@ -1265,12 +1265,28 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     return;
                 goodsCount = bundle.getInt("count") + "";
                 money = bundle.getFloat("money", 0.00f);
-                if (confirmPwdPop == null)
-                    confirmPwdPop = new ConfrimPwdPop(context);
-                confirmPwdPop.showPop(txtArsenal);
-                confirmPwdPop.setMoney(money);
-                confirmPwdPop.setPopInterfacer(this, 14);
+//                if (confirmPwdPop == null)
+//                    confirmPwdPop = new ConfrimPwdPop(context);
+//                confirmPwdPop.showPop(txtArsenal);
+//                confirmPwdPop.setMoney(money);
+//                confirmPwdPop.setPopInterfacer(this, 14);
                 isBuyGold = false;
+                float account = 0f;
+                Bean_UserInfo.GameUser userInfo = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+                if (userInfo != null) {
+                    if (TextUtils.isEmpty(userInfo.UserBalance))
+                        account = 0f;
+                    else account = Float.parseFloat(userInfo.UserBalance);
+                }
+                if (money > account) {
+                    //余额不足
+                    Tools.toastMsgCenter(context, "余额不足,请充值");
+                    return;
+                }
+                if (isBuyGold)
+                    redBuyGold();
+                else
+                    accountBuy();
                 break;
             case 16:
                 //充值红包选择支付方式
@@ -1310,11 +1326,22 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 } else {
                     //余额支付
                     isBuyGold = true;
-                    if (confirmPwdPop == null)
-                        confirmPwdPop = new ConfrimPwdPop(context);
-                    confirmPwdPop.showPop(txtArsenal);
-                    confirmPwdPop.setMoney(money);
-                    confirmPwdPop.setPopInterfacer(this, 14);
+                    float account1 = 0f;
+                    Bean_UserInfo.GameUser userInfo1 = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+                    if (userInfo1 != null) {
+                        if (TextUtils.isEmpty(userInfo1.UserBalance))
+                            account1 = 0f;
+                        else account1 = Float.parseFloat(userInfo1.UserBalance);
+                    }
+                    if (money > account1) {
+                        //余额不足
+                        Tools.toastMsgCenter(context, "余额不足,请充值");
+                        return;
+                    }
+                    if (isBuyGold)
+                        redBuyGold();
+                    else
+                        accountBuy();
                 }
                 break;
             case 23:
@@ -1333,16 +1360,16 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 money = Float.parseFloat(bundle.getString("money"));
                 alipayNo = bundle.getString("alipay");
                 alipayName = bundle.getString("name");
-                if (confirmPwdPop == null)
-                    confirmPwdPop = new ConfrimPwdPop(context);
-                confirmPwdPop.showPop(txtArsenal);
-                confirmPwdPop.setPopInterfacer(this, 25);
+//                if (confirmPwdPop == null)
+//                    confirmPwdPop = new ConfrimPwdPop(context);
+//                confirmPwdPop.showPop(txtArsenal);
+//                confirmPwdPop.setPopInterfacer(this, 25);
                 break;
             case 25:
                 if (bundle == null)
                     return;
                 convertRed(bundle.getString("pwd"));
-                confirmPwdPop.dismiss();
+//                confirmPwdPop.dismiss();
                 break;
             case 28:
                 if (bundle == null)
@@ -1488,37 +1515,37 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 break;
             case 14:
                 //forget pwd
-                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
-                    //忘记密码-->绑定手机号码
-                    dissAllPop();
-                    if (bandPhonePop == null)
-                        bandPhonePop = new BandPhonePop(context);
-                    bandPhonePop.showPop(txtArsenal);
-                    bandPhonePop.setPopInterfacer(this, 22);
-                } else {
-                    if (changePayPwd == null)
-                        changePayPwd = new ChangePayPwdPop(context);
-                    changePayPwd.showPop(imgArsenal);
-                    changePayPwd.setPopInterfacer(this, 13);
-                }
+//                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+//                    //忘记密码-->绑定手机号码
+//                    dissAllPop();
+//                    if (bandPhonePop == null)
+//                        bandPhonePop = new BandPhonePop(context);
+//                    bandPhonePop.showPop(txtArsenal);
+//                    bandPhonePop.setPopInterfacer(this, 22);
+//                } else {
+//                    if (changePayPwd == null)
+//                        changePayPwd = new ChangePayPwdPop(context);
+//                    changePayPwd.showPop(imgArsenal);
+//                    changePayPwd.setPopInterfacer(this, 13);
+//                }
                 break;
             case 17:
                 break;
             case 25:
                 //forget pwd
-                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
-                    //忘记密码-->绑定手机号码
-                    dissAllPop();
-                    if (bandPhonePop == null)
-                        bandPhonePop = new BandPhonePop(context);
-                    bandPhonePop.showPop(txtArsenal);
-                    bandPhonePop.setPopInterfacer(this, 22);
-                } else {
-                    if (changePayPwd == null)
-                        changePayPwd = new ChangePayPwdPop(context);
-                    changePayPwd.showPop(imgArsenal);
-                    changePayPwd.setPopInterfacer(this, 13);
-                }
+//                if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context))) {
+//                    //忘记密码-->绑定手机号码
+//                    dissAllPop();
+//                    if (bandPhonePop == null)
+//                        bandPhonePop = new BandPhonePop(context);
+//                    bandPhonePop.showPop(txtArsenal);
+//                    bandPhonePop.setPopInterfacer(this, 22);
+//                } else {
+//                    if (changePayPwd == null)
+//                        changePayPwd = new ChangePayPwdPop(context);
+//                    changePayPwd.showPop(imgArsenal);
+//                    changePayPwd.setPopInterfacer(this, 13);
+//                }
                 break;
             case 30:
                 isScan = false;
@@ -1533,13 +1560,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     /**
      * 红包购买金币
-     *
-     * @param pwd
      */
-    private void redBuyGold(String pwd) {
+    private void redBuyGold() {
         Map<String, String> params = new HashMap<>();
         params.put("GoldId", goodsId);
-        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
+//        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
         PostTools.postData(context, CommonUntilities.ORDER_URL + "BuyGold", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -1551,8 +1576,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
 //                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
-                    if (confirmPwdPop != null)
-                        confirmPwdPop.dismiss();
+//                    if (confirmPwdPop != null)
+//                        confirmPwdPop.dismiss();
                     toastSuccess();
                     FindBoomApplication.getInstance().playMoneySound();
                     String balance = "";
@@ -1766,14 +1791,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     /**
      * 余额支付
-     *
-     * @param pwd
      */
-    private void accountBuy(String pwd) {
+    private void accountBuy() {
         Map<String, String> params = new HashMap<>();
         params.put("ArmInfoId", goodsId);
         params.put("Count", goodsCount);
-        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
+//        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
         PostTools.postData(context, CommonUntilities.ORDER_URL + "CreateOrder", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
@@ -1793,7 +1816,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     money = 0.00f;
 //                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, "购买成功", "").showPop();
                     toastSuccess();
-                    confirmPwdPop.dismiss();
+//                    confirmPwdPop.dismiss();
                     shopBuyPop.dismiss();
                     defenseList.clear();
                     boomList.clear();
@@ -2142,7 +2165,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         if (geoCoder != null)
             geoCoder.destroy();
 //        EMClient.getInstance().chatManager().removeMessageListener(messageListener);
-        bitmap.recycle();
+        if (bitmap != null)
+            bitmap.recycle();
         mCurrentMarker.recycle();
         super.onDestroy();
     }
@@ -3170,12 +3194,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             getRecordPop.isShowing();
         if (recordListPop != null && recordListPop.isShowing())
             recordListPop.isShowing();
-        if (createPayPwd != null && createPayPwd.isShowing())
-            createPayPwd.isShowing();
-        if (changePayPwd != null && changePayPwd.isShowing())
-            changePayPwd.isShowing();
-        if (confirmPwdPop != null && confirmPwdPop.isShowing())
-            confirmPwdPop.isShowing();
+//        if (createPayPwd != null && createPayPwd.isShowing())
+//            createPayPwd.isShowing();
+//        if (changePayPwd != null && changePayPwd.isShowing())
+//            changePayPwd.isShowing();
+//        if (confirmPwdPop != null && confirmPwdPop.isShowing())
+//            confirmPwdPop.isShowing();
         if (shopBuyPop != null && shopBuyPop.isShowing())
             shopBuyPop.isShowing();
         if (selectPayPop != null && selectPayPop.isShowing())
@@ -3340,52 +3364,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
         @Override
         public void onContactInvited(final String username, String reason) {
-            // 接到邀请的消息，如果不处理(同意或拒绝)，掉线后，服务器会自动再发过来，所以客户端不需要重复提醒
-//            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-//
-//            for (InviteMessage inviteMessage : msgs) {
-//                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
-//                    inviteMessgeDao.deleteMessage(username);
-//                }
-//            }
-//            // 自己封装的javabean
-//            InviteMessage msg = new InviteMessage();
-//            msg.setFrom(username);
-//            msg.setTime(System.currentTimeMillis());
-//            msg.setReason(reason);
-//
-//            // 设置相应status
-//            msg.setStatus(InviteMessage.InviteMesageStatus.BEINVITEED);
         }
 
         @Override
         public void onContactAgreed(final String username) {
-//            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-//            for (InviteMessage inviteMessage : msgs) {
-//                if (inviteMessage.getFrom().equals(username)) {
-//                    return;
-//                }
-//            }
-//            // 自己封装的javabean
-//            InviteMessage msg = new InviteMessage();
-//            msg.setFrom(username);
-//            msg.setTime(System.currentTimeMillis());
-//
-//            msg.setStatus(InviteMesageStatus.BEAGREED);
-//            notifyNewIviteMessage(msg);
-//            runOnUiThread(new Runnable(){
-//
-//                @Override
-//                public void run() {
-//                    Toast.makeText(getApplicationContext(), "好友申请同意：+"+username, Toast.LENGTH_SHORT).show();
-//                }
-//            });
         }
 
         @Override
         public void onContactRefused(String username) {
-            // 参考同意，被邀请实现此功能,demo未实现
-//            Log.d(username, username + "拒绝了你的好友请求");
         }
 
     }

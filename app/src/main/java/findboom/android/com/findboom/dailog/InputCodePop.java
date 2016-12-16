@@ -95,6 +95,7 @@ public class InputCodePop extends BasePopupwind {
                 break;
             case R.id.btn_get_code:
                 popInterfacer.OnCancle(flag);
+                countTime();
                 break;
         }
     }
@@ -104,7 +105,6 @@ public class InputCodePop extends BasePopupwind {
             @Override
             public void onTick(long millisUntilFinished) {
                 btnGetCode.setClickable(false);
-//                btnGetCode.setBackgroundResource(R.drawable.get_code_bg);
                 btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
                 btnGetCode.setTextColor(Color.WHITE);
                 btnGetCode.setTextSize(14);
@@ -114,7 +114,6 @@ public class InputCodePop extends BasePopupwind {
             public void onFinish() {
                 btnGetCode.setClickable(true);
                 btnGetCode.setText("重新获取");
-//                btnGetCode.setBackgroundResource(R.mipmap.btn_get_code);
             }
         }.start();
     }
