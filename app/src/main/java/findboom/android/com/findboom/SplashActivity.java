@@ -96,7 +96,7 @@ public class SplashActivity extends BaseActivity {
                     });
                     FindBoomApplication.getInstance().setCurrentUserName(bean_UserInfo.Data.EasemobId);
                     AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(bean_UserInfo.Data.PayPassWord));
-                }
+                } else AppPrefrence.setIsLogin(context, false);
             }
 
             @Override

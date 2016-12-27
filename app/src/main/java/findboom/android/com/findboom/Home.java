@@ -183,8 +183,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private ImageView imgDefense, imgScan, imgRecord, imgArsenal, imgMsg, imgLocation;
-    private ImageView imgRedPoint;
-    private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg;
+    //    private ImageView imgRedPoint;
+    private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg, txtMsgCount;
     private CheckBox chbMoney, chbBoom;
 
     private SettingPop settingPop;
@@ -675,8 +675,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) txtMsg.getLayoutParams();
         params.width = (int) (Tools.getScreenWide(context) * 0.6);
         txtMsg.setLayoutParams(params);
-        imgRedPoint = (ImageView) findViewById(R.id.img_red_point);
-        imgRedPoint.setVisibility(View.GONE);
+//        imgRedPoint = (ImageView) findViewById(R.id.img_red_point);
+//        imgRedPoint.setVisibility(View.GONE);
+        txtMsgCount = (TextView) findViewById(R.id.txt_msg_count);
+        txtMsgCount.setVisibility(View.GONE);
     }
 
     /**
@@ -839,6 +841,15 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 mBaiduMap.animateMapStatus(update);
                 imgLocation.setVisibility(View.GONE);
                 isDrag = false;
+                break;
+            case R.id.img_put_boom:
+                if (walkLat!=null){
+                    initGeoCoder(walkLat);
+                    mineType="0";
+                    latItude=walkLat.latitude+"";
+                    longItude=walkLat.longitude+"";
+                    putCommentBoom();
+                }
                 break;
         }
     }
@@ -2140,9 +2151,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     };
 
     private void refreshUI(int count) {
-        if (count > 0)
-            imgRedPoint.setVisibility(View.VISIBLE);
-        else imgRedPoint.setVisibility(View.GONE);
+        if (count > 0) {
+            txtMsgCount.setVisibility(View.VISIBLE);
+            txtMsgCount.setText(count + "");
+        } else txtMsgCount.setVisibility(View.GONE);
     }
 
     @Override
