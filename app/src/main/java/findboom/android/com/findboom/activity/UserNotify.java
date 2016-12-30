@@ -5,10 +5,12 @@ package findboom.android.com.findboom.activity;/**
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import findboom.android.com.findboom.BaseActivity;
 import findboom.android.com.findboom.R;
@@ -20,6 +22,7 @@ import findboom.android.com.findboom.utils.CommonUntilities;
  */
 public class UserNotify extends BaseActivity {
     private WebView webView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,8 @@ public class UserNotify extends BaseActivity {
 
     private void initView() {
         // TODO Auto-generated method stub
-
+        progressBar = (ProgressBar) findViewById(R.id.progressbar);
+        progressBar.setVisibility(View.GONE);
         webView = (WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDatabaseEnabled(true);
@@ -65,6 +69,17 @@ public class UserNotify extends BaseActivity {
 
         });
         webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                if (newProgress < 100) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(newProgress);
+                } else {
+                    progressBar.setVisibility(View.GONE);
+                    progressBar.setProgress(0);
+                }
+            }
 
             @Override
             public boolean onJsAlert(WebView view, String url, String message,
@@ -74,6 +89,13 @@ public class UserNotify extends BaseActivity {
             }
 
         });
+
+    }
+
+    @Override
+    public void boomClick(View v) {
+        super.boomClick(v);
+        finish();
     }
 
     @Override
