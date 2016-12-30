@@ -17,7 +17,7 @@
     <dimen name="pop_pwd_btn_wide">80dp</dimen>
     <dimen name="pop_pwd_btn_height">27dp</dimen>
     <dimen name="home_icon_wide">50dp</dimen>
-    <dimen name="home_icon_wide_new">53dp</dimen>
+    <dimen name="home_icon_wide_new">52dp</dimen>
     <dimen name="home_icon_wide_bottom">57dp</dimen>
     <dimen name="home_icon_parent_wide">55dp</dimen>
     <dimen name="home_icon_height">70dp</dimen>

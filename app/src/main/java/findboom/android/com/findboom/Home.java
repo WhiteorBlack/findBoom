@@ -39,6 +39,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -186,6 +187,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     //    private ImageView imgRedPoint;
     private TextView txtDefense, txtScan, txtRecord, txtArsenal, txtMsg, txtMsgCount;
     private CheckBox chbMoney, chbBoom;
+    private LinearLayout llRightContent;
 
     private SettingPop settingPop;
     private NewShopPop shopPop;
@@ -491,46 +493,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private void initView() {
         vibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
-//        expandableSelector = (ExpandableSelector) findViewById(R.id.img_expand);
-//        expandableSelector.setVisibility(View.INVISIBLE);
-//        List<ExpandableItem> expandableItems = new ArrayList<>();
-//        expandableItems.add(new ExpandableItem(R.mipmap.friend_msg));
-//        expandableItems.add(new ExpandableItem(R.mipmap.system_msg));
-//        expandableSelector.showExpandableItems(expandableItems);
-//        expandableSelector.setOnExpandableItemClickListener(new OnExpandableItemClickListener() {
-//            @Override
-//            public void onExpandableItemClickListener(int index, View view) {
-//                if (index == 1) {
-//                    //系统消息
-//                    startActivity(new Intent(context, SystemMessage.class));
-//                } else {
-//                    //好友消息
-//                    startActivityForResult(new Intent(context, FriendMessage.class), 10);
-//                }
-//                expandableSelector.collapse();
-//            }
-//        });
-//        expandableSelector.setExpandableSelectorListener(new ExpandableSelectorListener() {
-//            @Override
-//            public void onCollapse() {
-//
-//            }
-//
-//            @Override
-//            public void onExpand() {
-//
-//            }
-//
-//            @Override
-//            public void onCollapsed() {
-//                expandableSelector.setVisibility(View.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onExpanded() {
-//                expandableSelector.setVisibility(View.VISIBLE);
-//            }
-//        });
         mapBoomList = new ArrayList<>();
         boomList = new ArrayList<>();
         defenseList = new ArrayList<>();
@@ -675,10 +637,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) txtMsg.getLayoutParams();
         params.width = (int) (Tools.getScreenWide(context) * 0.6);
         txtMsg.setLayoutParams(params);
-//        imgRedPoint = (ImageView) findViewById(R.id.img_red_point);
-//        imgRedPoint.setVisibility(View.GONE);
         txtMsgCount = (TextView) findViewById(R.id.txt_msg_count);
         txtMsgCount.setVisibility(View.GONE);
+
+        llRightContent=(LinearLayout)findViewById(R.id.ll_right_content);
+        RelativeLayout.LayoutParams paramsContent= (RelativeLayout.LayoutParams) llRightContent.getLayoutParams();
+        paramsContent.width= (int) (Tools.getScreenWide(this)/8+Tools.dip2px(this,50)/2);
+        llRightContent.setLayoutParams(paramsContent);
     }
 
     /**
@@ -1696,12 +1661,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     recharMoney = decentFloat(moneyF);
                     user.UserBalance = recharMoney;
                 }
-
                 BoomDBManager.getInstance().setUserData(user);
-
             } else {
                 recharMoney = "";
-                money = 0f;
+                money = 0.00f;
             }
         }
     };
@@ -2022,7 +1985,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             BoomDBManager.getInstance().setUserData(user);
         } else {
             recharMoney = "";
-            money = 0f;
+            money = 0.00f;
         }
         if (!AppPrefrence.getIsBack(this))
             startService(backIntent);

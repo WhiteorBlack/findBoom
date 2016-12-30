@@ -24,59 +24,75 @@
             android:paddingRight="25dp"
             android:paddingTop="15dp">
 
-            <RelativeLayout
-                android:layout_width="@dimen/home_icon_parent_wide"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/img_msg"
-                    android:layout_width="@dimen/home_icon_wide_bottom"
-                    android:layout_height="@dimen/home_icon_height"
-                    android:background="@mipmap/icon_message_center"
-                    android:onClick="boomClick" />
-
-                <TextView
-                    android:id="@+id/txt_msg_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="top|right"
-                    android:background="@mipmap/icon_text_bg"
-                    android:gravity="center"
-                    android:text="10"
-                    android:textColor="@color/pop_bg"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rel_record"
-                android:layout_width="@dimen/home_icon_parent_wide"
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:onClick="boomClick">
+                android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/img_record"
-                    android:layout_width="@dimen/home_icon_wide_new"
-                    android:layout_height="@dimen/home_icon_height"
-                    android:background="@mipmap/icon_home_record" />
+                <RelativeLayout
+                    android:layout_width="@dimen/home_icon_parent_wide"
+                    android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:id="@+id/img_msg"
+                        android:layout_width="@dimen/home_icon_wide_bottom"
+                        android:layout_height="@dimen/home_icon_height"
+                        android:background="@mipmap/icon_message_center"
+                        android:onClick="boomClick" />
 
-                <TextView
-                    android:id="@+id/txt_record_count"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/txt_msg_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="top|right"
+                        android:background="@mipmap/icon_text_bg"
+                        android:gravity="center"
+                        android:text="10"
+                        android:textColor="@color/pop_bg"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/rel_record"
+                    android:layout_width="@dimen/home_icon_parent_wide"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="top|right"
-                    android:background="@mipmap/icon_text_bg"
-                    android:gravity="center"
-                    android:text="10"
-                    android:textColor="@color/pop_bg"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+                    android:layout_marginLeft="15dp"
+                    android:onClick="boomClick">
 
+                    <ImageView
+                        android:id="@+id/img_record"
+                        android:layout_width="@dimen/home_icon_wide_new"
+                        android:layout_height="@dimen/home_icon_height"
+                        android:background="@mipmap/icon_home_record" />
+
+
+                    <TextView
+                        android:id="@+id/txt_record_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="top|right"
+                        android:background="@mipmap/icon_text_bg"
+                        android:gravity="center"
+                        android:text="10"
+                        android:textColor="@color/pop_bg"
+                        android:textSize="8sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
         </LinearLayout>
 
 
@@ -145,7 +161,7 @@
 
                 <ImageView
                     android:id="@+id/img_settings"
-                    android:layout_width="@dimen/home_icon_wide"
+                    android:layout_width="@dimen/home_icon_wide_new"
                     android:layout_height="@dimen/home_icon_height"
                     android:layout_gravity="center"
                     android:background="@mipmap/icon_home_setting" />
@@ -161,7 +177,8 @@
             android:paddingBottom="110dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/ll_right_content"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="50dp"
