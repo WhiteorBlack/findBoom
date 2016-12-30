@@ -141,6 +141,7 @@ import findboom.android.com.findboom.dailog.CreatePayPwdPop;
 import findboom.android.com.findboom.dailog.DefensePop;
 import findboom.android.com.findboom.dailog.FriendListPop;
 import findboom.android.com.findboom.dailog.GetRecordPop;
+import findboom.android.com.findboom.dailog.GuidePop;
 import findboom.android.com.findboom.dailog.MessageDialog;
 import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.NotifyPop;
@@ -222,6 +223,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BoomPic boomPic;
     private BoomText boomText;
     private BoomGold boomGold;
+    private GuidePop guidePop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -309,8 +311,18 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         userDao = new UserDao(this);
         //注册联系人变动监听
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
-
         initNotifier();
+        showGuide();
+    }
+
+    private void showGuide() {
+        if (AppPrefrence.getIsFirst(this)) {
+            if (guidePop == null)
+                guidePop = new GuidePop(this);
+            guidePop.showPop(txtArsenal);
+            guidePop.setPopInterfacer(this,38);
+        }
+        AppPrefrence.setIsFirst(this, false);
     }
 
     private EaseNotifier notifier;
@@ -640,9 +652,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         txtMsgCount = (TextView) findViewById(R.id.txt_msg_count);
         txtMsgCount.setVisibility(View.GONE);
 
-        llRightContent=(LinearLayout)findViewById(R.id.ll_right_content);
-        RelativeLayout.LayoutParams paramsContent= (RelativeLayout.LayoutParams) llRightContent.getLayoutParams();
-        paramsContent.width= (int) (Tools.getScreenWide(this)/8+Tools.dip2px(this,50)/2);
+        llRightContent = (LinearLayout) findViewById(R.id.ll_right_content);
+        RelativeLayout.LayoutParams paramsContent = (RelativeLayout.LayoutParams) llRightContent.getLayoutParams();
+        paramsContent.width = (int) (Tools.getScreenWide(this) / 8 + Tools.dip2px(this, 50) / 2);
         llRightContent.setLayoutParams(paramsContent);
     }
 
@@ -808,11 +820,11 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 isDrag = false;
                 break;
             case R.id.img_put_boom:
-                if (walkLat!=null){
+                if (walkLat != null) {
                     initGeoCoder(walkLat);
-                    mineType="0";
-                    latItude=walkLat.latitude+"";
-                    longItude=walkLat.longitude+"";
+                    mineType = "0";
+                    latItude = walkLat.latitude + "";
+                    longItude = walkLat.longitude + "";
                     putCommentBoom();
                 }
                 break;
@@ -945,6 +957,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 37:
                 boomGold = null;
                 break;
+            case 38:
+                guidePop=null;
+                break;
         }
     }
 
@@ -976,6 +991,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (!AppPrefrence.getIsBack(context)) {
                         startService(backIntent);
                     } else stopService(backIntent);
+                }
+                if (bundle!=null&&bundle.getInt("type",0)==5){
+                    if (guidePop==null)
+                        guidePop=new GuidePop(context);
+                    guidePop.showPop(txtArsenal);
+                    guidePop.setPopInterfacer(this,38);
                 }
                 break;
             case 1: //商店窗口
@@ -1589,7 +1610,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             public void onResponse(String response) {
                 super.onResponse(response);
                 if (TextUtils.isEmpty(response)) {
-                    Tools.toastMsgCenter(context,"网络错误检查网络后重试");
+                    Tools.toastMsgCenter(context, "网络错误检查网络后重试");
                     return;
                 }
 
@@ -1600,7 +1621,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         if (object != null && object.getBoolean("Success")) {
                             String orderInfo = object.getString("Data");
                             if (TextUtils.isEmpty(orderInfo)) {
-                                Tools.toastMsgCenter(context,"支付失败,请重试");
+                                Tools.toastMsgCenter(context, "支付失败,请重试");
                                 return;
                             }
 
@@ -1608,7 +1629,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         }
 
                     } catch (Exception e) {
-                        Tools.toastMsgCenter(context,"支付失败,请重试");
+                        Tools.toastMsgCenter(context, "支付失败,请重试");
                     }
                 } else {
                     //微信支付
@@ -1620,7 +1641,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         new WxPayHelper(context).genPayReq(bean_wXpay.Data.appid, bean_wXpay.Data.partnerid, bean_wXpay.Data.prepayid, bean_wXpay.Data.packageValue, bean_wXpay.Data.noncestr,
                                 bean_wXpay.Data.timestamp, bean_wXpay.Data.sign);
                     } else
-                        Tools.toastMsgCenter(context,"支付失败,请重试");
+                        Tools.toastMsgCenter(context, "支付失败,请重试");
                 }
             }
         });
@@ -1950,7 +1971,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         isForeground = true;
         super.onResume();
         if (CommonUntilities.WXPAY) {
-            CommonUntilities.WXPAY=false;
+            CommonUntilities.WXPAY = false;
             String balance = "";
             recharMoney = "";
             float moneyF = 0.00f;
@@ -2253,18 +2274,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             mHandler = new Handler(thread.getLooper());//使用HandlerThread的looper对象创建Handler，如果使用默认的构造方法，很有可能阻塞UI线程
         }
         mHandler.post(mBackgroundRunnable);//将线程post到Handler中
-//        for (int i = 0; i < mapBoomList.size(); i++) {
-//            Bean_MapBoom.MapBoom mapBoom = mapBoomList.get(i);
-//
-//            if (!TextUtils.equals(AppPrefrence.getUserName(context), mapBoom.UserId) && DistanceUtil.getDistance(endLat, new LatLng(mapBoom.Latitude, mapBoom.Longitude)) < mapBoom.BombRange) {
-//                try {
-//                    Thread.currentThread().sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                boomBoom(mapBoom);
-//            }
-//        }
     }
 
 

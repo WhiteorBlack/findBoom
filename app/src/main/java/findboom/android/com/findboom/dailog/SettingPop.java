@@ -55,6 +55,7 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
         view.findViewById(R.id.btn_share).setOnClickListener(this);
         view.findViewById(R.id.btn_advice).setOnClickListener(this);
         view.findViewById(R.id.btn_exit).setOnClickListener(this);
+        view.findViewById(R.id.btn_help).setOnClickListener(this);
 
         chbMusic = (CheckBox) view.findViewById(R.id.chb_music);
         chbMusic.setOnCheckedChangeListener(this);
@@ -92,6 +93,11 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
             case R.id.btn_exit:
                 dismiss();
                 popInterfacer.OnCancle(flag);
+                break;
+            case R.id.btn_help:
+                Bundle bundleH=new Bundle();
+                bundleH.putInt("type",5);
+                popInterfacer.OnConfirm(flag,bundleH);
                 break;
         }
     }

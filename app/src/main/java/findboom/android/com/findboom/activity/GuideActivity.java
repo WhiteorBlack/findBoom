@@ -99,7 +99,7 @@ public class GuideActivity extends BaseFragmentActivity {
             startActivity(new Intent(this, Home.class));
         else
             startActivity(new Intent(this, LoginActivity.class));
-        AppPrefrence.setIsFirst(this, false);
+
         finish();
     }
 
