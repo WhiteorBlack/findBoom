@@ -37,7 +37,7 @@ import okhttp3.Call;
  */
 public class SplashActivity extends BaseActivity {
 
-    private int[] splashRes = new int[]{R.mipmap.splash_day, R.mipmap.splash_night, R.mipmap.splash_rose};
+    private int[] splashRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class SplashActivity extends BaseActivity {
             finish();
         } else {
             ImageView imgSplash = (ImageView) findViewById(R.id.img_splash);
-            Glide.with(this).load(splashRes[new Random().nextInt(2)]).into(imgSplash);
+            Glide.with(this).load(splashRes[new Random().nextInt(3)]).into(imgSplash);
             if (AppPrefrence.getIsLogin(this)) {
                 getUserData();
             }

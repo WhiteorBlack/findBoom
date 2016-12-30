@@ -33,7 +33,7 @@ public class GuideActivity extends BaseFragmentActivity {
     private List<View> views;
     private Button btnGetIn;
     private ViewPagerAdapter pagerAdapter;
-    private int[] guideRes = new int[]{R.mipmap.splash_day, R.mipmap.splash_night, R.mipmap.splash_rose,R.mipmap.splash_girl};
+    private int[] guideRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

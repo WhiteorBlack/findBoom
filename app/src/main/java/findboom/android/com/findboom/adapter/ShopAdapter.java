@@ -38,7 +38,7 @@ public class ShopAdapter extends BaseRecyAdapter {
         int id = 0;
         switch (goodsInfo.ArmType) {
             case 0:
-                id = R.mipmap.icon_boom;
+                id = R.mipmap.boom;
                 break;
             case 1:
 
@@ -47,7 +47,7 @@ public class ShopAdapter extends BaseRecyAdapter {
                 id = R.mipmap.icon_scan;
                 break;
             case 4:
-                id = R.mipmap.defense_boom;
+                id = R.mipmap.defense;
                 break;
         }
         mHolder.setImage(R.id.img_photo, id);

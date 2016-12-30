@@ -56,12 +56,13 @@ public class ScanAdapter extends BaseRecyAdapter {
             ViewHolder mHolder = (ViewHolder) holder;
             Bean_UserArm.UserArm userArm = (Bean_UserArm.UserArm) dataList.get(position);
             mHolder.setText(R.id.txt_name, "扫雷器" + userArm.Count + "个");
+            mHolder.setImage(R.id.img_photo,R.mipmap.icon_scan);
             if (userArm.ArmType == 2) {
                 mHolder.setText(R.id.txt_intro, "(永久期限)");
-                mHolder.setImage(R.id.img_photo, R.mipmap.scan_normal);
+                mHolder.setText(R.id.txt_statue,"永久");
             } else {
                 mHolder.setText(R.id.txt_intro, "(当天使用)");
-                mHolder.setImage(R.id.img_photo, R.mipmap.scan_temp);
+                mHolder.setText(R.id.txt_statue,"临时");
             }
             mHolder.setOnClick(R.id.btn_use, position);
             mHolder.itemView.findViewById(R.id.btn_use).setVisibility(View.VISIBLE);

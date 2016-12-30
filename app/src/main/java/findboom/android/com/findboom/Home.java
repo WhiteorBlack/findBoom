@@ -1617,14 +1617,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      */
     private void buyGold(final int type) {
         Map<String, String> params = new HashMap<>();
-        params.put("GolbId", goodsId);
+        params.put("GoldId", goodsId);
         params.put("PayMentType", type + "");
         PostTools.postData(context, CommonUntilities.RECHARGE_URL + "RechargeGold", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
                 if (TextUtils.isEmpty(response)) {
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, "网络错误", "检查网络后重试").showPop();
+                    Tools.toastMsgCenter(context,"网络错误检查网络后重试");
                     return;
                 }
 
@@ -1635,7 +1635,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         if (object != null && object.getBoolean("Success")) {
                             String orderInfo = object.getString("Data");
                             if (TextUtils.isEmpty(orderInfo)) {
-                                new PostResultPop(context, txtArsenal, R.drawable.icon_error, "支付失败,请重试", "").showPop();
+                                Tools.toastMsgCenter(context,"支付失败,请重试");
                                 return;
                             }
 
@@ -1643,7 +1643,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         }
 
                     } catch (Exception e) {
-                        new PostResultPop(context, txtArsenal, R.drawable.icon_error, "支付失败,请重试", "").showPop();
+                        Tools.toastMsgCenter(context,"支付失败,请重试");
                     }
                 } else {
                     //微信支付
@@ -1655,7 +1655,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         new WxPayHelper(context).genPayReq(bean_wXpay.Data.appid, bean_wXpay.Data.partnerid, bean_wXpay.Data.prepayid, bean_wXpay.Data.packageValue, bean_wXpay.Data.noncestr,
                                 bean_wXpay.Data.timestamp, bean_wXpay.Data.sign);
                     } else
-                        new PostResultPop(context, txtArsenal, R.drawable.icon_error, "支付失败,请重试", "").showPop();
+                        Tools.toastMsgCenter(context,"支付失败,请重试");
                 }
             }
         });

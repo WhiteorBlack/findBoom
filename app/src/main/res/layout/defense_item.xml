@@ -14,11 +14,30 @@
         android:paddingRight="@dimen/pop_padding"
         android:paddingTop="10dp">
 
-        <ImageView
-            android:id="@+id/img_photo"
-            android:layout_width="@dimen/pop_pic_wide"
-            android:layout_height="@dimen/pop_pic_height"
-            android:scaleType="centerInside" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img_photo"
+                android:layout_width="@dimen/pop_pic_wide"
+                android:layout_height="@dimen/pop_pic_height"
+                android:layout_marginRight="5dp"
+                android:background="@mipmap/icon_scan"
+                android:scaleType="centerInside" />
+
+            <TextView
+                android:id="@+id/txt_statue"
+                android:layout_width="@dimen/pop_margin"
+                android:layout_height="@dimen/pop_margin"
+                android:layout_gravity="right|bottom"
+                android:background="@mipmap/icon_text_bg"
+                android:gravity="center"
+                android:text="永久"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/content_yellow"
+                android:textSize="8sp" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"

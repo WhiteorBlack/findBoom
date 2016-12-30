@@ -106,7 +106,6 @@ public class InputCodePop extends BasePopupwind {
             public void onTick(long millisUntilFinished) {
                 btnGetCode.setClickable(false);
                 btnGetCode.setText(millisUntilFinished / 1000 + "秒后重试");
-                btnGetCode.setTextColor(Color.WHITE);
                 btnGetCode.setTextSize(14);
             }
 
