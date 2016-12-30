@@ -1987,6 +1987,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         isForeground = true;
         super.onResume();
         if (CommonUntilities.WXPAY) {
+            CommonUntilities.WXPAY=false;
             String balance = "";
             recharMoney = "";
             float moneyF = 0.00f;
