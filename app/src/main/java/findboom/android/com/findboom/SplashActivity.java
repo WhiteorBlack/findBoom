@@ -5,22 +5,30 @@ package findboom.android.com.findboom;/**
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import cn.jpush.android.api.JPushInterface;
 import findboom.android.com.findboom.activity.GuideActivity;
 import findboom.android.com.findboom.activity.LoginActivity;
+import findboom.android.com.findboom.adapter.ViewPagerAdapter;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
@@ -37,12 +45,20 @@ import okhttp3.Call;
  */
 public class SplashActivity extends BaseActivity {
 
+    private ViewPager viewPager;
+    private LinearLayout llParent;
+    private List<View> views;
+    private Button btnGetIn;
+    private ViewPagerAdapter pagerAdapter;
+
     private int[] splashRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+        initView();
+        setData();
         if (AppPrefrence.getIsFirst(this)) {
             startActivity(new Intent(this, GuideActivity.class));
             finish();
@@ -53,9 +69,52 @@ public class SplashActivity extends BaseActivity {
                 getUserData();
             }
             JPushInterface.init(getApplicationContext());
-            countDown();
+//            countDown();
         }
 
+    }
+
+    private void setData() {
+        for (int i = 0; i < splashRes.length; i++) {
+            View view = LayoutInflater.from(this).inflate(R.layout.guide_imageview, null);
+            ImageView imageview = (ImageView) view.findViewById(R.id.img_guide);
+            Glide.with(this).load(splashRes[i]).into(imageview);
+            views.add(view);
+            ImageView point = new ImageView(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Tools.dip2px(this, 10), Tools.dip2px(this, 10));
+            params.leftMargin = 15;
+            params.rightMargin = 15;
+            point.setLayoutParams(params);
+            if (i == 0)
+                point.setBackgroundResource(R.drawable.guide_point_selected);
+            else point.setBackgroundResource(R.drawable.guide_point_unselect);
+            llParent.addView(point);
+        }
+        pagerAdapter.notifyDataSetChanged();
+    }
+
+    private void initView() {
+        views = new ArrayList<>();
+        btnGetIn = (Button) findViewById(R.id.btn_get_in);
+        btnGetIn.setVisibility(View.GONE);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        llParent = (LinearLayout) findViewById(R.id.ll_point_content);
+        pagerAdapter = new ViewPagerAdapter(views);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if (position == splashRes.length-1)
+                    btnGetIn.setVisibility(View.VISIBLE);
+                else btnGetIn.setVisibility(View.GONE);
+                for (int i = 0; i < splashRes.length; i++) {
+                    if (position==i){
+                        llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_selected);
+                    }else llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_unselect);
+                }
+            }
+        });
     }
 
     Bean_UserInfo bean_UserInfo;
@@ -124,5 +183,26 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
         }.start();
+    }
+
+    @Override
+    public void boomClick(View v) {
+        super.boomClick(v);
+        switch (v.getId()){
+            case R.id.btn_get_in:
+                if (!AppPrefrence.getIsLogin(SplashActivity.this))
+                    startActivity(new Intent(context, LoginActivity.class));
+                else
+                    startActivity(new Intent(context, Home.class));
+                finish();
+                break;
+            case R.id.btn_skipe:
+                if (!AppPrefrence.getIsLogin(SplashActivity.this))
+                    startActivity(new Intent(context, LoginActivity.class));
+                else
+                    startActivity(new Intent(context, Home.class));
+                finish();
+                break;
+        }
     }
 }

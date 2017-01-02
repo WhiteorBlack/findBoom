@@ -54,11 +54,11 @@ public class BoomDefensePop extends BasePopupwind {
     }
 
     private void setAnim(final View v, final int[] start_location) {
-        imgDefense.setX(start_location[0] / 2 - Tools.dip2px(context, 30));
-        imgDefense.setY(start_location[1] / 2 - Tools.dip2px(context, 30));
+        imgDefense.setLeft(start_location[0] / 2 - Tools.dip2px(context, 30));
+        imgDefense.setTop(start_location[1] / 2 - Tools.dip2px(context, 30));
         final int[] end_location = new int[2];// 这是用来存储动画结束位置的X、Y坐标
-        end_location[0] = (int) (Tools.getScreenWide(context) / 2 - Tools.dip2px(context, 20));
-        end_location[1] = (int) (Tools.getScreenHeight(context) / 2 - Tools.dip2px(context, 25));
+        end_location[0] = (int) (Tools.getScreenWide(context) / 2 );
+        end_location[1] = (int) (Tools.getScreenHeight(context) / 2 );
 
         // 计算位移
         int endX = end_location[0] - start_location[0];// 动画位移的X坐标
@@ -78,13 +78,13 @@ public class BoomDefensePop extends BasePopupwind {
         final ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 2.0f, 1.0f, 2.0f,
                 Animation.RELATIVE_TO_PARENT, 0.5f, Animation.RELATIVE_TO_PARENT, 0.5f);
         scaleAnimation.setFillAfter(true);
-        scaleAnimation.setDuration(300);
+        scaleAnimation.setDuration(600);
 
         AnimationSet set = new AnimationSet(false);
         set.setFillAfter(false);
         set.addAnimation(translateAnimationY);
         set.addAnimation(translateAnimationX);
-        set.setDuration(600);// 动画的执行时间
+        set.setDuration(800);// 动画的执行时间
 
         imgDefense.startAnimation(set);
 

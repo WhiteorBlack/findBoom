@@ -165,7 +165,7 @@ public class PutBoomTypePop extends BasePopupwind {
         }
 
         viewPager.setOffscreenPageLimit(views.size());
-        viewPager.setPageMargin(-Tools.dip2px(context, 135));
+        viewPager.setPageMargin(-Tools.dip2px(context, 155));
         viewPager.setAdapter(new ViewPaperAdapter(views));
         viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
         viewPager.setCurrentItem(0);

@@ -100,8 +100,8 @@ public class ConversationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+//        if (adapter != null)
+//            adapter.notifyDataSetChanged();
     }
 
     /**

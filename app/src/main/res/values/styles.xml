@@ -122,4 +122,9 @@
         <item name="android:layout_height">@dimen/pop_pwd_btn_height</item>
     </style>
 
+    <style name="checkbox_style" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+
 </resources>
