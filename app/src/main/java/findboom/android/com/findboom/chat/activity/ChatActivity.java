@@ -1,18 +1,5 @@
 package findboom.android.com.findboom.chat.activity;
 
-import java.util.Date;
-import java.util.List;
-
-import com.bumptech.glide.Glide;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMConversation;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.chat.EMMessage.ChatType;
-import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.DateUtils;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -28,11 +15,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.DateUtils;
+
+import java.util.Date;
+import java.util.List;
+
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
 import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.utils.EaseCommonUtils;
-import findboom.android.com.findboom.dailog.BasePopupwind;
 import findboom.android.com.findboom.database.BoomDBManager;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.widget.CircleImageView;
@@ -45,7 +44,7 @@ public class ChatActivity extends Activity {
     private Button btn_send;
     private EditText et_content;
     private List<EMMessage> msgList;
-    MessageAdapter adapter;
+    private MessageAdapter adapter;
     private EMConversation conversation;
     protected int pagesize = 20;
 

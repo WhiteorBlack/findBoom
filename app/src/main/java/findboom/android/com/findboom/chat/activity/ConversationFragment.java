@@ -92,6 +92,7 @@ public class ConversationFragment extends Fragment {
                     intent.putExtra("username", userName);
                     intent.putExtra("userId", userId);
                     startActivity(intent);
+                    conversation.markAllMessagesAsRead();
                 }
             }
         });
@@ -100,8 +101,8 @@ public class ConversationFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (adapter != null)
-//            adapter.notifyDataSetChanged();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 
     /**

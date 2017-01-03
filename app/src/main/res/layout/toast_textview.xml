@@ -10,7 +10,7 @@
         android:layout_height="120dp"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
         android:background="@drawable/bg_msg_pop"
         android:alpha="0.8"/>
