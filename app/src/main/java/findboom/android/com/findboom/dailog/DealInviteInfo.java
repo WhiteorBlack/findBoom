@@ -76,13 +76,14 @@ public class DealInviteInfo extends BasePopupwind {
                 break;
             case R.id.btn_confirm:
                 type = "1";
+                if (!TextUtils.isEmpty(userId))
+                    sendRequest();
+                else {
+                    dismiss();
+                }
                 break;
         }
-        if (!TextUtils.isEmpty(userId))
-            sendRequest();
-        else {
-            dismiss();
-        }
+
     }
 
     private void sendRequest() {

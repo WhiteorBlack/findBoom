@@ -6,8 +6,8 @@ android {
             keyAlias 'findboom'
             keyPassword 'findboom2016'
 //            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
-//            storeFile file('F:\\myProject\\FindBoom\\FindBoom.jks')
-            storeFile file('C:\\Users\\41508\\Documents\\MyProject\\FindBoom\\FindBoom.jks')
+            storeFile file('F:\\myProject\\FindBoom\\FindBoom.jks')
+//            storeFile file('C:\\Users\\41508\\Documents\\MyProject\\FindBoom\\FindBoom.jks')
             storePassword 'findboom2016'
         }
     }
