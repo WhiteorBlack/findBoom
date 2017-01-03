@@ -192,12 +192,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private ReportPop reportPop;
     private GetRecordPop getRecordPop;
     private RecordListPop recordListPop;
-    //    private CreatePayPwdPop createPayPwd;
-//    private ChangePayPwdPop changePayPwd;
-//    private ConfrimPwdPop confirmPwdPop;
     private ShopBuyPop shopBuyPop;
     private SelectPayTypePop selectPayPop;
-    //    private PersonalInfo personalInfo;
     private BoomPop boomPop;
     private SelectPayTypeAllPop selectPayTypeAllPop;
     private BandPhonePop bandPhonePop;
@@ -963,7 +959,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private float money = 0.00f;
     private int armType = 0;
     private int goldAmout = 0;//金币数量
-    private float goldPrice=0.00f;//金幣價格
+    private float goldPrice = 0.00f;//金幣價格
 
     @Override
     public void OnConfirm(int flag, Bundle bundle) {
@@ -1011,7 +1007,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     shopBuyPop.setGoodPic(armType);
                 }
                 if (bundle.getInt("type", -1) == 1) {//金币直接购买
-                    goldPrice=bundle.getFloat("money",0.00f);
+                    goldPrice = bundle.getFloat("money", 0.00f);
                     goldAmout = bundle.getInt("amount");
                     if (selectPayTypeAllPop == null)
                         selectPayTypeAllPop = new SelectPayTypeAllPop(context);
@@ -1355,6 +1351,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 money = Float.parseFloat(bundle.getString("money"));
                 alipayNo = bundle.getString("alipay");
                 alipayName = bundle.getString("name");
+                convertRed(bundle.getString("pwd"));
 //                if (confirmPwdPop == null)
 //                    confirmPwdPop = new ConfrimPwdPop(context);
 //                confirmPwdPop.showPop(txtArsenal);
@@ -1436,19 +1433,19 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         params.put("AlipayName", alipayName);
         params.put("AlipayAccount", alipayNo);
         params.put("Amount", money + "");
-        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
+//        params.put("PayPassWord", Tools.get32MD5StrWithOutKey(pwd));
         PostTools.postData(context, CommonUntilities.WITH_URL + "ApplyWithdraw", params, new PostCallBack() {
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
                 Tools.debug("convertRed" + response);
                 if (TextUtils.isEmpty(response)) {
-                    Tools.toastMsg(context, "网络错误,请检查后重试");
+                    Tools.toastMsgCenter(context, "网络错误,请检查后重试");
                     return;
                 }
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
+                    Tools.toastMsgCenter(context, baseBean.Msg);
                     String balance = "";
                     recharMoney = "";
                     float moneyF = 0.00f;
@@ -1465,7 +1462,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     if (convertRedPop != null && convertRedPop.isShowing())
                         convertRedPop.dismiss();
                 } else
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
+                    Tools.toastMsgCenter(context, baseBean.Msg);
             }
         });
     }
@@ -1576,27 +1573,26 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     toastSuccess();
                     FindBoomApplication.getInstance().playMoneySound();
                     String balance = "";
-                    String account="";
+                    String account = "";
                     recharMoney = "";
                     float moneyF = 0.00f;
-                    float accountF=0.00f;
+                    float accountF = 0.00f;
                     Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
-                    if (user != null)
-                    {
+                    if (user != null) {
                         balance = user.RedPackBalance;
-                        account=user.UserBalance;
+                        account = user.UserBalance;
                     }
                     if (!TextUtils.isEmpty(balance))
                         moneyF = Float.parseFloat(balance) - goldPrice;
                     if (!TextUtils.isEmpty(account))
-                        accountF=Float.parseFloat(account)+goldAmout;
+                        accountF = Float.parseFloat(account) + goldAmout;
 
                     recharMoney = decentFloat(moneyF);
                     user.RedPackBalance = recharMoney;
-                    user.UserBalance=decentFloat(accountF);
+                    user.UserBalance = decentFloat(accountF);
                     BoomDBManager.getInstance().setUserData(user);
-                    recharMoney="";
-                    goldAmout=0;
+                    recharMoney = "";
+                    goldAmout = 0;
                 } else
                     new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
             }
@@ -1657,12 +1653,12 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     String recharMoney = "";
-    private float aliMoney=0.00f;
+    private float aliMoney = 0.00f;
     Handler payHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Tools.debug("money--"+money);
+            Tools.debug("money--" + money);
             if (msg.what == 0) {
                 String balance = "";
                 recharMoney = "";
@@ -1712,7 +1708,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
      * @param type
      */
     private void recahrgeRed(final String type) {
-        aliMoney=money;
+        aliMoney = money;
         Map<String, String> params = new HashMap<>();
         params.put("RechargeAmount", money + "");
         params.put("PayMentType", type);
@@ -1754,7 +1750,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     } else
                         new PostResultPop(context, txtArsenal, R.drawable.icon_error, "支付失败,请重试", "").showPop();
                 }
-                Tools.debug("money--"+money);
+                Tools.debug("money--" + money);
             }
 
         });
@@ -2442,7 +2438,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private void setAnim(final int[] start_location) {
         final ViewGroup viewGroup = createAnimLayout();
         final ImageView imgDefense = new ImageView(this);
-        imgDefense.setLayoutParams(new LinearLayout.LayoutParams(Tools.dip2px(context,80),Tools.dip2px(context,80)));
+        imgDefense.setLayoutParams(new LinearLayout.LayoutParams(Tools.dip2px(context, 80), Tools.dip2px(context, 80)));
         imgDefense.setBackgroundResource(R.mipmap.defense_boom);
         imgDefense.setVisibility(View.GONE);
         viewGroup.addView(imgDefense);
@@ -2451,8 +2447,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         final int[] end_location = new int[]{(int) (Tools.getScreenWide(context) / 2), (int) (Tools.getScreenHeight(context) / 2)};// 这是用来存储动画结束位置的X、Y坐标
 
         // 计算位移
-        int endX = start_location[0] - end_location[0]+Tools.dip2px(context,10);// 动画位移的X坐标
-        int endY = end_location[1] - start_location[1]+Tools.dip2px(context,80);// 动画位移的y坐标
+        int endX = start_location[0] - end_location[0] + Tools.dip2px(context, 10);// 动画位移的X坐标
+        int endY = end_location[1] - start_location[1] + Tools.dip2px(context, 80);// 动画位移的y坐标
         TranslateAnimation translateAnimationX = new TranslateAnimation(start_location[0],
                 endX, 0, 0);
         translateAnimationX.setInterpolator(new LinearInterpolator());
@@ -2527,8 +2523,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             // 动画的结束
             @Override
             public void onAnimationEnd(Animation animation) {
-                imgDefense.setY(end_location[1]-Tools.dip2px(context,40));
-                imgDefense.setX(end_location[0]-Tools.dip2px(context,40));
+                imgDefense.setY(end_location[1] - Tools.dip2px(context, 40));
+                imgDefense.setX(end_location[0] - Tools.dip2px(context, 40));
                 imgDefense.clearAnimation();
                 imgDefense.startAnimation(scaleAnimation);
             }

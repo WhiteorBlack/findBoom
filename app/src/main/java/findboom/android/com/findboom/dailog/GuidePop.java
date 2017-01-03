@@ -6,6 +6,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -28,6 +29,7 @@ import okhttp3.Call;
 public class GuidePop extends BasePopupwind {
     private View view;
     private TextView txtContent;
+    private LinearLayout llParent;
 
     public GuidePop(Context context) {
         super(context);
@@ -64,6 +66,10 @@ public class GuidePop extends BasePopupwind {
             view = LayoutInflater.from(context).inflate(R.layout.guide_pop, null);
         view.findViewById(R.id.img_close).setOnClickListener(this);
         txtContent = (TextView) view.findViewById(R.id.txt_help);
+        llParent=(LinearLayout)view.findViewById(R.id.ll_parent);
+        LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) llParent.getLayoutParams();
+        params.width= (int) (Tools.getScreenWide(context)*0.9);
+        params.height= (int) (Tools.getScreenHeight(context)*0.7);
         this.setContentView(view);
     }
 
