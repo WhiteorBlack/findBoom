@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.tencent.ysdk.api.YSDKApi;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +58,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+        YSDKApi.onCreate(this);
         initView();
         setData();
         if (AppPrefrence.getIsFirst(this)) {
