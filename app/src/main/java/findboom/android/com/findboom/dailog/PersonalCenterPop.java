@@ -90,6 +90,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             txtWork.setText(TextUtils.isEmpty(userInfo.Profession) ? "其他" : userInfo.Profession);
             txtIntegra.setText(TextUtils.isEmpty(userInfo.UserScore) ? "0" : userInfo.UserScore);
             txtLevel.setText(TextUtils.isEmpty(userInfo.UserLevel) ? "0" : userInfo.UserLevel);
+            txtCity.setText(userInfo.City);
             if (!TextUtils.isEmpty(userInfo.Avatar))
                 setPhoto(userInfo.Avatar);
         }
@@ -103,6 +104,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             edtName.setText(userInfo.NickName);
             txtRed.setText(userInfo.RedPackBalance);
             txtWork.setText(userInfo.Profession);
+            txtCity.setText(userInfo.City);
             txtIntegra.setText(TextUtils.isEmpty(userInfo.UserScore) ? "0" : userInfo.UserScore);
             txtLevel.setText(TextUtils.isEmpty(userInfo.UserLevel) ? "0" : userInfo.UserLevel);
             if (!TextUtils.isEmpty(userInfo.Avatar))
@@ -111,9 +113,6 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         btnBottom.setBackgroundResource(R.mipmap.btn_edit_info);
     }
 
-    public void setCicy(String city) {
-        txtCity.setText(city);
-    }
 
     public void setPhoto(String path) {
         Glide.with(context).load(path).into(imgPhoto);
@@ -138,6 +137,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         txtWork.setOnClickListener(this);
         imgPhoto = (CircleImageView) personView.findViewById(R.id.img_user_photo);
         imgPhoto.setOnClickListener(this);
+        personView.findViewById(R.id.txt_user_city).setOnClickListener(this);
 
         accountView = LayoutInflater.from(context).inflate(R.layout.fragment_account_info, null);
         txtAccount = (TextView) accountView.findViewById(R.id.txt_account_fee);
@@ -198,6 +198,18 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
 
     }
 
+    public void setCity(String city) {
+        if (TextUtils.isEmpty(city))
+            return;
+        txtCity.setText(city);
+    }
+
+    private String province = "";
+
+    public void setProvince(String pro) {
+        this.province = pro;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -227,7 +239,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         isEdit = true;
                         btnBottom.setTag(6);
                         btnBottom.setBackgroundResource(R.mipmap.btn_save_info);
-                        Tools.openInput(edtName,context);
+                        Tools.openInput(edtName, context);
                         break;
                     case 2:
                         //创建支付密码
@@ -252,10 +264,14 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                         bundleBtn.putString("age", txtAge.getText().toString());
                         bundleBtn.putString("name", name);
                         bundleBtn.putString("pro", txtWork.getText().toString());
+                        bundleBtn.putString("city", txtCity.getText().toString());
+                        bundleBtn.putString("province", province);
                         Bean_UserInfo.GameUser user = new Bean_UserInfo.GameUser();
                         user.Age = txtAge.getText().toString();
                         user.NickName = txtName.getText().toString();
                         user.Profession = txtWork.getText().toString();
+                        user.Province = province;
+                        user.City = txtCity.getText().toString();
                         BoomDBManager.getInstance().setUserData(user);
                         if (popInterfacer != null)
                             popInterfacer.OnConfirm(flag, bundleBtn);
@@ -314,6 +330,14 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 bundle1P.putInt("type", 10);
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundle1P);
+                break;
+            case R.id.txt_user_city:
+                if (!isEdit)
+                    return;
+                Bundle bundle1C = new Bundle();
+                bundle1C.putInt("type", 11);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle1C);
                 break;
         }
     }

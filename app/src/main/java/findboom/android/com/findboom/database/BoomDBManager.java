@@ -50,10 +50,11 @@ public class BoomDBManager {
             contentValues.put(Contents.USER_REFERCOUNT, user.ReferUserCount);
             contentValues.put(Contents.USER_SCORE, user.UserScore);
             contentValues.put(Contents.USER_SOURCE, user.UserSource);
-            contentValues.put(Contents.USER_WORK,user.Profession);
+            contentValues.put(Contents.USER_WORK, user.Profession);
             contentValues.put(Contents.USER_STATUS, user.Status);
             contentValues.put(Contents.USER_STATUSTXT, user.StatusTxt);
             contentValues.put(Contents.USER_AGE, user.Age);
+            contentValues.put(Contents.USER_CITY, user.City);
             contentValues.put(Contents.USER_NIKC, user.NickName);
             contentValues.put(Contents.USER_AVATAR, user.Avatar);
             db.replace(Contents.USER_TABLE, null, contentValues);
@@ -83,7 +84,8 @@ public class BoomDBManager {
             contentValues.put(Contents.USER_AGE, user.Age);
             contentValues.put(Contents.USER_NIKC, user.NickName);
             contentValues.put(Contents.USER_AVATAR, user.Avatar);
-            contentValues.put(Contents.USER_WORK,user.Profession);
+            contentValues.put(Contents.USER_WORK, user.Profession);
+            contentValues.put(Contents.USER_CITY, user.City);
             db.replace(Contents.USER_TABLE, null, contentValues);
         }
     }
@@ -112,7 +114,8 @@ public class BoomDBManager {
                     user.Age = cursor.getString(cursor.getColumnIndex(Contents.USER_AGE));
                     user.NickName = cursor.getString(cursor.getColumnIndex(Contents.USER_NIKC));
                     user.Avatar = cursor.getString(cursor.getColumnIndex(Contents.USER_AVATAR));
-                    user.Profession=cursor.getString(cursor.getColumnIndex(Contents.USER_WORK));
+                    user.Profession = cursor.getString(cursor.getColumnIndex(Contents.USER_WORK));
+                    user.City=cursor.getString(cursor.getColumnIndex(Contents.USER_CITY));
                 }
                 cursor.close();
             }

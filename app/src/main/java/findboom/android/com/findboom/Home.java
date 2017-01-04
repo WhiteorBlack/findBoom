@@ -141,6 +141,7 @@ import findboom.android.com.findboom.dailog.NewShopPop;
 import findboom.android.com.findboom.dailog.NotifyPop;
 import findboom.android.com.findboom.dailog.OpenRedPop;
 import findboom.android.com.findboom.dailog.PersonalCenterPop;
+import findboom.android.com.findboom.dailog.PickerCityDialog;
 import findboom.android.com.findboom.dailog.PickerDialog;
 import findboom.android.com.findboom.dailog.PostResultPop;
 import findboom.android.com.findboom.dailog.PutBoomTypePop;
@@ -210,6 +211,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BoomText boomText;
     private BoomGold boomGold;
     private GuidePop guidePop;
+    private PickerCityDialog pickerCityDialog;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -758,7 +760,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 if (personalCenterPop == null)
                     personalCenterPop = new PersonalCenterPop(context);
                 personalCenterPop.showPop(imgArsenal);
-                personalCenterPop.setCicy(city);
                 personalCenterPop.setPopInterfacer(this, 3);
                 break;
             case R.id.rel_record:
@@ -952,6 +953,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 38:
                 guidePop = null;
                 break;
+            case 39:
+                pickerCityDialog = null;
+                break;
         }
     }
 
@@ -1132,6 +1136,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
                         }
                     }).show();
+                }
+
+                if (bundle != null && bundle.getInt("type") == 11) {
+                    if (pickerCityDialog == null)
+                        pickerCityDialog = new PickerCityDialog(context);
+                    pickerCityDialog.showPop(txtArsenal);
+                    pickerCityDialog.setPopInterfacer(this, 39);
                 }
                 break;
             case 4:
@@ -1417,6 +1428,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 31:
                 isPutBoom = true;
                 isScan = false;
+                break;
+            case 39:
+                if (bundle != null)
+                    if (personalCenterPop != null) {
+                        personalCenterPop.setCity(bundle.getString("city"));
+                        personalCenterPop.setProvince(bundle.getString("pro"));
+                    }
                 break;
         }
     }
@@ -1761,12 +1779,14 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         String name = bundle.getString("name");
         String pro = bundle.getString("pro");
         String age = bundle.getString("age");
+        String cityString = bundle.getString("city");
+        String proString = bundle.getString("province");
         int ageInt = TextUtils.isEmpty(age) ? 0 : Integer.parseInt(age);
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         params.put("NickName", TextUtils.isEmpty(name) ? "" : name);
-        params.put("City", city);
-        params.put("Province", provice);
+        params.put("City", TextUtils.isEmpty(cityString) ? city : cityString);
+        params.put("Province", TextUtils.isEmpty(proString) ? provice : proString);
         params.put("Area", area);
         params.put("Profession", TextUtils.isEmpty(pro) ? "" : pro);
         params.put("UserProfile", "");
@@ -1785,7 +1805,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_UserInfo userInfo = new Gson().fromJson(response, Bean_UserInfo.class);
                 if (userInfo != null && userInfo.Success) {
                     BoomDBManager.getInstance().updateUserData(userInfo.Data);
-
                     if (personalCenterPop != null)
                         personalCenterPop.setUserData(userInfo.Data);
                     Tools.toastMsgCenter(context, "修改成功");

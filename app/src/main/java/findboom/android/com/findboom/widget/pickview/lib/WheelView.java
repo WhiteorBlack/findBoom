@@ -2,6 +2,8 @@ package findboom.android.com.findboom.widget.pickview.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.database.DataSetObservable;
+import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -16,6 +18,8 @@ import android.view.View;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -28,7 +32,8 @@ import findboom.android.com.findboom.widget.pickview.listener.OnItemSelectedList
 /**
  * 3d滚轮控件
  */
-public class WheelView extends View {
+public class WheelView extends View  {
+
 
     public enum ACTION {
         // 点击，滑翔(滑到尽头)，拖拽事件

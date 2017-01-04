@@ -1,6 +1,10 @@
 package findboom.android.com.findboom.widget.pickview.adapter;
 
-public interface WheelAdapter<T> {
+import android.database.DataSetObservable;
+
+import java.util.Observable;
+
+public interface WheelAdapter<T>{
 	/**
 	 * Gets items count
 	 * @return the count of wheel items
@@ -22,4 +26,5 @@ public interface WheelAdapter<T> {
 	 * @return the maximum item length or -1
 	 */
 	public int indexOf(T o);
+
 }

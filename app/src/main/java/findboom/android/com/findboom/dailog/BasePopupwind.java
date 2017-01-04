@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.util.List;
+
 import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
@@ -29,11 +31,20 @@ public class BasePopupwind extends PopupWindow implements View.OnClickListener {
     public Context context;
     private boolean focus = false;
 
+    public BasePopupwind(Context context, List<String> datas, View parent) {
+        this.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+        this.getBackground().setAlpha(120);
+        this.context = context;
+        this.setAnimationStyle(R.style.goodsPopStyle);
+    }
+
     public BasePopupwind(Context context) {
         this.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
         this.getBackground().setAlpha(120);
         this.context = context;
         this.setAnimationStyle(R.style.goodsPopStyle);
+        this.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+        this.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
     }
 
     public void setPopInterfacer(PopInterfacer l, int flag) {
@@ -56,15 +67,6 @@ public class BasePopupwind extends PopupWindow implements View.OnClickListener {
         super.setBackgroundDrawable(background);
     }
 
-    @Override
-    public void setHeight(int height) {
-        super.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
-    }
-
-    @Override
-    public void setWidth(int width) {
-        super.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-    }
 
     @Override
     public void dismiss() {

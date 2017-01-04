@@ -17,7 +17,7 @@ import findboom.android.com.findboom.widget.pickview.lib.WheelView;
 import findboom.android.com.findboom.widget.pickview.listener.OnItemSelectedListener;
 
 
-public class PickerDialog extends PopupWindow {
+public class PickerDialog extends BasePopupwind {
 
     private List<String> datas;
     private Context context;
@@ -26,7 +26,7 @@ public class PickerDialog extends PopupWindow {
     private OnSelectItem onSelectItem;
 
     public PickerDialog(Context context, List<String> datas, View parent) {
-        super();
+        super(context, datas, parent);
         this.datas = datas;
         this.context = context;
         this.parent = parent;
@@ -49,23 +49,20 @@ public class PickerDialog extends PopupWindow {
                 // TODO Auto-generated method stub
 
                 if (onSelectItem != null) {
-//                    if (index == 0) {
-//                        onSelectItem.onItemSelect("");
-//                        return;
-//                    }
                     onSelectItem.onItemSelect(datas.get(index));
                 }
             }
         });
-    }
 
-    public void showPop() {
         this.setContentView(view);
         this.setWidth(LayoutParams.MATCH_PARENT);
         this.setHeight(LayoutParams.WRAP_CONTENT);
         this.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         this.setFocusable(true);
         this.setOutsideTouchable(true);
+    }
+
+    public void showPop() {
         this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
     }
 

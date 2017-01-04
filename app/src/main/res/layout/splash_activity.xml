@@ -32,6 +32,13 @@
             android:layout_margin="15dp"
             android:background="@mipmap/icon_skipe"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:text="Copyright©2017 扫雷科技. All Rights Reserved"/>
+
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"

@@ -1,18 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:orientation="vertical">
 
-    <findboom.android.com.findboom.widget.pickview.lib.WheelView
-        android:id="@+id/wheel_view_province"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="200dp" />
-    <findboom.android.com.findboom.widget.pickview.lib.WheelView
-        android:id="@+id/wheel_view_city"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_height="200dp" />
+        android:layout_height="40dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
+        <TextView
+            android:id="@+id/txt_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/txt_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <findboom.android.com.findboom.widget.pickview.lib.WheelView
+            android:id="@+id/wheel_view_province"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="1" />
+
+        <findboom.android.com.findboom.widget.pickview.lib.WheelView
+            android:id="@+id/wheel_view_city"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>
