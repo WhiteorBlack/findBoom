@@ -17,10 +17,8 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
-import com.tencent.ysdk.api.YSDKApi;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +56,6 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
-        YSDKApi.onCreate(this);
         initView();
         setData();
         if (AppPrefrence.getIsFirst(this)) {
@@ -107,13 +104,14 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if (position == splashRes.length-1)
+                if (position == splashRes.length - 1)
                     btnGetIn.setVisibility(View.VISIBLE);
                 else btnGetIn.setVisibility(View.GONE);
                 for (int i = 0; i < splashRes.length; i++) {
-                    if (position==i){
+                    if (position == i) {
                         llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_selected);
-                    }else llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_unselect);
+                    } else
+                        llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_unselect);
                 }
             }
         });
@@ -190,7 +188,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void boomClick(View v) {
         super.boomClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_get_in:
                 if (!AppPrefrence.getIsLogin(SplashActivity.this))
                     startActivity(new Intent(context, LoginActivity.class));
