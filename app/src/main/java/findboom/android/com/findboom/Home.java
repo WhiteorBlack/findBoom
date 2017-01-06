@@ -159,6 +159,7 @@ import findboom.android.com.findboom.interfacer.LocationListener;
 import findboom.android.com.findboom.interfacer.MyLocationListener;
 import findboom.android.com.findboom.interfacer.PopInterfacer;
 import findboom.android.com.findboom.interfacer.PostCallBack;
+import findboom.android.com.findboom.receiver.MyReceiver;
 import findboom.android.com.findboom.service.BackgroundService;
 import findboom.android.com.findboom.utils.AppPrefrence;
 import findboom.android.com.findboom.utils.CommonUntilities;
@@ -294,6 +295,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Tools.debug(logs);
             }
         });
+        Tools.debug(JPushInterface.isPushStopped(this)+"------");
         registerMessageReceiver();
         inviteMessgeDao = new InviteMessgeDao(this);
         userDao = new UserDao(this);
@@ -733,6 +735,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         switch (v.getId()) {
             case R.id.rel_defense:
                 //防爆衣
+                Tools.debug("jpush state----"+JPushInterface.getConnectionState(this));
                 if (defensePop == null)
                     defensePop = new DefensePop(context);
                 defensePop.showPop(imgArsenal);
@@ -1464,19 +1467,19 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
                     Tools.toastMsgCenter(context, baseBean.Msg);
-                    String balance = "";
-                    recharMoney = "";
-                    float moneyF = 0.00f;
-                    Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
-                    if (user != null)
-                        balance = user.RedPackBalance;
-                    if (!TextUtils.isEmpty(balance))
-                        moneyF = Float.parseFloat(balance) - money;
-                    recharMoney = decentFloat(moneyF);
-                    if (personalCenterPop != null)
-                        personalCenterPop.setRed(recharMoney);
-                    user.RedPackBalance = recharMoney;
-                    BoomDBManager.getInstance().setUserData(user);
+//                    String balance = "";
+//                    recharMoney = "";
+//                    float moneyF = 0.00f;
+//                    Bean_UserInfo.GameUser user = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
+//                    if (user != null)
+//                        balance = user.RedPackBalance;
+//                    if (!TextUtils.isEmpty(balance))
+//                        moneyF = Float.parseFloat(balance) - money;
+//                    recharMoney = decentFloat(moneyF);
+//                    if (personalCenterPop != null)
+//                        personalCenterPop.setRed(recharMoney);
+//                    user.RedPackBalance = recharMoney;
+//                    BoomDBManager.getInstance().setUserData(user);
                     if (convertRedPop != null && convertRedPop.isShowing())
                         convertRedPop.dismiss();
                 } else
@@ -2184,7 +2187,8 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mMessageReceiver);
+        if (AppPrefrence.getIsPush(this))
+            unregisterReceiver(mMessageReceiver);
         mLocationClient.stop();
         mLocationClient.unRegisterLocationListener(myListener);
         stopService(backIntent);
@@ -2199,7 +2203,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     }
 
     //for receive customer msg from jpush server
-    private MessageReceiver mMessageReceiver;
+    private MyReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "findboom.android.com.findboom.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
     public static final String KEY_MESSAGE = "message";
@@ -2207,7 +2211,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private LatLng startLat, walkLat;
 
     public void registerMessageReceiver() {
-        mMessageReceiver = new MessageReceiver();
+        mMessageReceiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         filter.addAction(MESSAGE_RECEIVED_ACTION);

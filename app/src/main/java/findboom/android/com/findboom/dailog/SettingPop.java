@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -146,6 +147,7 @@ public class SettingPop extends BasePopupwind implements CompoundButton.OnChecke
                 break;
             case R.id.chb_remind:
                 AppPrefrence.setIsPush(context, isChecked);
+                Tools.debug("reming--"+isChecked);
                 bundle.putInt("type", 3);
                 break;
 

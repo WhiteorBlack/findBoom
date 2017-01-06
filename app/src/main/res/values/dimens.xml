@@ -54,4 +54,7 @@
 
     <dimen name="image_thumbnail_size">100dp</dimen>
     <dimen name="image_thumbnail_spacing">1dp</dimen>
+
+    <dimen name="pop_btn_login_wide">100dp</dimen>
+    <dimen name="pop_btn_login_height">37dp</dimen>
 </resources>
