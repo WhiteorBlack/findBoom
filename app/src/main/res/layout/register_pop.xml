@@ -103,7 +103,6 @@
                 android:hint="输入密码"
                 android:textSize="16sp"
                 android:inputType="textPassword"
-                android:maxLength="11"
                 android:singleLine="true" />
 
             <EditText
@@ -120,7 +119,6 @@
                 android:gravity="center_vertical"
                 android:hint="再次输入密码"
                 android:inputType="textPassword"
-                android:maxLength="11"
                 android:singleLine="true" />
 
             <Button
@@ -138,11 +136,12 @@
                 android:id="@+id/txt_notify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:text="@string/user_notify"
                 android:textColor="#efa508"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
                 android:textSize="14sp"
                 />
         </LinearLayout>

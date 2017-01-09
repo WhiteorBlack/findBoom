@@ -50,9 +50,9 @@
                     android:gravity="center_vertical"
                     android:hint="手机号码"
                     android:inputType="phone"
-                    android:textSize="16sp"
                     android:maxLength="11"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/img_clear"
@@ -80,47 +80,22 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:textSize="16sp"
                     android:gravity="center_vertical"
                     android:hint="登录密码"
                     android:inputType="textPassword"
-                    android:maxLength="11"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp">
-
-                <TextView
-                    android:id="@+id/txt_forget"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="忘记密码?"
-                    android:textColor="@color/content_yellow"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/txt_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:text="快速注册"
-                    android:textColor="@color/content_yellow"
-                    android:textSize="14sp" />
-            </FrameLayout>
 
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="@dimen/pop_btn_login_wide"
                 android:layout_height="@dimen/pop_btn_login_height"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
                 android:layout_marginBottom="15dp"
+                android:layout_marginTop="25dp"
                 android:background="@mipmap/btn_login"
                 android:onClick="boomClick" />
 
@@ -131,11 +106,36 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
                 android:text="@string/user_notify"
                 android:textColor="#efa508"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="35dp"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp">
+
+            <TextView
+                android:id="@+id/txt_forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="忘记密码?"
+                android:textColor="@color/content_yellow"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txt_register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="快速注册"
+                android:textColor="@color/content_yellow"
+                android:textSize="14sp" />
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

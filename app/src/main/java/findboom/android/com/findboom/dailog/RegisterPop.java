@@ -81,7 +81,7 @@ public class RegisterPop extends BasePopupwind {
                     Tools.toastMsgCenter(context, "请输入密码");
                     return;
                 }
-                if (TextUtils.equals(pwd, pwdTwo)) {
+                if (!TextUtils.equals(pwd, pwdTwo)) {
                     Tools.toastMsgCenter(context, "两次输入的密码不一致");
                     return;
                 }
@@ -93,6 +93,8 @@ public class RegisterPop extends BasePopupwind {
                 break;
 
             case R.id.btn_get_code:
+                bundle.putInt("type",-1);
+                phone=edtPhone.getText().toString();
                 if (TextUtils.isEmpty(phone)) {
                     Tools.toastMsgCenter(context, "请输入手机号码");
                     return;

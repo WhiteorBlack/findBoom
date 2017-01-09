@@ -20,7 +20,7 @@
     <string name="setting_sound">音效</string>
     <string name="setting_remind">提醒</string>
     <string name="band_phone">绑定手机</string>
-    <string name="user_notify">点击确定就表示你同意《用户协议》</string>
+    <string name="user_notify">点击确定就会自动登录\n同时表示您同意《用户协议》</string>
     <string name="pay_notify">输入支付密码后确认</string>
     <string name="send_code_confirm">稍后将发送验证码短信到</string>
     <string name="input_code_title">输入验证码</string>

@@ -176,9 +176,14 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
                 }
                 break;
             case 4:
-                if (bundle != null) {
+                if (bundle==null)
+                    return;
+                if (bundle.getInt("type")==0) {
                     register(bundle.getString("phone"), bundle.getString("code"), bundle.getString("pwd"));
                 }
+
+                if (bundle.getInt("type")==1)
+                    startActivity(new Intent(context,UserNotify.class));
                 break;
         }
     }
