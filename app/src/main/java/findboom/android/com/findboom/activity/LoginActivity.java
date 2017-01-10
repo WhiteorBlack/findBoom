@@ -24,6 +24,7 @@ import findboom.android.com.findboom.R;
 import findboom.android.com.findboom.application.FindBoomApplication;
 import findboom.android.com.findboom.asytask.PostTools;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
+import findboom.android.com.findboom.dailog.FindPwdPop;
 import findboom.android.com.findboom.dailog.InputCodePop;
 import findboom.android.com.findboom.dailog.InputPhonePop;
 import findboom.android.com.findboom.dailog.LoginPop;
@@ -46,6 +47,7 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
     private InputPhonePop inputPhonePop;
     private SendCodeConfirmPop sendCodeConfirmPop;
     private InputCodePop inputCodePop;
+    private FindPwdPop findPwdPop;
     private LoginPop loginPop;
     private RegisterPop registerPop;
     private Button btnLogin;
@@ -172,20 +174,92 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
                 }
 
                 if (bundle.getInt("type") == 2) {
+                    if (findPwdPop == null)
+                        findPwdPop = new FindPwdPop(context);
+                    findPwdPop.showPop(btnLogin);
+                    findPwdPop.setPopInterfacer(this, 5);
                     loginPop.dismiss();
                 }
                 break;
             case 4:
-                if (bundle==null)
+                if (bundle == null)
                     return;
-                if (bundle.getInt("type")==0) {
+                if (bundle.getInt("type") == 0) {
                     register(bundle.getString("phone"), bundle.getString("code"), bundle.getString("pwd"));
                 }
 
-                if (bundle.getInt("type")==1)
-                    startActivity(new Intent(context,UserNotify.class));
+                if (bundle.getInt("type") == 1)
+                    startActivity(new Intent(context, UserNotify.class));
+                break;
+            case 5:
+                if (bundle == null)
+                    return;
+                if (bundle.getInt("type") == 0)
+                    changePwd(bundle.getString("phone"), bundle.getString("code"), bundle.getString("pwd"));
                 break;
         }
+    }
+
+    private void changePwd(String phone, String code, String pwd) {
+        Map<String, String> params = new HashMap<>();
+        params.put("PhoneNumber", phone);
+        params.put("UserCode", code);
+        params.put("NewPassWord", pwd);
+        PostTools.postData(this, CommonUntilities.ACCOUNT_URL + "FindPassword", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                Tools.debug("login" + response);
+                if (TextUtils.isEmpty(response)) {
+                    Tools.toastMsg(context, "请检查网络后重试");
+                    return;
+                }
+
+                bean_userInfo = new Gson().fromJson(response, Bean_UserInfo.class);
+                if (bean_userInfo != null && bean_userInfo.Success) {
+                    AppPrefrence.setIsLogin(context, true);
+                    AppPrefrence.setToken(context, bean_userInfo.Data.Token);
+                    AppPrefrence.setUserName(context, bean_userInfo.Data.GameUserId);
+                    BoomDBManager.getInstance().setUserData(bean_userInfo.Data);
+                    AppPrefrence.setIsPayPwd(context, !TextUtils.isEmpty(bean_userInfo.Data.PayPassWord));
+                    AppPrefrence.setUserPhone(context, bean_userInfo.Data.PhoneNumber);
+                    AppPrefrence.setEaseId(context, bean_userInfo.Data.EasemobId);
+                    EMClient.getInstance().login(bean_userInfo.Data.EasemobId, bean_userInfo.Data.EasemobPwd, new EMCallBack() {
+                        @Override
+                        public void onSuccess() {
+                            Tools.debug("ease login succes");
+                        }
+
+                        @Override
+                        public void onError(int i, String s) {
+
+                        }
+
+                        @Override
+                        public void onProgress(int i, String s) {
+
+                        }
+                    });
+                    FindBoomApplication.getInstance().setCurrentUserName(bean_userInfo.Data.EasemobId);
+                    if (loginPop != null)
+                        loginPop.dismiss();
+                    startActivity(new Intent(context, Home.class));
+                    LoginActivity.this.finish();
+                } else
+                    Tools.toastMsg(context, bean_userInfo.Msg);
+
+            }
+
+            @Override
+            public void onAfter() {
+                super.onAfter();
+            }
+
+            @Override
+            public void onError(Call call, Exception e) {
+                super.onError(call, e);
+            }
+        });
     }
 
     private void register(String phone, String code, String pwd) {

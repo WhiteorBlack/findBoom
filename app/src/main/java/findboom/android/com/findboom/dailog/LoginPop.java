@@ -61,7 +61,7 @@ public class LoginPop extends BasePopupwind {
                     Tools.toastMsgCenter(context, "请输入密码");
                     return;
                 }
-                bundle.putString("pwd",Tools.get32MD5Str(pwd));
+                bundle.putString("pwd",pwd);
                 bundle.putInt("type",0);
                 break;
             case R.id.txt_register:

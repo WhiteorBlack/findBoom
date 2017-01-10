@@ -9,7 +9,7 @@ package findboom.android.com.findboom.utils;/**
 public class CommonUntilities {
     public static boolean WXPAY = false;
     public static String MD5KEY = "v5d6g8fldghid58fdksigmnv5249d5ft";
-    public static String MAIN_URL = "http://youxi.wfy188.com:84/api/";
+    public static String MAIN_URL = "http://api.saoleikeji.com/api/";
     public static String LOGIN_URL = MAIN_URL + "Account/SendValidCode?";
     public static String ACCOUNT_URL = MAIN_URL + "Account/";
     public static String USER_URL = MAIN_URL + "User/";

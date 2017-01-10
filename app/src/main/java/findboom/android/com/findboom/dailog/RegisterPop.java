@@ -85,7 +85,7 @@ public class RegisterPop extends BasePopupwind {
                     Tools.toastMsgCenter(context, "两次输入的密码不一致");
                     return;
                 }
-                bundle.putString("pwd", Tools.get32MD5Str(pwd));
+                bundle.putString("pwd", pwd);
                 bundle.putInt("type", 0);
                 break;
             case R.id.txt_notify:
