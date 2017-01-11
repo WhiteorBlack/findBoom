@@ -3,12 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/pop_bg"
-    android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
@@ -103,14 +102,33 @@
                 android:layout_height="27dp"
                 android:layout_marginLeft="15dp"
                 android:background="@mipmap/btn_charge" />
+
         </LinearLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_convert_money"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:background="@mipmap/btn_apply_money" />
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_convert_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@mipmap/btn_apply_money" />
+
+
+        <Button
+            android:id="@+id/btn_change_pwd"
+            android:layout_width="@dimen/pop_btn_login_wide"
+            android:layout_height="@dimen/pop_btn_login_height"
+            android:layout_marginBottom="5dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@mipmap/btn_change_login_pwd" />
+    </LinearLayout>
 
 </LinearLayout>

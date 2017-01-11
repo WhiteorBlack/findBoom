@@ -24,9 +24,9 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/advice_edit_bg"
         android:gravity="center"
-        android:visibility="gone"
         android:text="用户名"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/txt_user_name"
@@ -102,11 +102,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="1"
         android:gravity="bottom"
         android:orientation="horizontal"
-
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
@@ -194,5 +193,13 @@
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_edit_info"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/btn_edit_info" />
+
 
 </LinearLayout>

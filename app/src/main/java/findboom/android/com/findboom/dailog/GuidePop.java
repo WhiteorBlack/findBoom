@@ -68,8 +68,8 @@ public class GuidePop extends BasePopupwind {
         txtContent = (TextView) view.findViewById(R.id.txt_help);
         llParent=(LinearLayout)view.findViewById(R.id.ll_parent);
         LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) llParent.getLayoutParams();
-        params.width= (int) (Tools.getScreenWide(context)*0.9);
-        params.height= (int) (Tools.getScreenHeight(context)*0.7);
+        params.width= (int) (Tools.getScreenWide(context)*0.95);
+        params.height= (int) (Tools.getScreenHeight(context)*0.65);
         this.setContentView(view);
     }
 

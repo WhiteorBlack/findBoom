@@ -89,6 +89,10 @@ public class NewShopPop extends BasePopupwind implements ViewPager.OnPageChangeL
                 Bean_ShopList bean_ShopList = new Gson().fromJson(response, Bean_ShopList.class);
                 if (bean_ShopList != null && bean_ShopList.Success) {
                     shopList.addAll(bean_ShopList.Data);
+                    for (int i = 0; i < 5; i++) {
+                        shopList.add(new ArrayList<>());
+                    }
+
                     shopAdapter.notifyDataSetChanged();
                 }
             }
@@ -131,7 +135,7 @@ public class NewShopPop extends BasePopupwind implements ViewPager.OnPageChangeL
                 Bean_ShopList.GoodsInfo goodsInfo = (Bean_ShopList.GoodsInfo) shopList.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 0);
-                bundle.putFloat("money", goodsInfo.Price );
+                bundle.putFloat("money", goodsInfo.Price);
                 bundle.putInt("armType", goodsInfo.ArmType);
                 bundle.putString("id", goodsInfo.ArmInfoId);
                 if (popInterfacer != null)
@@ -153,12 +157,12 @@ public class NewShopPop extends BasePopupwind implements ViewPager.OnPageChangeL
         goldAdapter.setOnclick(new OnClickInterface() {
             @Override
             public void onClick(View view, int position) {
-               Bean_GoldList.GoldList goodsInfo = ( Bean_GoldList.GoldList) goldList.get(position);
+                Bean_GoldList.GoldList goodsInfo = (Bean_GoldList.GoldList) goldList.get(position);
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 1);
-                bundle.putFloat("money", goodsInfo.Price );
+                bundle.putFloat("money", goodsInfo.Price);
                 bundle.putString("id", goodsInfo.ConfigId);
-                bundle.putInt("amount",goodsInfo.GoldAmount);
+                bundle.putInt("amount", goodsInfo.GoldAmount);
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundle);
             }

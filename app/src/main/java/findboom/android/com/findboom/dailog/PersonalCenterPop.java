@@ -138,14 +138,18 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         imgPhoto = (CircleImageView) personView.findViewById(R.id.img_user_photo);
         imgPhoto.setOnClickListener(this);
         personView.findViewById(R.id.txt_user_city).setOnClickListener(this);
+        btnBottom = (Button) personView.findViewById(R.id.btn_edit_info);
+        btnBottom.setOnClickListener(this);
+        btnBottom.setTag(1);
 
         accountView = LayoutInflater.from(context).inflate(R.layout.fragment_account_info, null);
         txtAccount = (TextView) accountView.findViewById(R.id.txt_account_fee);
         txtRed = (TextView) accountView.findViewById(R.id.txt_account_red);
-        btnApply = (Button) accountView.findViewById(R.id.btn_convert_money);
-        btnApply.setOnClickListener(this);
+        accountView.findViewById(R.id.btn_convert_money).setOnClickListener(this);
         accountView.findViewById(R.id.btn_charge_money).setOnClickListener(this);
         accountView.findViewById(R.id.btn_charge_red).setOnClickListener(this);
+        accountView.findViewById(R.id.btn_change_pwd).setOnClickListener(this);
+
         viewList = new ArrayList<>();
         viewList.add(personView);
         viewList.add(accountView);
@@ -159,7 +163,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         viewPager.setOnPageChangeListener(this);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) viewPager.getLayoutParams();
-        params.height = (int) (Tools.getScreenWide(context) * 0.8);
+        params.height = (int) (Tools.getScreenWide(context) * 0.9);
         viewPager.setLayoutParams(params);
         imgAccount = (ImageView) view.findViewById(R.id.img_account);
         imgAccount.setOnClickListener(this);
@@ -169,9 +173,7 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
 
         imgPersonal.setEnabled(false);
         imgSelector = (ImageView) view.findViewById(R.id.img_selector);
-        btnBottom = (Button) view.findViewById(R.id.btn_edit_info);
-        btnBottom.setOnClickListener(this);
-        btnBottom.setTag(1);
+
         this.setContentView(view);
         this.setFocuse(true);
     }
@@ -339,6 +341,12 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 if (popInterfacer != null)
                     popInterfacer.OnConfirm(flag, bundle1C);
                 break;
+            case R.id.btn_change_pwd:
+                Bundle bundle1=new Bundle();
+                bundle1.putInt("type",12);
+                if (popInterfacer!=null)
+                    popInterfacer.OnConfirm(flag,bundle1);
+                break;
         }
     }
 
@@ -362,17 +370,11 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
             btnBottom.setBackgroundResource(R.mipmap.btn_edit_info);
             btnBottom.setVisibility(View.VISIBLE);
             btnBottom.setTag(1);
+//            llContent.setVisibility(View.GONE);
         } else {
             imgAccount.setEnabled(false);
             imgPersonal.setEnabled(true);
-            btnBottom.setVisibility(View.INVISIBLE);
-//            if (AppPrefrence.getIsPayPwd(context)) {
-//                btnBottom.setBackgroundResource(R.mipmap.btn_change_pwd);
-//                btnBottom.setTag(3);
-//            } else {
-//                btnBottom.setTag(2);
-//                btnBottom.setBackgroundResource(R.mipmap.btn_create_pwd);
-//            }
+//            btnBottom.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -130,6 +130,7 @@ import findboom.android.com.findboom.dailog.BoomGold;
 import findboom.android.com.findboom.dailog.BoomPic;
 import findboom.android.com.findboom.dailog.BoomPop;
 import findboom.android.com.findboom.dailog.BoomText;
+import findboom.android.com.findboom.dailog.ChangePwdPop;
 import findboom.android.com.findboom.dailog.ChatPop;
 import findboom.android.com.findboom.dailog.ConvertRedPop;
 import findboom.android.com.findboom.dailog.DefensePop;
@@ -213,6 +214,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
     private BoomGold boomGold;
     private GuidePop guidePop;
     private PickerCityDialog pickerCityDialog;
+    private ChangePwdPop changePwdPop;
 
     private List<Bean_UserArm.UserArm> defenseList;
     private List<Bean_UserArm.UserArm> boomList;
@@ -295,7 +297,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 Tools.debug(logs);
             }
         });
-        Tools.debug(JPushInterface.isPushStopped(this)+"------");
+        Tools.debug(JPushInterface.isPushStopped(this) + "------");
         registerMessageReceiver();
         inviteMessgeDao = new InviteMessgeDao(this);
         userDao = new UserDao(this);
@@ -735,7 +737,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         switch (v.getId()) {
             case R.id.rel_defense:
                 //防爆衣
-                Tools.debug("jpush state----"+JPushInterface.getConnectionState(this));
                 if (defensePop == null)
                     defensePop = new DefensePop(context);
                 defensePop.showPop(imgArsenal);
@@ -959,6 +960,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             case 39:
                 pickerCityDialog = null;
                 break;
+            case 40:
+                changePwdPop = null;
+                break;
         }
     }
 
@@ -1146,6 +1150,13 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         pickerCityDialog = new PickerCityDialog(context);
                     pickerCityDialog.showPop(txtArsenal);
                     pickerCityDialog.setPopInterfacer(this, 39);
+                }
+                if (bundle != null && bundle.getInt("type") == 12) {
+                    //修改密码
+                    if (changePwdPop == null)
+                        changePwdPop = new ChangePwdPop(context);
+                    changePwdPop.setPopInterfacer(this, 40);
+                    changePwdPop.showPop(txtArsenal);
                 }
                 break;
             case 4:

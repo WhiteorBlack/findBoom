@@ -32,6 +32,7 @@ public class LoginPop extends BasePopupwind {
         view.findViewById(R.id.btn_login).setOnClickListener(this);
         view.findViewById(R.id.img_close).setOnClickListener(this);
         view.findViewById(R.id.txt_register).setOnClickListener(this);
+        view.findViewById(R.id.img_clear).setOnClickListener(this);
         view.findViewById(R.id.txt_forget).setOnClickListener(this);
         this.setContentView(view);
     }
@@ -42,6 +43,7 @@ public class LoginPop extends BasePopupwind {
         Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.img_close:
+                bundle.putInt("type", -1);
                 dismiss();
                 break;
             case R.id.btn_login:
@@ -61,17 +63,21 @@ public class LoginPop extends BasePopupwind {
                     Tools.toastMsgCenter(context, "请输入密码");
                     return;
                 }
-                bundle.putString("pwd",pwd);
-                bundle.putInt("type",0);
+                bundle.putString("pwd", pwd);
+                bundle.putInt("type", 0);
                 break;
             case R.id.txt_register:
-                bundle.putInt("type",1);
+                bundle.putInt("type", 1);
                 break;
             case R.id.txt_forget:
-                bundle.putInt("type",2);
+                bundle.putInt("type", 2);
+                break;
+            case R.id.img_clear:
+                bundle.putInt("type", -1);
+                edtPhone.setText("");
                 break;
         }
-        if (popInterfacer!=null)
-            popInterfacer.OnConfirm(flag,bundle);
+        if (popInterfacer != null)
+            popInterfacer.OnConfirm(flag, bundle);
     }
 }
