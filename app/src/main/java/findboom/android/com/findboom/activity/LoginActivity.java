@@ -329,7 +329,7 @@ public class LoginActivity extends BaseActivity implements PopInterfacer {
     private void login(String code, String phone) {
         Map<String, String> params = new HashMap<>();
         params.put("PhoneNumber", phone);
-        params.put("UserCode", code);
+        params.put("password", code);
 
         PostTools.postData(this, CommonUntilities.ACCOUNT_URL + "Login", params, new PostCallBack() {
             @Override
