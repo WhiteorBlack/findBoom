@@ -114,6 +114,7 @@ import findboom.android.com.findboom.bean.Bean_RedBoom;
 import findboom.android.com.findboom.bean.Bean_UseScan;
 import findboom.android.com.findboom.bean.Bean_UserArm;
 import findboom.android.com.findboom.bean.Bean_UserInfo;
+import findboom.android.com.findboom.bean.Bean_Version;
 import findboom.android.com.findboom.bean.Bean_WXpay;
 import findboom.android.com.findboom.chat.Constant;
 import findboom.android.com.findboom.chat.EaseNotifier;
@@ -1967,6 +1968,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
 
     private void logOut() {
         AppPrefrence.setIsLogin(context, false);
+        AppPrefrence.setUserName(context, "");
+        AppPrefrence.setUserPhone(context, "");
+        AppPrefrence.setUserPwd(context, "");
         final ProgressDialog pd = new ProgressDialog(this);
         String st = getResources().getString(R.string.Are_logged_out);
         pd.setMessage(st);
@@ -2060,7 +2064,49 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             e.printStackTrace();
             Tools.debug(e.toString());
         }
+        checkUpdate();
+    }
 
+    private void checkUpdate() {
+        Map<String, String> params = new HashMap<>();
+        PostTools.postData(context, CommonUntilities.UNTILS + "CheckUpdate", params, new PostCallBack() {
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (TextUtils.isEmpty(response))
+                    return;
+                final Bean_Version beanVersioin = new Gson().fromJson(response, Bean_Version.class);
+                if (beanVersioin.Success) {
+                    int version = 0;
+                    try {
+                        version = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                    } catch (PackageManager.NameNotFoundException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    if (version < beanVersioin.Data.AppVisionId) {
+                        new AlertDialog.Builder(context).setTitle("发现新版本").setMessage(beanVersioin.Data.VisionDesc).setCancelable(true)
+                                .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (!TextUtils.isEmpty(beanVersioin.Data.DownUrl)) {
+                                            Intent intent = new Intent();
+                                            intent.setAction("android.intent.action.VIEW");
+                                            intent.setData(Uri.parse(beanVersioin.Data.DownUrl));
+                                            startActivity(intent);
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+                    }
+                }
+            }
+        });
     }
 
     private void addMsgListener() {

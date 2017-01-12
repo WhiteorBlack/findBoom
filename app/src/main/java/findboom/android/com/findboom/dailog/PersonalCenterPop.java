@@ -148,6 +148,9 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
         accountView.findViewById(R.id.btn_convert_money).setOnClickListener(this);
         accountView.findViewById(R.id.btn_charge_money).setOnClickListener(this);
         accountView.findViewById(R.id.btn_charge_red).setOnClickListener(this);
+        if (TextUtils.isEmpty(AppPrefrence.getUserPhone(context)))
+            accountView.findViewById(R.id.btn_change_pwd).setVisibility(View.GONE);
+        else accountView.findViewById(R.id.btn_change_pwd).setVisibility(View.VISIBLE);
         accountView.findViewById(R.id.btn_change_pwd).setOnClickListener(this);
 
         viewList = new ArrayList<>();
@@ -342,10 +345,10 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                     popInterfacer.OnConfirm(flag, bundle1C);
                 break;
             case R.id.btn_change_pwd:
-                Bundle bundle1=new Bundle();
-                bundle1.putInt("type",12);
-                if (popInterfacer!=null)
-                    popInterfacer.OnConfirm(flag,bundle1);
+                Bundle bundle1 = new Bundle();
+                bundle1.putInt("type", 12);
+                if (popInterfacer != null)
+                    popInterfacer.OnConfirm(flag, bundle1);
                 break;
         }
     }

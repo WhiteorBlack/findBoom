@@ -33,7 +33,7 @@ public class RecordListAdapter extends BaseRecyAdapter {
         ViewHolder mHolder = (ViewHolder) holder;
         Bean_RecordList.RecordList recordList = (Bean_RecordList.RecordList) dataList.get(position);
         mHolder.setText(R.id.txt_date, recordList.GetTime);
-        mHolder.setText(R.id.txt_content, recordList.SourceType + " " + recordList.ScoreValue + " 积分");
+        mHolder.setText(R.id.txt_content,recordList.Remark);
 
     }
 

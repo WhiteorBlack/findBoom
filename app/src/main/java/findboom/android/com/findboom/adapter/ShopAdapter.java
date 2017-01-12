@@ -54,25 +54,39 @@ public class ShopAdapter extends BaseRecyAdapter {
             }
             mHolder.setImage(R.id.img_photo, id);
             mHolder.setOnClick(R.id.btn_buy, position);
-            ((StrokeTextView) mHolder.getView(R.id.txt_price)).setTextSize(16);
             mHolder.getView(R.id.btn_buy).setVisibility(View.VISIBLE);
             mHolder.getView(R.id.img_photo).setVisibility(View.VISIBLE);
             mHolder.getView(R.id.btn_buy).setBackgroundResource(R.mipmap.btn_buy);
+            mHolder.getView(R.id.btn_buy).setClickable(true);
         } else {
             if (position == dataList.size() - 1) {
                 mHolder.setStrokeText(R.id.txt_price, "期待升级中...");
-                ((StrokeTextView) mHolder.getView(R.id.txt_price)).setTextSize(12);
                 mHolder.setText(R.id.txt_name, "");
                 mHolder.getView(R.id.btn_buy).setVisibility(View.INVISIBLE);
                 mHolder.getView(R.id.img_photo).setVisibility(View.INVISIBLE);
             } else {
-                mHolder.setText(R.id.txt_name, "");
+                String name="";
+                switch (position){
+                    case 3:
+                        name="望远镜";
+                        break;
+                    case 4:
+                        name="扫雷犬";
+                        break;
+                    case 5:
+                        name="原子弹";
+                        break;
+                    case 6:
+                        name="TNT雷";
+                        break;
+                }
+                mHolder.setText(R.id.txt_name, name);
                 mHolder.setStrokeText(R.id.txt_price, " . . . ");
                 mHolder.setImage(R.id.img_photo, R.mipmap.icon_boom_other);
                 mHolder.getView(R.id.btn_buy).setBackgroundResource(R.mipmap.btn_buy_gray);
-                ((StrokeTextView) mHolder.getView(R.id.txt_price)).setTextSize(16);
                 mHolder.getView(R.id.btn_buy).setVisibility(View.VISIBLE);
                 mHolder.getView(R.id.img_photo).setVisibility(View.VISIBLE);
+                mHolder.getView(R.id.btn_buy).setClickable(false);
             }
 
         }

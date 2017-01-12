@@ -55,6 +55,7 @@ public class FindPwdPop extends BasePopupwind {
         Bundle bundle = new Bundle();
         switch (v.getId()) {
             case R.id.img_close:
+                bundle.putInt("type",-1);
                 dismiss();
                 break;
             case R.id.btn_login:

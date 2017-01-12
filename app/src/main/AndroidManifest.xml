@@ -66,7 +66,7 @@
                 <category android:name="android.intent.category.default" />
             </intent-filter>
         </service>
-
+        <service android:name=".service.DownLoadService"></service>
         <activity
             android:name=".Home"
             android:screenOrientation="portrait"

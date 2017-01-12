@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.hyphenate.EMCallBack;
@@ -36,7 +37,8 @@ import okhttp3.Call;
 
 public class ChangePwdPop extends BasePopupwind {
     private View view;
-    private EditText edtOldPwd, edtNewPwd, edtPhone;
+    private EditText edtOldPwd, edtNewPwd;
+    private TextView edtPhone;
     private String phone, pwd, pwdTwo, code;
 
     public ChangePwdPop(Context context) {
@@ -47,7 +49,8 @@ public class ChangePwdPop extends BasePopupwind {
     private void initView() {
         if (view == null)
             view = LayoutInflater.from(context).inflate(R.layout.change_login_pwd_pop, null);
-        edtPhone = (EditText) view.findViewById(R.id.edt_phone);
+        edtPhone = (TextView) view.findViewById(R.id.edt_phone);
+        edtPhone.setText(AppPrefrence.getUserPhone(context));
         edtOldPwd = (EditText) view.findViewById(R.id.edt_pwd);
         edtNewPwd = (EditText) view.findViewById(R.id.edt_pwd_two);
         view.findViewById(R.id.btn_login).setOnClickListener(this);
