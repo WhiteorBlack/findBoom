@@ -64,7 +64,7 @@
         AppSecret="38a4f8204cc784f81f9f0daaf31e02e3"
         RedirectUrl="http://www.sharesdk.cn"
         ShareByAppClient="true"
-        Enable="true" />
+        Enable="false" />
 
     <TencentWeibo
         Id="2" 
@@ -72,7 +72,7 @@
         AppKey="1105792674"
         AppSecret="d69fXQ6MAH5MBPNJ"
         RedirectUri="http://sharesdk.cn"
-        Enable="true" />
+        Enable="false" />
     
     <QZone
         Id="4"
@@ -114,7 +114,7 @@
         SortId="7"
         AppId="wxd54740ca347dcebb"
         AppSecret="3e63d9844fd26c0d6a56c74af3673187"
-        Enable="true" />
+        Enable="false" />
     
 	<!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
 	<QQ
@@ -165,7 +165,7 @@
     <ShortMessage
         Id="13" 
         SortId="13"
-        Enable="true" />
+        Enable="false" />
     
     <Douban
         Id="16"

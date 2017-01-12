@@ -50,7 +50,7 @@ public class SplashActivity extends BaseActivity {
     private Button btnGetIn;
     private ViewPagerAdapter pagerAdapter;
 
-    private int[] splashRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night};
+    private int[] splashRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night, R.mipmap.splash_five, R.mipmap.splash_six};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +85,8 @@ public class SplashActivity extends BaseActivity {
             params.rightMargin = 15;
             point.setLayoutParams(params);
             if (i == 0)
-                point.setBackgroundResource(R.drawable.guide_point_selected);
-            else point.setBackgroundResource(R.drawable.guide_point_unselect);
+                point.setBackgroundResource(R.mipmap.guide_point_selected);
+            else point.setBackgroundResource(R.mipmap.guide_point_unselect);
             llParent.addView(point);
         }
         pagerAdapter.notifyDataSetChanged();
@@ -109,9 +109,9 @@ public class SplashActivity extends BaseActivity {
                 else btnGetIn.setVisibility(View.GONE);
                 for (int i = 0; i < splashRes.length; i++) {
                     if (position == i) {
-                        llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_selected);
+                        llParent.getChildAt(i).setBackgroundResource(R.mipmap.guide_point_selected);
                     } else
-                        llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_unselect);
+                        llParent.getChildAt(i).setBackgroundResource(R.mipmap.guide_point_unselect);
                 }
             }
         });

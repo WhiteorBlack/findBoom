@@ -37,12 +37,6 @@ public class ConvertRedPop extends BasePopupwind {
         edtAlipay = (EditText) view.findViewById(R.id.edt_alipay);
         edtName = (EditText) view.findViewById(R.id.edt_name);
         view.findViewById(R.id.btn_pay).setOnClickListener(this);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
         this.setContentView(view);
     }
 

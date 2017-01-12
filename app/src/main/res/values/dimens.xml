@@ -11,7 +11,7 @@
     <dimen name="pic_size">70dp</dimen>
     <dimen name="pop_btn_height">30dp</dimen>
     <dimen name="pop_btn_wide">87dp</dimen>
-    <dimen name="pop_pic_wide">62dp</dimen>
+    <dimen name="pop_pic_wide">63dp</dimen>
     <dimen name="pop_pic_height">67dp</dimen>
     <dimen name="pop_padding">15dp</dimen>
     <dimen name="pop_pwd_btn_wide">80dp</dimen>

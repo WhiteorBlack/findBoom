@@ -6,9 +6,9 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_splash"
@@ -28,16 +28,10 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="right"
-            android:onClick="boomClick"
             android:layout_margin="15dp"
-            android:background="@mipmap/icon_skipe"/>
+            android:background="@mipmap/icon_skipe"
+            android:onClick="boomClick" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="5dp"
-            android:text="Copyright©2017 扫雷科技. All Rights Reserved"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
@@ -46,8 +40,8 @@
 
         <Button
             android:id="@+id/btn_get_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="132dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/pop_pic_wide"
             android:background="@mipmap/btn_get_in"
@@ -64,6 +58,14 @@
             android:layout_marginBottom="@dimen/pop_btn_height"
             android:gravity="center"
             android:orientation="horizontal"></LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="5dp"
+            android:text="Copyright©2017 扫雷科技. All Rights Reserved"
+            android:textSize="12sp" />
     </FrameLayout>
 
 

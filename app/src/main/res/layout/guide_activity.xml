@@ -15,16 +15,13 @@
 
         <Button
             android:id="@+id/btn_get_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="132dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="@dimen/pop_pic_wide"
-            android:background="@mipmap/bg_count_down"
+            android:background="@mipmap/btn_get_in"
             android:onClick="boomClick"
-            android:text="立即体验"
-            android:textColor="#BB5445"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+          />
 
         <LinearLayout
             android:id="@+id/ll_point_content"

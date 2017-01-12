@@ -38,9 +38,7 @@ public class MyBoomRecordAdapter extends BaseRecyAdapter {
         mHolder.setText(R.id.txt_name, boomInfo.MineTypeTxt);
         mHolder.setText(R.id.txt_date, boomInfo.CreateTime);
         mHolder.setText(R.id.txt_state, boomInfo.StatusTxt);
-        if (boomInfo.MineType == 0) {
-            mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_normal);
-        } else mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_other);
+        mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_normal);
         mHolder.setOnClick(R.id.btn_detial, position);
     }
 

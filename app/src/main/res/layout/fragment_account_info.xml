@@ -118,14 +118,14 @@
             android:id="@+id/btn_convert_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="15dp"
             android:background="@mipmap/btn_apply_money" />
 
 
         <Button
             android:id="@+id/btn_change_pwd"
-            android:layout_width="@dimen/pop_btn_login_wide"
-            android:layout_height="@dimen/pop_btn_login_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_gravity="bottom|center_horizontal"
             android:background="@mipmap/btn_change_login_pwd" />

@@ -36,8 +36,8 @@ public class MyGetBoomAdapter extends BaseRecyAdapter {
         Bean_MyBoomRecord.BoomInfo boomInfo = (Bean_MyBoomRecord.BoomInfo) dataList.get(position);
         mHolder.setText(R.id.txt_name, boomInfo.MineTypeTxt);
         TextView txtContent = (TextView) mHolder.itemView.findViewById(R.id.txt_state);
-        if (TextUtils.isEmpty(boomInfo.MineUserNickName)){
-            boomInfo.MineUserNickName="玩儿家";
+        if (TextUtils.isEmpty(boomInfo.MineUserNickName)) {
+            boomInfo.MineUserNickName = "玩儿家";
         }
         txtContent.setText("");
         SpannableString content = new SpannableString(boomInfo.MineUserNickName);
@@ -46,9 +46,7 @@ public class MyGetBoomAdapter extends BaseRecyAdapter {
         txtContent.append(content);
         txtContent.append("的雷");
         mHolder.setText(R.id.txt_address, "地址:" + boomInfo.Address);
-        if (boomInfo.MineType == 0) {
-            mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_normal);
-        } else mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_other);
+        mHolder.setImage(R.id.img_photo, R.mipmap.record_boom_normal);
         mHolder.setOnClick(R.id.btn_detial, position);
     }
 

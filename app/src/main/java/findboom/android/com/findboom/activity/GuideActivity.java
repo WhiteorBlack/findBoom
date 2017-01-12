@@ -33,7 +33,7 @@ public class GuideActivity extends BaseFragmentActivity {
     private List<View> views;
     private Button btnGetIn;
     private ViewPagerAdapter pagerAdapter;
-    private int[] guideRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night};
+    private int[] guideRes = new int[]{R.mipmap.splash_rose, R.mipmap.splash_girl, R.mipmap.splash_day, R.mipmap.splash_night, R.mipmap.splash_five, R.mipmap.splash_six};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +61,8 @@ public class GuideActivity extends BaseFragmentActivity {
             params.rightMargin = 15;
             point.setLayoutParams(params);
             if (i == 0)
-                point.setBackgroundResource(R.drawable.guide_point_selected);
-            else point.setBackgroundResource(R.drawable.guide_point_unselect);
+                point.setBackgroundResource(R.mipmap.guide_point_selected);
+            else point.setBackgroundResource(R.mipmap.guide_point_unselect);
             llParent.addView(point);
         }
         pagerAdapter.notifyDataSetChanged();
@@ -80,13 +80,14 @@ public class GuideActivity extends BaseFragmentActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if (position == guideRes.length-1)
+                if (position == guideRes.length - 1)
                     btnGetIn.setVisibility(View.VISIBLE);
                 else btnGetIn.setVisibility(View.GONE);
                 for (int i = 0; i < guideRes.length; i++) {
-                    if (position==i){
-                        llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_selected);
-                    }else llParent.getChildAt(i).setBackgroundResource(R.drawable.guide_point_unselect);
+                    if (position == i) {
+                        llParent.getChildAt(i).setBackgroundResource(R.mipmap.guide_point_selected);
+                    } else
+                        llParent.getChildAt(i).setBackgroundResource(R.mipmap.guide_point_unselect);
                 }
             }
         });

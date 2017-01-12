@@ -23,7 +23,6 @@
                 android:layout_width="@dimen/pop_pic_wide"
                 android:layout_height="@dimen/pop_pic_height"
                 android:layout_marginRight="5dp"
-                android:background="@mipmap/icon_scan"
                 android:scaleType="centerInside" />
 
             <TextView
