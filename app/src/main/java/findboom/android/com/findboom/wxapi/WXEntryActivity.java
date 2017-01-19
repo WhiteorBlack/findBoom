@@ -175,7 +175,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
                 user.GameUserId = userInfo.Data.GameUserId;
                 BoomDBManager.getInstance().setUserData(user);
                 saveUserInfo();
-                finish();
+
             }
         });
     }
@@ -198,6 +198,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
+                finish();
             }
         });
     }
