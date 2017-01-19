@@ -305,6 +305,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         //注册联系人变动监听
         EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
         initNotifier();
+        checkUpdate();
     }
 
     @Override
@@ -1346,9 +1347,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     float account1 = 0f;
                     Bean_UserInfo.GameUser userInfo1 = BoomDBManager.getInstance().getUserData(AppPrefrence.getUserName(context));
                     if (userInfo1 != null) {
-                        if (TextUtils.isEmpty(userInfo1.UserBalance))
+                        if (TextUtils.isEmpty(userInfo1.RedPackBalance))
                             account1 = 0f;
-                        else account1 = Float.parseFloat(userInfo1.UserBalance);
+                        else account1 = Float.parseFloat(userInfo1.RedPackBalance);
                     }
                     if (money > account1) {
                         //余额不足
@@ -1600,9 +1601,6 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                 }
                 Bean_UserArm baseBean = new Gson().fromJson(response, Bean_UserArm.class);
                 if (baseBean != null && baseBean.Success) {
-//                    new PostResultPop(context, txtArsenal, R.drawable.icon_right, baseBean.Msg, "").showPop();
-//                    if (confirmPwdPop != null)
-//                        confirmPwdPop.dismiss();
                     toastSuccess();
                     FindBoomApplication.getInstance().playMoneySound();
                     String balance = "";
@@ -1626,8 +1624,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     BoomDBManager.getInstance().setUserData(user);
                     recharMoney = "";
                     goldAmout = 0;
-                } else
-                    new PostResultPop(context, txtArsenal, R.drawable.icon_error, baseBean.Msg, "").showPop();
+                } else Tools.toastMsgCenter(context, baseBean.Msg);
             }
         });
     }
@@ -2064,7 +2061,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             e.printStackTrace();
             Tools.debug(e.toString());
         }
-        checkUpdate();
+
     }
 
     private void checkUpdate() {
@@ -2084,7 +2081,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
-                    if (version < beanVersioin.Data.AppVisionId) {
+                    if (version < beanVersioin.Data.VisionName) {
                         new AlertDialog.Builder(context).setTitle("发现新版本").setMessage(beanVersioin.Data.VisionDesc).setCancelable(true)
                                 .setPositiveButton("更新", new DialogInterface.OnClickListener() {
                                     @Override
@@ -3329,7 +3326,10 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                         }
                         txtArsenal.setText(boomCount + "");
                     }
-
+                    float money = Float.parseFloat(user.RedPackBalance);
+                    money -= Float.parseFloat(redAmount);
+                    user.RedPackBalance = decentFloat(money);
+                    BoomDBManager.getInstance().updateUserData(user);
                     addMarker(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)), 3);
 //                    addOverLay(new LatLng(Double.parseDouble(latItude), Double.parseDouble(longItude)));
                 } else

@@ -11,5 +11,6 @@ public class Bean_Version extends BaseBean {
         public String VisionDesc;
         public String CreateTime;
         public String DownUrl;
+        public int VisionName;
     }
 }
