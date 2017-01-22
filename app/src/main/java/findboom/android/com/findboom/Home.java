@@ -73,8 +73,10 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.adapter.EMAChatManager;
 import com.hyphenate.exceptions.HyphenateException;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.model.CropOptions;
@@ -985,7 +987,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     advicePop.setPopInterfacer(this, 8);
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 1) { //邀请好友
-                    showShare("需要你的支援", CommonUntilities.SHARE_REGISTER + AppPrefrence.getUserName(context), "我已经被炸的体无完肤,速速支援寡人", "");
+                    showShare(CommonUntilities.SHARE_TITLE, CommonUntilities.SHARE_REGISTER + AppPrefrence.getUserName(context), CommonUntilities.SHARE_CONTENT, "");
                 }
                 if (bundle != null && bundle.getInt("type", 0) == 2) { //音效
 
@@ -1258,7 +1260,7 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
                     addFriendPop.setPopInterfacer(this, 26);
                 }
                 if (bundle != null && bundle.getInt("type", -1) == 2) {
-                    showShare("痛不欲生", CommonUntilities.SHARE_RECORD + AppPrefrence.getUserName(context), "我已经被炸得怀疑人生,闪开,我想静静", "");
+                    showShare(CommonUntilities.SHARE_TITLE, CommonUntilities.SHARE_RECORD + AppPrefrence.getUserName(context), CommonUntilities.SHARE_CONTENT, "");
                 }
                 break;
             case 12: //个人中心-->创建支付密码
@@ -2127,8 +2129,9 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
             if (!Constant.isRuning && (chatPop == null || !chatPop.isShowing()) && !TextUtils.equals(Constant.CHAT_USER, msg.getFrom())) //如果当前在聊天页面则不推送消息
             {
                 notifier.onNewMesg(list);
-                refreshUI(list.size());
-            } else refreshUI(list.size());
+
+                refreshUI(EMClient.getInstance().chatManager().getUnreadMsgsCount());
+            } else refreshUI(EMClient.getInstance().chatManager().getUnreadMsgsCount());
             String title = "";
             if (msg != null) {
                 try {
@@ -2222,11 +2225,18 @@ public class Home extends BaseActivity implements PopInterfacer, LocationListene
         }
     };
 
-    private void refreshUI(int count) {
-        if (count > 0) {
-            txtMsgCount.setVisibility(View.VISIBLE);
-            txtMsgCount.setText(count + "");
-        } else txtMsgCount.setVisibility(View.GONE);
+    private void refreshUI(final int count) {
+        Tools.debug("message---" + count);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (count > 0) {
+                    txtMsgCount.setVisibility(View.VISIBLE);
+                    txtMsgCount.setText(count + "");
+                } else txtMsgCount.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     @Override

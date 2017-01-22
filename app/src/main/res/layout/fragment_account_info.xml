@@ -105,6 +105,9 @@
 
         </LinearLayout>
 
+
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -121,13 +124,12 @@
             android:layout_marginBottom="15dp"
             android:background="@mipmap/btn_apply_money" />
 
-
         <Button
             android:id="@+id/btn_change_pwd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="5dp"
             android:background="@mipmap/btn_change_login_pwd" />
     </LinearLayout>
 

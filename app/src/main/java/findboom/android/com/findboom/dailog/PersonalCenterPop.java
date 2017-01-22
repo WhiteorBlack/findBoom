@@ -296,6 +296,8 @@ public class PersonalCenterPop extends BasePopupwind implements ViewPager.OnPage
                 popInterfacer.OnConfirm(flag, bundle);
                 break;
             case R.id.img_photo:
+                if (!isEdit)
+                    return;
                 if (popInterfacer != null)
                     popInterfacer.OnCancle(flag);
                 break;

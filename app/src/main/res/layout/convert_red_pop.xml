@@ -103,9 +103,18 @@
             android:layout_width="102dp"
             android:layout_height="35dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp"
             android:background="@mipmap/btn_send_confirm" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:text="最小提现金额20元。按支付宝标准收取相应费用。提现手续费每笔最低扣除1元"
+            android:textColor="@color/content_yellow"
+            android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>
