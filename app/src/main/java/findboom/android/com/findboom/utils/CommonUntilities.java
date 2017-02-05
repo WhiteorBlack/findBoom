@@ -25,9 +25,9 @@ public class CommonUntilities {
     public static String CONFIG_URL = MAIN_URL + "Config/";
     public static String WITH_URL = MAIN_URL + "Withdraw/";
     public static String UNTILS=MAIN_URL+"utils/";
-    public static String SHARE_REGISTER = "http://youxi.wfy188.com:84/Mobile/invite/index?id=";
-    public static String SHARE_RECORD = "http://youxi.wfy188.com:84/Mobile/invite/share?id=";
-    public static String NOTIFY="http://youxi.wfy188.com:84/Mobile/Protocol";
+    public static String SHARE_REGISTER = "http://api.saoleikeji.com/Mobile/invite/index?id=";
+    public static String SHARE_RECORD = "http://api.saoleikeji.com/Mobile/invite/share?id=";
+    public static String NOTIFY="http://api.saoleikeji.com/Mobile/Protocol";
     public static String SHARE_TITLE="不让放鞭炮，我就放地雷！！";
     public static String SHARE_CONTENT="你的城市将布满地雷！!革新的手机游戏，线上线下一起玩。快下载试试吧.";
 }

@@ -5,9 +5,9 @@ android {
         config {
             keyAlias 'findboom'
             keyPassword 'findboom2016'
-            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
+//            storeFile file('C:\\Users\\Administrator\\Desktop\\findboom\\FindBoom.jks')
 //            storeFile file('F:\\myProject\\FindBoom\\FindBoom.jks')
-//            storeFile file('C:\\Users\\41508\\Documents\\MyProject\\FindBoom\\FindBoom.jks')
+            storeFile file('C:\\Users\\41508\\Documents\\MyProject\\FindBoom\\FindBoom.jks')
             storePassword 'findboom2016'
         }
     }
@@ -17,8 +17,8 @@ android {
         applicationId "findboom.android.com.findboom"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.02"
     }
 
     buildTypes {
